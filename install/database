@@ -1,0 +1,301 @@
+#
+# TABLE STRUCTURE FOR: category
+#
+
+DROP TABLE IF EXISTS `q_category`;
+
+CREATE TABLE `q_category` (
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+INSERT INTO `q_category` (`cat_id`, `cat_name`) VALUES ('1', 'Web application');
+INSERT INTO `q_category` (`cat_id`, `cat_name`) VALUES ('2', 'Web Plugin');
+INSERT INTO `q_category` (`cat_id`, `cat_name`) VALUES ('3', 'PHP Tutorial');
+INSERT INTO `q_category` (`cat_id`, `cat_name`) VALUES ('4', 'CSS Tutorial');
+INSERT INTO `q_category` (`cat_id`, `cat_name`) VALUES ('5', 'Javascript/AJAX/Jquery');
+
+
+#
+# TABLE STRUCTURE FOR: pages
+#
+
+DROP TABLE IF EXISTS `q_pages`;
+
+CREATE TABLE `q_pages` (
+  `page_id` int(11) NOT NULL AUTO_INCREMENT,
+  `site_id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `page_title` varchar(50) NOT NULL,
+  `page_content` text NOT NULL,
+  `page_status` int(11) NOT NULL,
+  PRIMARY KEY (`page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: post
+#
+
+DROP TABLE IF EXISTS `q_post`;
+
+CREATE TABLE `q_post` (
+  `post_id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_title` varchar(250) NOT NULL,
+  `slug` varchar(250) NOT NULL,
+  `post_content` text NOT NULL,
+  `date_posted` datetime NOT NULL,
+  `site_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: post_category
+#
+
+DROP TABLE IF EXISTS `q_post_category`;
+
+CREATE TABLE `q_post_category` (
+  `cat_id` int(11) NOT NULL,
+  `post_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: post_file
+#
+
+DROP TABLE IF EXISTS `q_post_file`;
+
+CREATE TABLE `q_post_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `gallery_id` int(11) NOT NULL,
+  `newfilename` varchar(255) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `mtype` varchar(255) NOT NULL,
+  `type` varchar(25) NOT NULL,
+  `status` int(1) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `caption` varchar(200) NOT NULL,
+  `u_key` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: post_tag
+#
+
+DROP TABLE IF EXISTS `q_post_tag`;
+
+CREATE TABLE `q_post_tag` (
+  `tag_id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `site_id` int(11) NOT NULL,
+  `keyword` varchar(250) NOT NULL,
+  PRIMARY KEY (`tag_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('3', '1', '0', 'Test');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('13', '3', '0', 'Test button');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('14', '4', '0', 'fhfhfdhd');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('15', '5', '0', 'dsfhsfdhsdhsd');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('16', '6', '0', 'fhsdfhsdhsdh');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('17', '7', '0', 'esgsesteujui');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('18', '7', '0', 'ui');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('19', '8', '0', 'sfsfds');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('20', '9', '0', 'sdfsdfsdfsdf');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('21', '10', '0', 'gwegwegwegw');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('22', '11', '0', 'wgwegwegwe');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('23', '12', '0', 'sfafas');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('24', '13', '0', 'test 2');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('25', '14', '0', 'Test 3');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('26', '15', '0', 'Test 4');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('27', '16', '0', 'test 5');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('28', '17', '0', 'Test 6');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('29', '18', '0', 'dfasdf');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('30', '19', '0', 'fhfdhfdghfd');
+INSERT INTO `q_post_tag` (`tag_id`, `post_id`, `site_id`, `keyword`) VALUES ('31', '20', '0', 'sdfasfd');
+
+
+#
+# TABLE STRUCTURE FOR: post_view
+#
+
+DROP TABLE IF EXISTS `q_post_view`;
+
+CREATE TABLE `q_post_view` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page` text NOT NULL,
+  `post_id` int(11) NOT NULL,
+  `userip` text NOT NULL,
+  `year` int(11) NOT NULL,
+  `agent` varchar(255) NOT NULL,
+  `machine` varchar(50) NOT NULL,
+  `browser` varchar(25) NOT NULL,
+  `last_used_browser` varchar(15) NOT NULL,
+  `counter` int(11) NOT NULL,
+  `month` int(11) NOT NULL,
+  `day` int(11) NOT NULL,
+  `tday` varchar(11) NOT NULL,
+  `timeUpdate` int(11) NOT NULL,
+  `complete_date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: post_visit
+#
+
+DROP TABLE IF EXISTS `q_post_visit`;
+
+CREATE TABLE `q_post_visit` (
+  `visit_id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_id` int(11) NOT NULL,
+  `page` varchar(500) NOT NULL,
+  `country` varchar(50) NOT NULL,
+  `count` int(11) NOT NULL,
+  `date_visited` varchar(20) NOT NULL,
+  `date_updated` varchar(20) NOT NULL,
+  `month_year` varchar(20) NOT NULL,
+  PRIMARY KEY (`visit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: site
+#
+
+DROP TABLE IF EXISTS `q_site`;
+
+CREATE TABLE `q_site` (
+  `site_id` int(11) NOT NULL AUTO_INCREMENT,
+  `site_name` varchar(150) NOT NULL,
+  `site_path` varchar(50) NOT NULL,
+  `date_created` date NOT NULL,
+  `site_category` int(2) NOT NULL,
+  `status` int(1) NOT NULL,
+  PRIMARY KEY (`site_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+INSERT INTO `q_site` (`site_id`, `site_name`, `site_path`, `date_created`, `site_category`, `status`) VALUES ('1', 'Coloftech State of the Arts and Technology', 'home', '2018-02-16', '0', '1');
+
+
+#
+# TABLE STRUCTURE FOR: site_category
+#
+
+DROP TABLE IF EXISTS `q_site_category`;
+
+CREATE TABLE `q_site_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+INSERT INTO `q_site_category` (`id`, `name`) VALUES ('1', 'College');
+INSERT INTO `q_site_category` (`id`, `name`) VALUES ('2', 'Office');
+
+
+#
+# TABLE STRUCTURE FOR: site_setting
+#
+
+DROP TABLE IF EXISTS `q_site_setting`;
+
+CREATE TABLE `q_site_setting` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `setting_name` varchar(100) NOT NULL,
+  `setting_value` text NOT NULL,
+  `site_id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: site_theme
+#
+
+DROP TABLE IF EXISTS `q_site_theme`;
+
+CREATE TABLE `q_site_theme` (
+  `site_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: site_users
+#
+
+DROP TABLE IF EXISTS `q_site_users`;
+
+CREATE TABLE `q_site_users` (
+  `site_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: summernote
+#
+
+DROP TABLE IF EXISTS `q_summernote`;
+
+CREATE TABLE `q_summernote` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL,
+  `gallery_id` int(11) NOT NULL,
+  `newfilename` varchar(255) NOT NULL,
+  `title` varchar(50) NOT NULL,
+  `mtype` varchar(255) NOT NULL,
+  `type` varchar(25) NOT NULL,
+  `status` int(1) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `caption` varchar(200) NOT NULL,
+  `u_key` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# TABLE STRUCTURE FOR: template
+#
+
+DROP TABLE IF EXISTS `q_template`;
+
+CREATE TABLE `q_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `status` int(1) NOT NULL,
+  `date_added` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+INSERT INTO `q_template` (`id`, `name`, `status`, `date_added`) VALUES ('1', 'default', '1', '0000-00-00 00:00:00');
+INSERT INTO `q_template` (`id`, `name`, `status`, `date_added`) VALUES ('2', 'admin', '0', '0000-00-00 00:00:00');
+INSERT INTO `q_template` (`id`, `name`, `status`, `date_added`) VALUES ('3', 'cacao', '0', '0000-00-00 00:00:00');
+INSERT INTO `q_template` (`id`, `name`, `status`, `date_added`) VALUES ('4', 'site', '0', '2018-02-16 00:00:00');
+
+
+#
+# TABLE STRUCTURE FOR: users
+#
+
+DROP TABLE IF EXISTS `q_users`;
+
+CREATE TABLE `q_users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(50) NOT NULL,
+  `user_pass` varchar(250) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `middle_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `user_email` varchar(100) NOT NULL,
+  `last_logged_in` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+INSERT INTO `q_users` (`user_id`, `user_name`, `user_pass`, `first_name`, `middle_name`, `last_name`, `user_email`, `last_logged_in`, `status`) VALUES ('1', 'admin', '68be23e1141e8508efd5ecbf79f62168', 'Harold', '', 'Rita', '', '2018-02-24 02:58:34', '0');
+INSERT INTO `q_users` (`user_id`, `user_name`, `user_pass`, `first_name`, `middle_name`, `last_name`, `user_email`, `last_logged_in`, `status`) VALUES ('2', 'coed', 'd41ddfe88c1030bb35c7d59a3a907feb', '', '', '', '', '2018-02-24 01:45:33', '0');
+INSERT INTO `q_users` (`user_id`, `user_name`, `user_pass`, `first_name`, `middle_name`, `last_name`, `user_email`, `last_logged_in`, `status`) VALUES ('3', 'bilar', 'e2ee372135ea5b88a709c227635b7fd2', '', '', '', '', '2018-02-24 01:46:46', '0');
+
+
