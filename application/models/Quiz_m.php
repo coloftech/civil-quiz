@@ -30,6 +30,16 @@ class Quiz_m extends CI_Model
 		return $this->db->get_where('quiz',array('post_question'=>$question))->result();
 		//return $this->db->get()->result();
 	}
+	public function isAnswer($question=0, $answer = '')
+	{
+
+		if($this->db->get_where('quiz',array('post_id'=>$question,'post_answer'=>$answer))->result()){
+			return true;
+		}else{
+			return false;
+		}
+
+	}
 
 	public function list_questions($category=false)
 	{

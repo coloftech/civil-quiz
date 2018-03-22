@@ -40,6 +40,28 @@ class Quiz extends CI_Controller
 
 		$this->template->load('admin','quiz/takeaquiz',$data);
 	}
+
+	public function checkquiz($value='')
+	{
+		# code...
+		$input = $this->input->post();
+			$total = 0;
+
+		foreach ($input as $key => $value) {
+			# code...
+			$id = str_replace('question_', '', $key);
+			if($this->quiz_m->isAnswer($id, $value)){
+				$answer = 'correct';
+				$total++;
+			}else{
+				$answer = 'wrong';
+			}
+
+			echo "<br />$id $value is $answer  ";
+		}
+			echo "<br />Total point: $total  ";
+
+	}
 	public function create($value='')
 	{
 
