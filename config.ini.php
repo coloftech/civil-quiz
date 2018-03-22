@@ -3,7 +3,7 @@
 hostname = localhost
 username = root
 password = 
-dbname = coloftec_quiz
+dbname = coloftec_quize
 dbprefix = q_
 
 

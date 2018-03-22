@@ -1,5 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+date_default_timezone_set('Asia/Manila');
 $ini = '';
 $ini = parse_ini_file("config.ini.php", true);
 /*

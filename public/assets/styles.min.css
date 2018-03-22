@@ -28,4 +28,4 @@ zoom{from{transform:scale(0)}to{transform:scale(1)}}.close{position:absolute;top
 li{text-decoration:none;list-style:none;font-size:16px;color:#fff}footer > .container > .footer-top  a:link,footer > .container > .footer-top  a:active,footer > .container > .footer-top  a:hover{text-decoration:none;list-style:none;font-size:16px;color:#fff}footer>.container>.footer-center{}footer>.container>.footer-center>.btn{}footer>.container>.footer-center>.btn:hover{color:#555;background-color:#fff}footer>.container>.footer-bottom{}@media only screen and (max-device-width: 768px){.modal-content{width:100%}header
 .logo{display:inline-block;max-width:100px}header
 .title{display:inline-block;max-width:300px}header
-#navbarCollapse{position:absolute;z-index:9999;display:block}.body>.container>.sidebar{padding-top:50px}.divider{display:block;height:50px;padding:5px}}.fa.fa-folder{color:#e7d97a;font-size:20px}.folders{background-color:#e5e5e5;padding:5px}.files{background-color:#e5e5e5;padding:5px}
+#navbarCollapse{position:absolute;z-index:9999;display:block}.body>.container>.sidebar{padding-top:50px}.divider{display:block;height:50px;padding:5px}}

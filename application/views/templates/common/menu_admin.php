@@ -38,14 +38,23 @@
                 
 
                 <li>
-                    <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Post Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Quiz Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                     <ul id="submenu-2" class="collapse">
 
-                        <li><a href="<?=site_url('post/create');?>"><i class="fa fa-angle-double-right"></i> New post</a></li>
-                        <li><a href="<?=site_url('post/list_all');?>"><i class="fa fa-angle-double-right"></i> List posts</a></li>
+                        <li><a href="<?=site_url('quiz/create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
+                        <li><a href="<?=site_url('quiz/list_questions');?>"><i class="fa fa-angle-double-right"></i> List posts</a></li>
+                        <li><a href="<?=site_url('quiz/takeaquiz');?>"><i class="fa fa-angle-double-right"></i> Take a quiz</a></li>
 
-                    
-                        <li><a href="<?=site_url('post/category');?>"><i class="fa fa-angle-double-right"></i> Category</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="collapse" data-target="#subject"><i class="fa fa-fw fa-book"></i>  Category Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <ul id="subject" class="collapse">
+
+                        <li><a href="<?=site_url('subject');?>"><i class="fa fa-angle-double-right"></i> View all</a></li>
+                        <li><a href="<?=site_url('subject/create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
+
                     </ul>
                 </li>
 

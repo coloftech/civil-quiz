@@ -40,12 +40,33 @@ if(isset($description)){
         echo $this->minify->deploy_css();
         ?>
 
-    <style type="text/css">
-    </style>
-       
+
+ <!-- CORE PLUGINS -->
+        <script src="https://cdn.coloftech.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+        <script src="<?=base_url('public/assets/bootstrap/js/bootstrap.min.js')?>" type="text/javascript"></script>
+             
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-8571573304867694",
+          enable_page_level_ads: true
+     });
+</script>
 
 </head>
 <body class="site">
+
+  <!--
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-4992069019327122",
+    enable_page_level_ads: true
+  });
+</script>
+
+-->
 <header class="wrapper" >
     <div class="container" >
         
@@ -73,7 +94,7 @@ if(isset($description)){
         </div>
         <div class="col-md-4 recentspost">
             <h3>RECENT POST</h3>
-            <?php echo $this->auto_m->recent_post_footer(); ?>
+            <?php //echo $this->auto_m->recent_post_footer(); ?>
             </div>
         <div class="col-md-4 campuses">
             
@@ -94,10 +115,6 @@ if(isset($description)){
     </div>
 </footer>
 
-
- <!-- CORE PLUGINS -->
-        <script src="<?=base_url('public/assets/js/jquery-1.11.0.min.js');?>" type="text/javascript"></script>
-        <script src="<?=base_url('public/assets/bootstrap/js/bootstrap.min.js');?>" type="text/javascript"></script>
         <script src="<?=base_url('public/assets/js/jquery-migrate.min.js');?>" type="text/javascript"></script>
         <script src="<?=base_url('public/assets/js/notify/dist/notify.js');?>" type="text/javascript"></script>
         <script src="<?=base_url('public/assets/js/col-script.js');?>" type="text/javascript"></script>

@@ -62,7 +62,7 @@ class Home extends CI_Controller {
 				             $('header').notify(res.msg, { position:\"bottom right\", className:\"success\" }); 
 
 				             setTimeout(function(){
-				              window.location.reload() = true;
+				              window.location = '".site_url()."';//.reload() = true;
 				             },2000);
 				             return false;
 				          }else{

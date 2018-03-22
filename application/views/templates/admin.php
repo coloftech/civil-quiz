@@ -54,8 +54,18 @@
         <div class="container-fluid">
             <!-- Page Heading -->
             <div class="row  main">
-             
+              <div class="wrapper admin-wrapper create">
+
+                <div class="col-md-12">
+                  
+              
             <?php echo $body; ?>
+
+                </div>
+
+
+            </div>
+
              
 
             </div>
@@ -97,7 +107,7 @@ var ui = $.summernote.ui;
 return button.render();
 } 
 
-$('#desc').summernote({
+$('.summernote').summernote({
  
   toolbar: [
     ['style', ['bold', 'italic', 'underline', 'clear']],

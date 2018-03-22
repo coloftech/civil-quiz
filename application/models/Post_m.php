@@ -9,17 +9,17 @@ class Post_m extends CI_Model
 
 	public function total_post($value='')
 	{
-		return $this->db->count_all_results('post');
+		return $this->db->count_all_results('quiz');
 	}
 	public function get_site_post($site_id=false,$limit=false,$start=false)
 	{
 		if ($site_id) {
-			$post = $this->db->dbprefix('post');
-			$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path,site.site_name')
-			->from('post')
-			->join('site','site.site_id = post.site_id','LEFT')
-			->where('post.site_id',$site_id)
-			->order_by('post.date_posted desc');
+			$post = $this->db->dbprefix('quiz');
+			$this->db->select('quiz.*,YEAR('.$quiz.'.date_posted) as post_year,DATE_FORMAT('.$quiz.'.date_posted,"%b") as post_month,DAY('.$quiz.'.date_posted) as post_day,site.site_path,site.site_name')
+			->from('quiz')
+			->join('site','site.site_id = quiz.site_id','LEFT')
+			->where('quiz.site_id',$site_id)
+			->order_by('quiz.date_posted desc');
 			if($limit && $start){
 			$this->db->limit($limit,$start);
 			}elseif($limit){
@@ -31,11 +31,11 @@ class Post_m extends CI_Model
 		}else{
 
 
-			$post = $this->db->dbprefix('post');
-			$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path')
-			->from('post')
-			->join('site','site.site_id = post.site_id','LEFT')			
-			->order_by('post.date_posted desc');
+			$post = $this->db->dbprefix('quiz');
+			$this->db->select('quiz.*,YEAR('.$quiz.'.date_posted) as post_year,DATE_FORMAT('.$quiz.'.date_posted,"%b") as post_month,DAY('.$quiz.'.date_posted) as post_day,site.site_path')
+			->from('quiz')
+			->join('site','site.site_id = quiz.site_id','LEFT')			
+			->order_by('quiz.date_posted desc');
 			if($limit && $start){
 			$this->db->limit($limit,$start);
 			}elseif($limit){
@@ -50,12 +50,12 @@ class Post_m extends CI_Model
 	}
 	public function post_search($site_id=false,$limit=false,$start=false,$post_title){
 		if ($site_id) {
-			$post = $this->db->dbprefix('post');
-			$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path,site.site_name')
-			->from('post')
-			->join('site','site.site_id = post.site_id','LEFT')
-			->where(array('post.site_id'=>$site_id,'post.post_title'=>$post_title))
-			->order_by('post.date_posted desc');
+			$post = $this->db->dbprefix('quiz');
+			$this->db->select('quiz.*,YEAR('.$quiz.'.date_posted) as post_year,DATE_FORMAT('.$quiz.'.date_posted,"%b") as post_month,DAY('.$quiz.'.date_posted) as post_day,site.site_path,site.site_name')
+			->from('quiz')
+			->join('site','site.site_id = quiz.site_id','LEFT')
+			->where(array('quiz.site_id'=>$site_id,'quiz.post_title'=>$post_title))
+			->order_by('quiz.date_posted desc');
 			if($limit && $start){
 			$this->db->limit($limit,$start);
 			}elseif($limit){
@@ -67,12 +67,12 @@ class Post_m extends CI_Model
 		}else{
 
 
-			$post = $this->db->dbprefix('post');
-			$this->db->select('post.*,YEAR('.$post.'.date_posted) as post_year,DATE_FORMAT('.$post.'.date_posted,"%b") as post_month,DAY('.$post.'.date_posted) as post_day,site.site_path')
-			->from('post')
-			->join('site','site.site_id = post.site_id','LEFT')	
-			->like('post.post_title',$post_title,'both')		
-			->order_by('post.date_posted desc');
+			$post = $this->db->dbprefix('quiz');
+			$this->db->select('quiz.*,YEAR('.$quiz.'.date_posted) as post_year,DATE_FORMAT('.$quiz.'.date_posted,"%b") as post_month,DAY('.$quiz.'.date_posted) as post_day,site.site_path')
+			->from('quiz')
+			->join('site','site.site_id = quiz.site_id','LEFT')	
+			->like('quiz.post_title',$post_title,'both')		
+			->order_by('quiz.date_posted desc');
 			if($limit && $start){
 			$this->db->limit($limit,$start);
 			}elseif($limit){
@@ -116,7 +116,7 @@ class Post_m extends CI_Model
 	public function get_postBySlug($slug='',$site_id=0)
 	{
 		if(is_string($slug) && $site_id > 0){
-			$query = $this->db->get_where('post',array('slug'=>$slug,'site_id'=>$site_id));
+			$query = $this->db->get_where('quiz',array('slug'=>$slug,'site_id'=>$site_id));
 
 			if($result = $query->result()){
 				return $result;
@@ -129,11 +129,11 @@ class Post_m extends CI_Model
 	public function get_postById($post_id=0,$site_id=0)
 	{
 		if($post_id > 0){
-			//$query = $this->db->get_where('post',array('post_id'=>$post_id));
+			//$query = $this->db->get_where('quiz',array('post_id'=>$post_id));
 
-			$this->db->select('post.*,site.site_path,site.site_name')
-			->from('post')
-			->join('site','site.site_id = post.site_id','LEFT')
+			$this->db->select('quiz.*,site.site_path,site.site_name')
+			->from('quiz')
+			->join('site','site.site_id = quiz.site_id','LEFT')
 			->where(array('post_id'=>$post_id));
 			$query = $this->db->get();
 			if($result = $query->result()){
@@ -149,7 +149,7 @@ class Post_m extends CI_Model
 	{
 		if($post_id > 0){
 			//$this->db->select('keyword');
-			$query = $this->db->get_where('post_tag',array('post_id'=>$post_id));
+			$query = $this->db->get_where('quiz_tag',array('post_id'=>$post_id));
 			if($result = $query->result()){
 				return $result;
 			}
@@ -163,7 +163,7 @@ class Post_m extends CI_Model
 	{
 		if ($post_id > 0) {
 			$this->db->select('link');
-			$query = $this->db->get_where('post_file',array('post_id'=>$post_id,'gallery_id'=>0));
+			$query = $this->db->get_where('quiz_file',array('post_id'=>$post_id,'gallery_id'=>0));
 			if($result = $query->result()){
 				return $result[0]->link;
 			}else{
@@ -178,7 +178,7 @@ class Post_m extends CI_Model
 	{
 		if ($post_id > 0) {
 			$this->db->select('link,u_key');
-			$query = $this->db->get_where('post_file',array('gallery_id'=>$post_id));
+			$query = $this->db->get_where('quiz_file',array('gallery_id'=>$post_id));
 			if($result = $query->result()){
 				return $result;
 			}else{
@@ -192,20 +192,20 @@ class Post_m extends CI_Model
 	public function recent_post($site_id=false,$limit=10)
 	{
 		if($site_id){
-			$query = $this->db->select('post.post_title,post.slug,site.site_path')
-					->from('post')
-					->join('site','site.site_id = post.site_id','LEFT')
+			$query = $this->db->select('quiz.post_title,quiz.slug,site.site_path')
+					->from('quiz')
+					->join('site','site.site_id = quiz.site_id','LEFT')
 					->where('site_id',$site_id)
-					->order_by('post.date_posted desc')
+					->order_by('quiz.date_posted desc')
 					->limit($limit)
 					->get();
 			return $query->result();
 		}else{
 
-			$query = $this->db->select('post.post_title,post.slug,site.site_path')
-					->from('post')
-					->join('site','site.site_id = post.site_id','LEFT')
-					->order_by('post.date_posted desc')
+			$query = $this->db->select('quiz.post_title,quiz.slug,site.site_path')
+					->from('quiz')
+					->join('site','site.site_id = quiz.site_id','LEFT')
+					->order_by('quiz.date_posted desc')
 					->limit($limit)
 					->get();
 			return $query->result();
@@ -215,7 +215,7 @@ class Post_m extends CI_Model
 	{
 		if (is_array($info)) {
 			# code...
-			$this->db->insert('post',$info);
+			$this->db->insert('quiz',$info);
 			$id = $this->db->insert_id();
 			
 			return $id;
@@ -246,7 +246,7 @@ class Post_m extends CI_Model
 		if($post_id > 0){
 			$this->db->set('post_id',$post_id);
 			$this->db->where('u_key',$u_key);
-			$this->db->update('post_file');
+			$this->db->update('quiz_file');
 		}
 	}
 
@@ -255,7 +255,7 @@ class Post_m extends CI_Model
 		if($post_id > 0){
 			$this->db->set('gallery_id',$post_id);
 			$this->db->where('u_key',$u_key);
-			$this->db->update('post_file');
+			$this->db->update('quiz_file');
 		}
 	}
 	public function save_tag($tags=false,$id)
@@ -263,7 +263,7 @@ class Post_m extends CI_Model
 		# code...
 		if ($tags) {
 			# code...
-			$this->db->insert('post_tag',array('keyword'=>$tags,'post_id'=>$id));
+			$this->db->insert('quiz_tag',array('keyword'=>$tags,'post_id'=>$id));
 			return;
 		}
 	}
@@ -275,7 +275,7 @@ class Post_m extends CI_Model
 		if (is_numeric($id)) {
 			# code...
 			$this->db->where('post_id',$id);	
-			$this->db->delete('post_tag');
+			$this->db->delete('quiz_tag');
 			return;
 		}
 	}
@@ -285,7 +285,7 @@ class Post_m extends CI_Model
 
 		if($title){
 			
-		$result = $this->db->select('*')->from('post')->where('post_title',$title)->get()->result();
+		$result = $this->db->select('*')->from('quiz')->where('post_title',$title)->get()->result();
 		return count($result);
 		}else{
 			return 0;
@@ -297,7 +297,7 @@ class Post_m extends CI_Model
 		if($title){
 			
 			$q = $this->db->select('post_id')
-				->from('post')
+				->from('quiz')
 				->where('post_title',$title)
 				->get();
 				if($result = $q->result()){
@@ -322,12 +322,12 @@ class Post_m extends CI_Model
 
 			$this->db->set('status',1);
 			$this->db->WHERE('page_id',$post_id);
-			return $this->db->update('post');
+			return $this->db->update('quiz');
 			}else{
 
 			$this->db->set('status',0);
 			$this->db->WHERE('page_id',$post_id);
-			return $this->db->update('post');
+			return $this->db->update('quiz');
 			}
 		}
 	}
@@ -335,7 +335,7 @@ class Post_m extends CI_Model
 	public function save_file_array($data)
 	{
 		if (is_array($data)) {
-			return $this->db->insert_batch('post_file',$data);
+			return $this->db->insert_batch('quiz_file',$data);
 		}
 	
 		
@@ -343,7 +343,7 @@ class Post_m extends CI_Model
 
 	public function free_space($time=0)
 	{
-		$q = $this->db->get_where('post_file',array('post_id'=>0,'gallery_id'=>0));
+		$q = $this->db->get_where('quiz_file',array('post_id'=>0,'gallery_id'=>0));
 		if($result = $q->result()){
 			foreach ($result as $key) {
 				/* remove not use in post or gallery image */
@@ -352,7 +352,7 @@ class Post_m extends CI_Model
 
 					}
 					$this->db->where('id',$key->id);	
-					$this->db->delete('post_file');
+					$this->db->delete('quiz_file');
 
 				}
 			}
@@ -361,25 +361,25 @@ class Post_m extends CI_Model
 	}
 	public function remove_post($post_id=0)
 	{
-		$q = $this->db->get_where('post_file',array('post_id'=>$post_id,'gallery_id'=>0));
+		$q = $this->db->get_where('quiz_file',array('post_id'=>$post_id,'gallery_id'=>0));
 		if($result = $q->result()){
 			foreach ($result as $key) {
 					unlink($key->link);
 					$this->db->where('id',$key->id);	
-					$this->db->delete('post_file');
+					$this->db->delete('quiz_file');
 			}
 
 		}
 		$this->db->where('post_id',$post_id);
-		$this->db->delete(array('post_tag','post_category'));
+		$this->db->delete(array('quiz_tag','post_category'));
 		$this->db->where('post_id',$post_id);
-		return $this->db->delete(array('post'));
+		return $this->db->delete(array('quiz'));
 
 
 	}
 	public function remove_gall($u_key=0)
 	{
-		$q = $this->db->get_where('post_file',array('u_key'=>$u_key));
+		$q = $this->db->get_where('quiz_file',array('u_key'=>$u_key));
 		if($result = $q->result()){
 
 			foreach ($result as $key) {
@@ -388,7 +388,7 @@ class Post_m extends CI_Model
 
 					}
 					$this->db->where('id',$key->id);	
-					$this->db->delete('post_file');
+					$this->db->delete('quiz_file');
 
 			}
 
@@ -408,7 +408,7 @@ class Post_m extends CI_Model
 			
 
 			return $this->db->where('post_id',$post_id)
-							->update('post',$info);
+							->update('quiz',$info);
 
 		}
 		return false;
@@ -420,8 +420,8 @@ class Post_m extends CI_Model
 		# code...
 		if ($tags) {
 			# code...
-			$this->db->delete('post_tag',array('post_id'=>$id));
-			$this->db->insert('post_tag',array('keyword'=>$tags,'post_id'=>$id));
+			$this->db->delete('quiz_tag',array('post_id'=>$id));
+			$this->db->insert('quiz_tag',array('keyword'=>$tags,'post_id'=>$id));
 			return;
 		}
 	}
@@ -431,13 +431,13 @@ class Post_m extends CI_Model
 		if($post_id > 0){
 
 
-				$q = $this->db->get_where('post_file',array('post_id'=>$post_id,'gallery_id'=>0));
+				$q = $this->db->get_where('quiz_file',array('post_id'=>$post_id,'gallery_id'=>0));
 				if($result = $q->result()){
 					foreach ($result as $key) {
 						/* remove not use in post or gallery image */
 							unlink($key->link);
 							$this->db->where('id',$key->id);	
-							$this->db->delete('post_file');
+							$this->db->delete('quiz_file');
 
 						
 					}
@@ -446,7 +446,7 @@ class Post_m extends CI_Model
 
 			$q2 = $this->db->set('post_id',$post_id);
 			$this->db->where('u_key',$u_key);
-			return $this->db->update('post_file');
+			return $this->db->update('quiz_file');
 		}
 	}
 

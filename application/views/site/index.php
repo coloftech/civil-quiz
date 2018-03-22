@@ -67,7 +67,7 @@
 		<div class="panel-heading"><h4>RECENT POST</h4></div>
 		<div class="panel-body">
 			<ul class="recent-post">
-				<?php echo $this->auto_m->recent_post(5); ?>
+				<?php //echo $this->auto_m->recent_post(5); ?>
 			</ul>
 		</div>
 
@@ -75,8 +75,7 @@
 	</div>
 
 	<div class="panel">
-		<div class="panel-heading"><h4>SHARE US NOW  
-			<div style="background: #fff;padding:5px;display: inline-block;margin-top: -5px;border-radius: 0 5px 0 5px;" class="pull-right"><div class="fb-share-button pull-right" data-href="<?=site_url();?>" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=<?=site_url();?>&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div></div></h4>
+		<div class="panel-heading"><h4>SHARE US NOW </h4>
 			
 		</div>
 		<div class="panel-body">
@@ -88,9 +87,9 @@
 
     roy.rita@coloftech.com
       </p>
-      <p>
+      <!-- p>
           <div class="fb-page" data-href="https://www.facebook.com/coloftech/" data-tabs="about" data-width="350" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true"><blockquote cite="https://www.facebook.com/coloftech/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/coloftech/">Coloftech - State of the Art &amp; Technology</a></blockquote></div>
-      </p>
+      </p -->
 		</div>
 	</div>
 

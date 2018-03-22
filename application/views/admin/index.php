@@ -1,4 +1,3 @@
-<div class="wrapper admin-wrapper create">
 	<div class="panel panel-info  Statitics">
 		<div class="panel-heading"><h4>Statitics</h4></div>
 	
@@ -45,7 +44,6 @@
 	</div>
 
 	</div>
-</div>
 
 	<script>
 		$(function () {
