@@ -41,8 +41,8 @@
                     <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Quiz Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                     <ul id="submenu-2" class="collapse">
 
-                        <li><a href="<?=site_url('quiz/create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
-                        <li><a href="<?=site_url('quiz/list_questions');?>"><i class="fa fa-angle-double-right"></i> List posts</a></li>
+                        <li><a href="<?=site_url('quiz/create');?>"><i class="fa fa-angle-double-right"></i> Create a quiz</a></li>
+                        <li><a href="<?=site_url('quiz/list_questions');?>"><i class="fa fa-angle-double-right"></i> List save quiz</a></li>
                         <li><a href="<?=site_url('quiz/takeaquiz');?>"><i class="fa fa-angle-double-right"></i> Take a quiz</a></li>
 
                     </ul>

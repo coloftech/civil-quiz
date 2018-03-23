@@ -3,10 +3,7 @@
 <div class="form-responsive">
 	<form class="form form-horizontal" action="<?=site_url('quiz/add');?>" method="post" autocomplete="off" id="frmquestion" name="frmquestion" >
 		<div class="col-md-6">
-		<div class="form-group">
-			<label for="question">Category</label>
-			<?=$category?>
-		</div>
+		
 		<div class="form-group">
 			<label for="question">Question</label>
 			<textarea class="form-control" name="question" id="question" class="summernote" required></textarea>
@@ -32,16 +29,23 @@
 			<label for="answer5">Choice 5 <input type="radio" name="answer" id="answer5" value="5"></label>
 			<input type="text" name="choice5" id="choice5" class="form-control" required  />
 		</div>
-		<div class="form-group choices">
-			<label for="answer6">Choice 6 <input type="radio" name="answer" id="answer6" value="6"></label>
-			<input type="text" name="choice6" id="choice6" class="form-control"  required />
+
+
+		</div>
+		<div class="col-md-1"></div>
+		<div class="col-md-5">
+			<div class="form-group">
+			<label for="question">Category <i class="btn fa fa-plus"></i></label>
+			<?=$category?>
+		</div><div class="form-group">
+			<label for="question">Quiz group <i class="btn fa fa-plus"></i></label>
+			<?=$category?>
 		</div>
 
 		<div class="form-group">
 			<label  for="Add"></label>
 			<button class="btn btn-info" type="submit" name="btn_add" id="btn_add">Add</button>
 		</div>
-
 		</div>
 	</form>
 </div>
