@@ -20,9 +20,25 @@
 		display: inline-block;
 	}
 </style>
+
+	<?php if (isset($category)): ?>
+		<form class="form  form-horizontal" method="get" action="./takeaquiz">
+			<div class="form-group">
+				
+		<label for="category">Select Exam Category </label><?php echo $category; ?>
+
+			</div>
+			<div class="form-group" >
+				<label for="btncategory">
+					<button class="btn btn-info btn-sm" type="submit" id="btncategory">Set</button>
+				</label>
+			</div>
+		</form>
+	<?php endif ?>
+
 <?php if (isset($lists) && is_array($lists)): ?>
 
-			<form class="form form-horizontal" action="./checkquiz" method="post">
+	<form class="form form-horizontal" action="./result" method="post">
 	<?php $i=1; foreach ($lists as $key ): ?>
 	<div class="panel panel-info">
 		<div class="panel-heading"><?=$key->post_question ?></div>

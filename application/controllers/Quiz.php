@@ -30,10 +30,29 @@ class Quiz extends CI_Controller
 	}
 
 	public function takeaquiz(){
+		$quiz = false;
+		if ($this->input->get('category')) {
 
-
-		$quiz = $this->quiz_m->list_questions();
+		$quiz = $this->quiz_m->list_questions($this->input->get('category'));
 		$data['lists'] = $quiz;
+
+		}else{
+			
+			$cat = '<select class="form-control" name="category" id="category"><option value="0">No category</option></select>';
+		if($category = $this->category_m->get_Categories()){
+			$cat = '<select class="form-control" name="category" id="category">';
+			foreach ($category as $key) {
+				# code...
+				$cat .= "<option value='$key->cat_id'>$key->cat_name</option>";
+			}
+
+			$cat .= '</select>';
+		
+		$data['category']=$cat;
+		}
+		}
+		
+
 		
 
 		$data['site_title'] = 'Take a quiz';
@@ -41,11 +60,14 @@ class Quiz extends CI_Controller
 		$this->template->load('admin','quiz/takeaquiz',$data);
 	}
 
-	public function checkquiz($value='')
+	public function checkquiz($input='')
 	{
 		# code...
+		
 		$input = $this->input->post();
-			$total = 0;
+		$total = 0;
+		$i = 1;
+		$html = '';
 
 		foreach ($input as $key => $value) {
 			# code...
@@ -57,10 +79,40 @@ class Quiz extends CI_Controller
 				$answer = 'wrong';
 			}
 
-			echo "<br />$id $value is $answer  ";
+			$html .= "<br />$i) $value is $answer  ";
+			$i++;
 		}
-			echo "<br />Total point: $total  ";
+			$html .= "<br />Total point: $total  ";
 
+	}
+	public function result($result='')
+	{
+		# code...
+
+		$input = $this->input->post();
+		$total = 0;
+		$i = 1;
+		$html = '';
+
+		foreach ($input as $key => $value) {
+			# code...
+			$id = str_replace('question_', '', $key);
+			if($this->quiz_m->isAnswer($id, $value)){
+				$answer = 'correct';
+				$total++;
+			}else{
+				$answer = 'wrong';
+			}
+
+			$html .= "<br />$i) $value is $answer  ";
+			$i++;
+		}
+			$html .= "<br /><br /><b>Total point:<font color='red'> $total </font></b>  ";
+
+		$data['results'] = $html;
+		$data['site_title'] = 'Quiz result';
+
+		$this->template->load('admin','quiz/result',$data);
 	}
 	public function create($value='')
 	{
