@@ -18,6 +18,19 @@ class Quiz_m extends CI_Model
 			return $this->db->insert_id();
 
 	}
+	public function add_exam($data=false)
+	{
+
+			$this->db->insert('quizes_setting',$data);
+			return $this->db->insert_id();
+
+	}
+
+	public function exam_exist($question='')
+	{
+		# code...
+		return $this->db->get_where('quizes_setting',array('quizes_title'=>$question))->result();
+	}
 	public function set_category($data=false)
 	{
 

@@ -1,5 +1,32 @@
-<?php if (isset($lists) && is_array($lists)): ?>
+<?php if (isset($exams)): ?>
+	
 
-	<?php if (isset($category)): ?>
-		<label for="category">Select Exam Category </label><?php echo $category; ?>
+
+
+
+	
+<?php endif ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php if (isset($category)): ?>
+	
 <?php endif ?>

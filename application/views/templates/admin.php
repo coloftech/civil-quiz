@@ -46,7 +46,7 @@
         <?php endif ?>
 </head>
 <header>
-    <div class="wrapper">
+    <div class="wrapper menu-header">
      <?php require_once 'common/menu_admin.php'; ?>
      </div>
 </header>
@@ -107,7 +107,7 @@ var ui = $.summernote.ui;
 return button.render();
 } 
 
-$('.summernote').summernote({
+$('#question').summernote({
  
   toolbar: [
     ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -121,7 +121,7 @@ $('.summernote').summernote({
     ['view',['codeview']],
     ['mybutton', ['hello']]
   ],
-  height: 250,
+  height: 150,
     cleaner:{
           action: 'button', 
           newline: '<br>', 
@@ -252,4 +252,8 @@ $('#btn-summernote').on('click',function(){
 
     
 <?php endif ?>
+
+      <?php echo isset($js_script) ? $js_script : '';?>
+
+
 </html>

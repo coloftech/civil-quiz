@@ -117,9 +117,9 @@ class Quiz extends CI_Controller
 	public function create($value='')
 	{
 
-		$cat = '<select class="form-control" name="category" id="category"><option value="0">No category</option></select>';
+		$cat = '<select class="form-control" name="s_category" id="s_category"><option value="0">No category</option></select>';
 		if($category = $this->category_m->get_Categories()){
-			$cat = '<select class="form-control" name="category" id="category">';
+			$cat = '<select class="form-control" name="s_category" id="s_category">';
 			foreach ($category as $key) {
 				# code...
 				$cat .= "<option value='$key->cat_id'>$key->cat_name</option>";
@@ -127,9 +127,12 @@ class Quiz extends CI_Controller
 
 			$cat .= '</select>';
 		}
+
+		$data['editform'] = true;
+		$data['js_script'] = $this->is_cript();
 		$data['category']=$cat;
 		$data['site_title'] = 'Create quiz';
-		$this->template->load('admin','quiz/create',$data);
+		$this->template->load('admin','quiz/create_Q',$data);
 	}
 
 	public function add($value=''){
@@ -183,6 +186,78 @@ class Quiz extends CI_Controller
 			echo json_encode(array('stats'=>false,'msg'=>'No input receveid.'));
 		}
 
+	}
+	public function addexam($value='')
+	{
+		# code...
+		if ($this->input->post()) {
+			
+			$input = (object)$this->input->post();
+			if(empty($input->q_title)){
+
+				echo json_encode(array('stats'=>false,'msg'=>'Title of quiz should not be empty.'));
+				exit();
+			}
+
+			$isExist = $this->quiz_m->exam_exist($input->q_title);
+			if(count($isExist) > 0){
+
+				echo json_encode(array('stats'=>false,'msg'=>'Post failed! The exam title already used.','quizes_id'=>$isExist[0]->quizes_id));
+				exit();
+
+			}
+			$choices = isset($input->q_random_choices) ? $input->q_random_choices : 0;
+			$questions = isset($input->q_random_question) ? $input->q_random_question : 0;
+			
+			$data = array(
+				'quizes_title'=>$input->q_title,
+				'total'=>$input->q_total,
+				'type_id'=>$input->q_type,
+				'category_id'=>$input->s_category,
+				'shuffle_choices'=>$choices,
+				'suffle_questions'=>$questions
+			);
+			$quizes_id = $this->quiz_m->add_exam($data);
+			echo json_encode(array('stats'=>true,'msg'=>'Quiz settings added successfuly.','quizes_id'=>$quizes_id));
+
+		}
+	}
+
+	public function is_cript($value='')
+	{
+			
+	$js_script = "
+
+		<script>
+
+			$('input[name=\"q_type\"]').on('change click',function(e){
+				
+				var selected =  $('input[name=q_type]:checked').val();
+
+				if(selected == 1){
+					$('.is_new').show('slow');
+					$('.is_exist').hide();
+
+					$('.q_type1').addClass('alert alert-info');
+					$('.q_type2').removeClass('alert alert-info');
+
+				}
+				if(selected == 2){
+					$('.is_exist').show('slow');
+					$('.is_new').hide();
+
+					$('.q_type2').addClass('alert alert-info');
+					$('.q_type1').removeClass('alert alert-info');
+
+				}
+				
+			});
+
+		</script>
+
+		";
+
+		return $js_script;
 	}
 
 }
