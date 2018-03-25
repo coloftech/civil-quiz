@@ -28,6 +28,13 @@ class Quiz extends CI_Controller
 		$data['site_title'] = 'List all';
 		$this->template->load('admin','quiz/listall',$data);
 	}
+	public function list_exam($value='')
+	{
+		$quiz = $this->quiz_m->list_questions();
+		$data['lists'] = $quiz;
+		$data['site_title'] = 'List all';
+		$this->template->load('admin','quiz/listall',$data);
+	}
 
 	public function takeaquiz(){
 		$quiz = false;
@@ -158,11 +165,12 @@ class Quiz extends CI_Controller
 				'post_choice2'=>$choice[1],
 				'post_choice3'=>$choice[2],
 				'post_choice4'=>$choice[3],
-				'post_choice5'=>$choice[4],
 				'date_posted'=>date('Y-m-d H:i:s')
 
 
 			);
+
+
 			$isExist = $this->quiz_m->question_exist($input->question);
 			if(count($isExist) > 0){
 
@@ -170,12 +178,15 @@ class Quiz extends CI_Controller
 
 			}else{
 
+
 				if($id = $this->quiz_m->add_quiz($data)){
 
-				$category = array('post_id'=>$id,'cat_id'=>$input->category);
+				$category = array('post_id'=>$id,'cat_id'=>$input->category_id);
 				$set_category = $this->quiz_m->set_category($category);
 
-				echo json_encode(array('stats'=>true,'msg'=>$set_category));
+				$add_to_exam = $this->quiz_m->add_to_exam(array('quiz_id'=>$id,'quizes_setting_id'=>$input->quizes_id));
+
+				echo json_encode(array('stats'=>true,'msg'=>'Question added','quiz_id'=>$id));
 				}
 			}
 			exit();

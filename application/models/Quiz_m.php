@@ -26,6 +26,14 @@ class Quiz_m extends CI_Model
 
 	}
 
+	public function add_to_exam($data=false)
+	{
+
+			return $this->db->insert('quizes',$data);
+			//return $this->db->insert_id();
+
+	}
+
 	public function exam_exist($question='')
 	{
 		# code...
@@ -54,6 +62,26 @@ class Quiz_m extends CI_Model
 
 	}
 
+	public function list_exams($category=false)
+	{
+		if($category){
+
+			$this->db->select('quiz.*,quiz_category.cat_id,category.cat_name')
+				->from('quiz')
+				->join('quiz_category','quiz_category.post_id = quiz.post_id','LEFT')
+				->join('category','category.cat_id = quiz_category.cat_id','LEFT')
+				->where('quiz_category.cat_id',$category);
+			return $this->db->get()->result();
+
+		}else{
+
+			$this->db->select('quiz.*,quiz_category.cat_id,category.cat_name')
+				->from('quiz')
+				->join('quiz_category','quiz_category.post_id = quiz.post_id','LEFT')
+				->join('category','category.cat_id = quiz_category.cat_id','LEFT');
+			return $this->db->get()->result();
+		}
+	}
 	public function list_questions($category=false)
 	{
 		if($category){

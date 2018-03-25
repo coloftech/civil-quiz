@@ -42,7 +42,8 @@
                     <ul id="submenu-2" class="collapse">
 
                         <li><a href="<?=site_url('quiz/create');?>"><i class="fa fa-angle-double-right"></i> Create a quiz</a></li>
-                        <li><a href="<?=site_url('quiz/list_questions');?>"><i class="fa fa-angle-double-right"></i> List save quiz</a></li>
+                        <li><a href="<?=site_url('quiz/list_exam');?>"><i class="fa fa-angle-double-right"></i> List all exam</a></li>
+                        <li><a href="<?=site_url('quiz/list_questions');?>"><i class="fa fa-angle-double-right"></i> List all question</a></li>
                         <li><a href="<?=site_url('quiz/takeaquiz');?>"><i class="fa fa-angle-double-right"></i> Take a quiz</a></li>
 
                     </ul>

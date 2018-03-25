@@ -152,8 +152,9 @@
 
 <script type="text/javascript">
   
-  $(function(){ 
   var total_question = 0;
+  var max_question = 0;
+  $(function(){ 
     $("#question_added").html(total_question);
   });
   $('input[type="radio"]').on('click', function(e) {
@@ -189,8 +190,19 @@
       success: function(resp){
         console.log(resp);
         if(resp.stats == true){
-          total_question++;
+          total_question = total_question + 1;
         $("#question_added").html(total_question);
+        
+          if(max_question == total_question){
+           $('#btn_add').prop('disabled',true);
+            $('#btn_publish').removeAttr('disabled');
+          }
+
+          $('.user-profile').notify("Question added successfully", { position:"bottom right", className:"success" }); 
+
+        }else{
+
+                  $('.user-profile').notify('Error! '+resp.msg, { position:"bottom right", className:"error" }); 
         }
       }
 
@@ -204,10 +216,11 @@
 <script type="text/javascript">
 	$('#frmnew').on('submit',function(){
 		var data = $(this).serialize();
+    max_question = $('#q_total').val();
 
 
          // $('#btn_publish').removeAttr('disabled');
-          return false;
+          // return false;
     $.ajax({
 
       type: 'post',
@@ -222,6 +235,8 @@
           $('.category').click();
 
           $('.user-profile').notify("Question settings added successfully", { position:"bottom right", className:"success" }); 
+          $("#quizes_id").val(resp.quizes_id);
+
 
           $('#btn_add').attr('disabled');
 
@@ -243,6 +258,7 @@
     var total = $(this).val();
     $('#total_question').html(total);
     $('#total_question').css('color','blue');
+    max_question = total;
   });
 
 
