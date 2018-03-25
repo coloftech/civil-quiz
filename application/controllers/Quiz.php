@@ -30,10 +30,26 @@ class Quiz extends CI_Controller
 	}
 	public function list_exam($value='')
 	{
-		$quiz = $this->quiz_m->list_questions();
+		$quiz = $this->quiz_m->list_exams();
 		$data['lists'] = $quiz;
 		$data['site_title'] = 'List all';
-		$this->template->load('admin','quiz/listall',$data);
+		$this->template->load('admin','quiz/listexam',$data);
+	}
+	public function removeExam($value='')
+	{
+		# code...
+		if($this->input->post()){
+			if($isRemove = $this->quiz_m->removeExam($this->input->post('quizes_id'))){
+
+				echo json_encode(array('stats'=>true,'msg'=>'Exam remove successfully'));
+			}else{
+
+				echo json_encode(array('stats'=>false,'msg'=>'Nothing to remove.'));
+			}
+		}else{
+
+				echo json_encode(array('stats'=>false,'msg'=>'No input received.'));
+			}
 	}
 
 	public function takeaquiz(){
