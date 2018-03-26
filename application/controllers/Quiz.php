@@ -35,6 +35,88 @@ class Quiz extends CI_Controller
 		$data['site_title'] = 'List all';
 		$this->template->load('admin','quiz/listexam',$data);
 	}
+
+	public function edit($examId='')
+	{
+		# code...
+		if($this->input->post()){
+
+			$input =(object) $this->input->post();
+
+
+
+			if($isExist = $this->quiz_m->exam_exist($input->q_title)){
+
+				$existId = $isExist[0]->quizes_id;
+
+				if($existId != $input->quizes_id){
+					echo json_encode(array('stats'=>false,'msg'=>'This exam title cannot be used. Please try another.'));
+					exit();
+				}
+			}
+
+			$choices = isset($input->q_random_choices) ? $input->q_random_choices : 0;
+			$questions = isset($input->q_random_question) ? $input->q_random_question : 0;
+			
+			$data = array(
+				'quizes_title'=>$input->q_title,
+				'total'=>$input->q_total,
+				'type_id'=>$input->q_type,
+				'category_id'=>$input->s_category,
+				'shuffle_choices'=>$choices,
+				'suffle_questions'=>$questions
+			);
+			if($quizes_id = $this->quiz_m->update_exam($data,$input->quizes_id)){
+
+				echo json_encode(array('stats'=>true,'msg'=>'Quiz settings updated successfuly.'));
+			}else{
+
+				echo json_encode(array('stats'=>false,'msg'=>'Nothing to change.'));
+			}
+
+			exit();
+		}
+		if($exam = $this->quiz_m->getExamById($examId)){
+
+			$data['examId'] = $examId;
+
+			$data['q_title'] = $exam[0]->quizes_title;
+			$data['q_total'] = $exam[0]->total;
+			if($exam[0]->shuffle_choices == 1){
+				$data['isChoice'] = 'checked';
+			}
+			if($exam[0]->suffle_questions == 1){
+				$data['isQuestion'] = 'checked';
+			}
+			if($total = $this->quiz_m->countExamById($examId)){
+				$data['q_questions'] = $total;
+			}
+			$cat_id = $exam[0]->category_id;
+		}
+		
+		$cat = '<select class="form-control" name="s_category" id="s_category"><option value="0">No category</option></select>';
+		if($category = $this->category_m->get_Categories()){
+			$cat = '<select class="form-control" name="s_category" id="s_category">';
+			foreach ($category as $key) {
+				# code...
+				$selected = '';
+				if ($cat_id == $key->cat_id) {
+					# code...
+					$selected = 'selected';
+				}
+				$cat .= "<option value='$key->cat_id' $selected>$key->cat_name</option>";
+			}
+
+			$cat .= '</select>';
+		}
+
+		$data['editform'] = true;
+		$data['js_script'] = $this->is_cript();
+		$data['category']=$cat;
+		$data['site_title'] = 'Edit exam';
+		$this->template->load('admin','quiz/edit_q',$data);
+		
+	}
 	public function removeExam($value='')
 	{
 		# code...
@@ -155,7 +237,7 @@ class Quiz extends CI_Controller
 		$data['js_script'] = $this->is_cript();
 		$data['category']=$cat;
 		$data['site_title'] = 'Create quiz';
-		$this->template->load('admin','quiz/create_Q',$data);
+		$this->template->load('admin','quiz/create_q',$data);
 	}
 
 	public function add($value=''){
@@ -238,15 +320,14 @@ class Quiz extends CI_Controller
 			
 			$data = array(
 				'quizes_title'=>$input->q_title,
-				'total'=>$input->q_total,
-				'type_id'=>$input->q_type,
-				'category_id'=>$input->s_category,
+				'e_description'=>$input->e_description,
 				'shuffle_choices'=>$choices,
-				'suffle_questions'=>$questions
+				'suffle_questions'=>$questions,
+				'date_posted'=>date('Y-m-d H:i:s')
 			);
 			$quizes_id = $this->quiz_m->add_exam($data);
 			echo json_encode(array('stats'=>true,'msg'=>'Quiz settings added successfuly.','quizes_id'=>$quizes_id));
-
+			exit();
 		}
 	}
 

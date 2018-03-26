@@ -1,117 +1,86 @@
+<div class="wrapper site-wrapper">
+	<div class="container site-container">
 
-<div class="col-md-9 post-content">
-	<div class="item2" id="post-announce">
-	</div>
-	<div class="item2" id="post-sticky">
-	</div>
-	<?php 
-	if (isset($posts)) {
-		# code...
-		if (is_array($posts)) {
-			# code...
-			foreach ($posts as $key) {
-				# code...
+<div class="col-md-12 post-index">
+	
+<div class="col-md-9">
 
-									$listallcat = $this->post_model->listpostcategory($key->page_id);
-
-									if (is_array($listallcat)) {
-										# code...
-
-										$total = count($listallcat);
-										$cat = '';
-										foreach ($listallcat as $key2) {
-										$name = $this->post_model->categoryname_by_id($key2->category_id);
-										$cat[] = $name;
-										}
-									}
-									if(count($cat) > 0){
-										if (is_array($cat)) {
-											# code...
-										$post_category = implode(', ',$cat);
-										}else{
-
-										$post_category = $cat;
-										}
-
-
-									}else{ $post_category='';}
-				?>
-		<div class="item">
-		<?php if(!empty($key->imgs)){
-
-		echo '<div class="col-md-3 featured-img-s"><a href="'.site_url('ref=home&com=read_post&q=').$key->slug.'"><img src="'.urldecode($key->imgs).'"></a></div>';
-			}else{?>
-		<div class="col-md-3 featured-img-s"><a href="<?=site_url('ref=home&com=read_post&q=');?><?=$key->slug;?>"><img src="<?=base_url();?>public/images/blank.jpg"></a></div>
-		<?php } ?>
-		<div class="col-md-9 post-desc-home">
-		<a href="<?=site_url('ref=home&com=read_post&q=');?><?=$key->slug;?>" class="post-title-home"><?=$key->title;?></a>
-		<div class="only-desc"><?php echo $this->mglobal->limitext(urldecode($key->content));?></div>
-		<ul class="user">By <li><a href="">User</a></li>
-<?php
-$date = $key->date_created;
-$date = date('F, Y', strtotime($date));
-?>
-		<li><a href=""><?=$date;?></a></li>
-		<li class="category">
-		<?php if (is_array($cat)): ?>
-			
-		<?php foreach ($cat as $key3): ?>
-			<a href=""><?=$key3;?></a>
-		<?php endforeach ?>
-		<?php endif ?>
-
-		</li>
-		</ul>
-		<br>
-		<a href="<?=site_url('ref=home&com=read_post&q=');?><?=$key->slug;?>" class="btn btn-success detail">Details</a>
-		<a href="" class="btn btn-info detail-ex"><i class="fa fa-comment"></i>&nbsp;0</a>
-		<a href="" class="btn btn-default detail-ex"><i class="fa fa-eye"></i>&nbsp;<?php $page = '-index.php-h-p-'.$key->slug; echo $this->pagecounter->visit_total($page);?></a>
-		</div>
-
-		</div>
-
-		<div class="breaker-full"></div>
-			<?php
-			}
-		}
-		echo isset($links) ? $links : '<span class="btn alert-info">No post yet.</span>';
-	}
-
-	?>
-</div>
-
-
-<div class="col-md-3 post-sidebar">
-	<div class="item">
-	<span class="title">Recent post</span>
-		<ul>
 		<?php if (isset($posts)): ?>
-			
-		<?php
-		if(is_array($posts)){
+			<?php // print_r($posts) ?>
+			<?php if (is_array($posts)): ?>
+				<?php foreach ($posts as $key): ?>
+					<div class="post">
+						<div class="col-md-6 post-featured-img">
+							<div class="year"><?=date('Y',strtotime($key->date_posted));?></div>
+							<div class="month"><?=date('M',strtotime($key->date_posted));?></div>
+							<div class="day"><?=date('d',strtotime($key->date_posted));?></div>
+							<div class="blured">
+								<a href="<?=site_url("exam/$key->quizes_title");?>">
 
-		 foreach ($posts as $key2) {
-		 	echo "<li><a href='".site_url('ref=home&com=read_post&q='.$key->slug)."'> $key2->title </a><i>($key->year)</i></li>";
-		
-		}
+									
+									<div class="tiles">
+										<div class="tile" data-scale="1.1" data-image="<?=base_url('public/images/civil-quiz.png')?>"></div>
+									</div>
+							</div>
+							
+						</div>
+						<div class="col-md-6 post-content">
+							<div class="post-title"><a href="<?=site_url("exam/$key->quizes_title");?>" title='<?=$key->quizes_title?>'><h4><?=$this->auto_m->limit_title($key->quizes_title);?></h4></a></div>
+							<div class="post-content-desc">descriptions</div>
+							<div class="post-options">
+								<div class="posted-by">coloftech</div>
+								<div class="post-category"><?php 
 
-			} 
-			?>
+								$key->cat_name;
 
+								?></div>
+								<div class="post-details"><a href="<?=site_url("exam/$key->quizes_title");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>
+							</div>
+						</div>
+					</div>
+						
+				<?php endforeach ?>
+			<?php endif ?>
 		<?php endif ?>
-		</ul>
+<div class="col-md-12"><?=isset($pagination) ? $pagination : '';?></div>
+</div>
+<div class="col-md-3 side-bar">
+	<div class="panel panel-search">
+	<div class="panel-body" style="padding: 0;">
+		<input class="form-control" placeholder="Search" id="search" name="q" /><i class="fa fa-search pul"></i></div>
 	</div>
-	<div class="item">
-		<span class="title">
-			Ads
-		</span>
+	<div class="panel">
+		<div class="panel-heading"><h4>REVIEWER RATING</h4></div>
+		<div class="panel-body">
+			<ul class="recent-post">
+				<?php //echo $this->auto_m->recent_post(5); ?>
+			</ul>
+		</div>
+
+
 	</div>
 
-	<div class="item">
-	<span class="title">Calendar</span>
-		<ul>
-		<li><a href=""></a></li>
-		<li><a href=""></a></li>
-		</ul>
+	<div class="panel">
+		<div class="panel-heading"><h4>SHARE US NOW </h4>
+			
+		</div>
+		<div class="panel-body">
+		     <p>
+        
+    Hello! I am Roy, a PHP Developer and COLFTECH is my programming blog. I'm fond of developing modern web applications.<br />
+
+    Contact me, I accept paid work.<br /><br />
+
+    roy.rita@coloftech.com
+      </p>
+      <!-- p>
+          <div class="fb-page" data-href="https://www.facebook.com/coloftech/" data-tabs="about" data-width="350" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true"><blockquote cite="https://www.facebook.com/coloftech/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/coloftech/">Coloftech - State of the Art &amp; Technology</a></blockquote></div>
+      </p -->
+		</div>
+	</div>
+
+</div>
+</div>
 	</div>
 </div>
+

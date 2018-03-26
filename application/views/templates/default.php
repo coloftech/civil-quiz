@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo isset($title) ? $title : 'COLOFTECH' ;?></title>
+    <title><?php echo isset($site_title) ? $site_title : 'COLOFTECH' ;?></title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta charset="utf-8">

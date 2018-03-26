@@ -1,7 +1,9 @@
 
 <ul class="nav nav-tabs" id="ul_new">
   <li class="active"><a data-toggle="tab" href="#home" class="home">SETTING</a></li>
-  <li><a data-toggle="tab" href="#category" class="category">QUESTIONS</a></li>
+  <li><a data-toggle="tab" href="#category" class="category">CATEGORY</a></li>
+  <li><a data-toggle="tab" href="#questions" class="questions">QUESTIONS</a></li>
+
 </ul>
 
 <div class="tab-content">
@@ -12,27 +14,19 @@
     	<div class="col-md-8">
     		<div class="is_new">
     			<form class="form form-horizontal" id="frmnew" method="post" accept="./addexam">
+            
             <div class="form-group">
               
           <label>Title of the quiz</label>
           <input type="text" name="q_title" id="q_title" class="form-control" />
             </div>
+            
             <div class="form-group">
               
-          <label>Total of the quiz</label>
-          <input type="number" name="q_total" id="q_total" class="form-control" />
-            </div>
-             <div class="form-group">
-              <label for="s_category">Select subject/category <i class="btn fa fa-plus"></i></label>
-              <?php echo $category; ?>
+          <label>Exam description</label>
+          <textarea class="form-control" id="e_description" name="e_description" rows="8" required></textarea> 
             </div>
 
-            <div class="form-group">
-              <label for="question">Select quiz type </label>
-              <select class="form-control" id="q_type" name="q_type">
-                <option value="1">Multiple choice</option>
-              </select>
-            </div>
 
             <div class="form-group">
               
@@ -66,6 +60,18 @@
       </p>
   </div>
   <div id="category" class="tab-pane fade">
+    <h3>Category</h3>
+
+
+      <button class="btn btn-default btn-sm" data-toggle="modal"  data-target="#category_modal" type="button" >Exam category <i class="fa fa-plus "></i></button>
+      <p id="listexam">
+        <table class="table table-bordered" id="tbl_exams">
+          <thead><tr><th>Exam Category</th><th>Type</th><th>Total exam</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </p>
+  </div>
+  <div id="questions" class="tab-pane fade">
     <h3>Questions</h3>
     <p>
     <div class="form-responsive">
@@ -78,28 +84,28 @@
         <input type="hidden" name="type_id" id="type_id" value="0" />
     <div class="form-group">
       <label for="question">Question textarea</label>
-      <textarea class="form-control" name="question" id="question" class="summernote" required></textarea>
+      <textarea class="form-control" name="question" id="question" class="summernote"></textarea>
     </div>
 
     <div class="form-group choices">
-      <label for="answer1" style="width:100%;display: block;"><input type="radio" name="answer" id="answer1" value="1" required=""> Choice 1 </label>
-      <input type="text" name="choice1" id="choice1" class="form-control"  required />
+      <label for="answer1" style="width:100%;display: block;"><input type="radio" name="answer" id="answer1" value="1" > Choice 1 </label>
+      <input type="text" name="choice1" id="choice1" class="form-control txtinput" placeholder="Enter choice here..."  required />
     </div>
     <div class="form-group choices">
       <label for="answer2" style="width:100%;display: block;"><input type="radio" name="answer" id="answer2" value="2"> Choice 2 </label>
-      <input type="text" name="choice2" id="choice2" class="form-control"  required />
+      <input type="text" name="choice2" id="choice2" class="form-control txtinput" placeholder="Enter choice here..."  required />
     </div>
     <div class="form-group choices">
       <label for="answer3" style="width:100%;display: block;"><input type="radio" name="answer" id="answer3" value="3"> Choice 3 </label>
-      <input type="text" name="choice3" id="choice3" class="form-control" required  />
+      <input type="text" name="choice3" id="choice3" class="form-control txtinput" placeholder="Enter choice here..." required  />
     </div>
     <div class="form-group choices">
       <label for="answer4" style="width:100%;display: block;"><input type="radio" name="answer" id="answer4" value="4"> Choice 4 </label>
-      <input type="text" name="choice4" id="choice4" class="form-control" required  />
+      <input type="text" name="choice4" id="choice4" class="form-control txtinput" placeholder="Enter choice here..." required  />
     </div>
     <div class="form-group choices">
       <label for="answer5" style="width:100%;display: block;"><input type="radio" name="answer" id="answer5" value="5"> Choice 5 </label>
-      <input type="text" name="choice5" id="choice5" class="form-control" required  />
+      <input type="text" name="choice5" id="choice5" class="form-control txtinput" placeholder="Enter choice here..." required  />
     </div>
 
   </div>
@@ -112,15 +118,23 @@
       </div>
 
     <div class="form-group">
+      <label for="exam_title">Exam title: </label><span id="exam_title"></span><input type="hidden" name="e_title_id" id="etitle_id">
+    </div>
+    <div class="form-group">
+      <label for="exam_category">Exam Category: </label><span id="exam_category"></span><input type="hidden" name="ecategory" id="ecategory">
+    </div>
+    <div class="form-group">
+      <label for="exam_type">Exam type: </label><span id="exam_type"></span><input type="hidden" name="etype_id" id="etype_id">
+    </div>
+    </div>
+    <div class="form-group">
       <label  for="Add"></label>
       <button class="btn btn-info btn-sm" type="submit" name="btn_add" id="btn_add">Add</button>&nbsp;
       <button class="btn btn-default btn-sm" type="submit" name="btn_addlater" id="btn_addlater">Draft</button>
       <button class="btn btn-success btn-sm " type="submit" name="btn_publish" id="btn_publish" disabled='true'>Publish</button>&nbsp;
     </div>
 
-    </div>
 
-      <div class="col-md-12">
           <br />
           <br />
        <p style="font-size: 12px; ">
@@ -139,6 +153,63 @@
   </form>
 </p>
   </div>
+</div>
+
+
+<!--- -->
+
+<div class="row">
+  <!-- Modal -->
+<div id="category_modal" class="modal fade" role="dialog">
+<div class="modal-bg hidden">
+  <!--span class="loader"></span -->
+  <progress id="progressBar" value="0" maximum="100" style="width:300px;"></progress>
+  <h3 id="status"></h3>
+  <p id="loaded_n_total"></p>
+</div>
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" >&times;</button>
+        <h4 class="modal-title">Add photo gallery</h4>
+      </div>
+      <div class="modal-body">
+        
+        <p>   
+    <form action="#" id="frm_exam" name="frm_exam" class="">
+           
+             <div class="form-group">
+              <label for="s_category">Select subject/category <i class="btn fa fa-plus"></i></label>
+              <?php echo $category; ?>
+            </div>
+
+            <div class="form-group">
+              <label for="question">Select quiz type </label>
+              <select class="form-control" id="q_type" name="q_type">
+                <option value="1">Multiple choice</option>
+              </select>
+            </div>
+             <div class="form-group">
+              
+          <label>Total of the quiz</label>
+          <input type="number" name="q_total" id="q_total" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+        <label style="width:12px;"></label><button class="btn btn-sm btn-info upload" type="submit" id="btn_category">Set</button>
+            </div>
+    </form>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default hidden" data-dismiss="modal" >Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 </div>
 
 <style type="text/css">
@@ -176,7 +247,26 @@
   $('#frmquestion').on('submit',function(){
     var data = $(this).serialize();
     var category_id = $('#s_category').val();
+    var question = $('#question').val()
     var type_id = $('#q_type').val();
+
+    var choices = $('input[name="answer"]:checked').val();
+
+
+    if(question == '' || question == '<p></p>' || question == '<p><br></p>'){
+
+      $('.user-profile').notify('Error! Please input a question.', { position:"bottom right", className:"error" }); 
+      return false;
+    }
+     if(choices == '' || choices == undefined){
+
+
+      $('.user-profile').notify('Error! Please select an answer to this question.', { position:"bottom right", className:"error" }); 
+      return false;
+    }
+    //console.log(question)
+
+    //return false;
 
     data =  data + '&category_id='+category_id+'&type_id='+type_id;
 
@@ -210,12 +300,47 @@
     return false;
   });
 
-</script>
 
+  $('#frm_exam').on('submit',function(){
+    var category = $('#s_category').val();
+    var t_category = $('#s_category option:selected').text();
+    var q_type = $('#q_type').val();
+    var t_type = $('#q_type option:selected').text();
+    var q_total = $('#q_total').val();
+    var quizes_id = $('#quizes_id').val();
+    var type = '';
+    if (parseInt(q_type) == 1) {
+      type = 'Multiple choice';
+    }
 
-<script type="text/javascript">
+      $('#tbl_exams tbody').append('<tr><td>'+t_category+'</td><td>'+t_type+'</td><td>'+q_total+'</td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
+
+              $('#category_modal').modal('hide');
+    return false;
+  });
+
+  var eid = 0;
+  var ecategory_id = 0;
+  var etotal = 0;
+  function add_questions(eid,ecategory_id,etotal,t_category,t_type){
+    /*console.log(eid);
+    console.log(ecategory_id);
+    console.log(etotal);*/
+    eid = eid;
+    ecategory_id =ecategory_id;
+    etotal = etotal;
+
+   // $('#exam_title').html();
+    $('#exam_category').html(t_category);
+    $('#exam_type').html(t_type);
+
+          $('.questions').click();
+    return false;
+  }
+
 	$('#frmnew').on('submit',function(){
-		var data = $(this).serialize();
+    var data = $(this).serialize();
+    var data = $(this).serialize();
     max_question = $('#q_total').val();
 
 
@@ -235,10 +360,13 @@
           $('.category').click();
 
           $('.user-profile').notify("Question settings added successfully", { position:"bottom right", className:"success" }); 
+          
           $("#quizes_id").val(resp.quizes_id);
 
+          $('#exam_title').html($('#q_title').val());
 
-          $('#btn_add').attr('disabled');
+
+          $('#btn_set').attr('disabled');
 
          }else{
 
@@ -259,6 +387,40 @@
     $('#total_question').html(total);
     $('#total_question').css('color','blue');
     max_question = total;
+  });
+
+
+  $('.txtinput').on('change',function(){
+    var data = $(this).val();
+    var i = 0;
+    var choice1 = $('#choice1').val();
+    var choice2 = $('#choice2').val();
+    var choice3 = $('#choice3').val();
+    var choice4 = $('#choice4').val();
+    var choice5 = $('#choice5').val();
+   
+
+    if(data == choice1){
+      i++;
+    }
+    if(data == choice2){
+      i++;
+    }
+    if(data == choice3){
+      i++;
+    }
+    if(data == choice4){
+      i++;
+    }
+    if(data == choice5){
+      i++;
+    }
+    if(i > 1){
+      $(this).val('');
+      //$(this).focus();
+      $(this).attr('placeholder','Warning: This field should be unique.');
+    }
+    console.log(i);
   });
 
 

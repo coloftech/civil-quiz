@@ -25,6 +25,12 @@ class Quiz_m extends CI_Model
 			return $this->db->insert_id();
 
 	}
+	public function update_exam($data=false,$exam_id=0)
+	{
+			$this->db->where('quizes_id',$exam_id);
+			return $this->db->update('quizes_setting',$data);
+
+	}
 
 	public function add_to_exam($data=false)
 	{
@@ -47,11 +53,23 @@ class Quiz_m extends CI_Model
 			}
 	}
 
+	public function getExamById($exam_id=0)
+	{
+		
+
+			$this->db->select('quizes_setting.*,category.cat_name')
+				->from('quizes_setting')				
+				->join('category','category.cat_id = quizes_setting.category_id','LEFT')
+				->where('quizes_id',$exam_id);
+			return $this->db->get()->result();
+
+	}
 	public function exam_exist($question='')
 	{
 		# code...
 		return $this->db->get_where('quizes_setting',array('quizes_title'=>$question))->result();
 	}
+
 	public function set_category($data=false)
 	{
 
@@ -87,8 +105,9 @@ class Quiz_m extends CI_Model
 		}else{
 
 			$this->db->select('quizes_setting.*,category.cat_name')
+				->from('quizes_setting')
 				->join('category','category.cat_id = quizes_setting.category_id','LEFT')
-				->from('quizes_setting');
+				->order_by('quizes_setting.date_posted','DESC');
 			return $this->db->get()->result();
 		}
 	}

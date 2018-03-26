@@ -42,7 +42,7 @@
 		<td><?php echo "$added_q/$key->total"; ?></td>
 		<td><?=$key->cat_name ?></td>
 		<td><?=$Status ?></td>
-		<td width="80px"><i class="fa fa-edit btn"></i> <i class="fa fa-remove btn" onclick="removeExam(<?=$key->quizes_id ?>);"></i></td>
+		<td width="80px"><i class="fa fa-edit btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-remove btn" onclick="removeExam(<?=$key->quizes_id ?>);"></i></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>
@@ -53,6 +53,9 @@
 
 <script type="text/javascript">
 	
+	function editExam(examid){
+		window.location = '<?=site_url("quiz/edit/")?>'+examid;
+	}
 	function removeExam(examid){
 		//alert(examid);
 		var data = 'quizes_id='+examid;

@@ -41,7 +41,7 @@ class Administration extends CI_Controller {
     // Backup your entire database and assign it to a variable
     $backup =& $this->dbutil->backup();
 
-    $fileName = 'db-backup-'.$this->username.'-'.date('Y-m-d-h-m-s').'.zip';
+    $fileName = 'civil-quiz-backup-'.date('Y-m-d H:i:s').'.zip';
     // Load the file helper and write the file to your server
     $this->load->helper('file');
     write_file(UPLOADPATH.'/admin/'.$fileName, $backup);

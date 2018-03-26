@@ -28,15 +28,20 @@ class Home extends CI_Controller {
 	{
 		$this->load->model('site_m');
 		$this->load->model('user_m');
+		$this->load->model('quiz_m');
 	}
 
 	public function index()
 	{
 		$data['is_index'] = true;
 
+		$quiz = $this->quiz_m->list_exams();
+		$data['posts'] = $quiz;
+
 		$data['site_path'] = $this->site_m->getSiteName(false,1)[0]->site_path;
-		$data['site_title'] = 'Bohol Island State University - Bilar Campus';
-		$this->template->load(false,'site/index',$data);
+		$data['site_title'] = 'Coloftech: Civil Service Exam Review';
+		$data['meta_title'] = $data['site_title'];
+		$this->template->load(false,'home/index',$data);
 	}
 
 	public function login($page='home')
