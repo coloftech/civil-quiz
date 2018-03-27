@@ -256,6 +256,9 @@ class Quiz extends CI_Controller
 
 			}
 
+			//echo json_encode($input);
+			//exit();
+
 			$data = array(
 				'post_question'=>$input->question,
 				'post_answer'=>$answer,
@@ -295,6 +298,37 @@ class Quiz extends CI_Controller
 			echo json_encode(array('stats'=>false,'msg'=>'No input receveid.'));
 		}
 
+	}
+
+	public function examsetting($value='')
+	{
+
+		if ($this->input->post()) {
+			$input = (object)$this->input->post();
+			
+
+			$isExist = $this->quiz_m->exam_category_exist($input->quizes_id,$input->s_category);
+			if(count($isExist) > 0){
+
+				echo json_encode(array('stats'=>false,'msg'=>'Failed! Exam category cannot be duplicate.'));
+				exit();
+			
+			}
+
+			$data = array(
+				'exam_id'=>$input->quizes_id,
+				'category_id'=>$input->s_category,
+				'exam_total'=>$input->q_total,
+				'exam_type'=>$input->q_type
+			);
+			if($quizes_id = $this->quiz_m->add_to_exam_setting($data)){
+
+			echo json_encode(array('stats'=>true,'msg'=>'Exam setting added'));
+			}else{
+
+			echo json_encode(array('stats'=>false,'msg'=>'No changes made.'));
+			}
+		}
 	}
 	public function addexam($value='')
 	{

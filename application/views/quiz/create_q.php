@@ -173,7 +173,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" >&times;</button>
-        <h4 class="modal-title">Add photo gallery</h4>
+        <h4 class="modal-title">Add exam</h4>
       </div>
       <div class="modal-body">
         
@@ -199,6 +199,9 @@
 
             <div class="form-group">
         <label style="width:12px;"></label><button class="btn btn-sm btn-info upload" type="submit" id="btn_category">Set</button>
+            </div>
+            <div class="form-group">
+        <label for="error"></label><div id="error"></div>
             </div>
     </form>
         </p>
@@ -245,11 +248,11 @@
 
 
   $('#frmquestion').on('submit',function(){
-    var data = $(this).serialize();
-    var category_id = $('#s_category').val();
-    var question = $('#question').val()
-    var type_id = $('#q_type').val();
 
+    var data = $(this).serialize();
+    var category_id = $('#category_id').val();
+    var question = $('#question').val()
+    var type_id = $('#type_id').val();
     var choices = $('input[name="answer"]:checked').val();
 
 
@@ -268,7 +271,7 @@
 
     //return false;
 
-    data =  data + '&category_id='+category_id+'&type_id='+type_id;
+    //data =  data + '&category_id='+category_id+'&type_id='+type_id;
 
     $.ajax({
 
@@ -278,7 +281,9 @@
       dataType: 'json',
 
       success: function(resp){
+
         console.log(resp);
+        return false;
         if(resp.stats == true){
           total_question = total_question + 1;
         $("#question_added").html(total_question);
@@ -309,33 +314,60 @@
     var q_total = $('#q_total').val();
     var quizes_id = $('#quizes_id').val();
     var type = '';
+    var data = $(this).serialize();
     if (parseInt(q_type) == 1) {
       type = 'Multiple choice';
     }
 
-      $('#tbl_exams tbody').append('<tr><td>'+t_category+'</td><td>'+t_type+'</td><td>'+q_total+'</td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
+    $.ajax({
+
+      type: 'post',
+      data: data+'&quizes_id='+quizes_id,
+      url: '<?=site_url("quiz/examsetting"); ?>',
+      dataType: 'json',
+      success: function(resp){
+         console.log(resp);
+        if(resp.stats == true){
+
+      $('#tbl_exams tbody').append('<tr><td>'+t_category+'</td><td>'+t_type+'</td><td>'+q_total+'</td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
 
               $('#category_modal').modal('hide');
+
+
+        }else{
+
+                  $('#s_category').notify('Error! '+resp.msg, { position:"bottom right", className:"error" }); 
+        }
+      }
+    });
+
     return false;
   });
 
   var eid = 0;
   var ecategory_id = 0;
   var etotal = 0;
-  function add_questions(eid,ecategory_id,etotal,t_category,t_type){
-    /*console.log(eid);
-    console.log(ecategory_id);
-    console.log(etotal);*/
+  var etype = 0; 
+  function add_questions(eid,ecategory_id,etotal,etype,t_category,t_type){
+    
     eid = eid;
-    ecategory_id =ecategory_id;
+    ecategory_id = ecategory_id;
     etotal = etotal;
+    etype = etype;
+
+
+      $('#category_id').val(ecategory_id);
+      $('#quiz_total').val(etotal);
+      $('#type_id').val(etype);
 
    // $('#exam_title').html();
     $('#exam_category').html(t_category);
     $('#exam_type').html(t_type);
 
-          $('.questions').click();
+    $('.questions').click();
+
     return false;
+
   }
 
 	$('#frmnew').on('submit',function(){

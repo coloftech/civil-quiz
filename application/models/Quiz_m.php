@@ -39,6 +39,13 @@ class Quiz_m extends CI_Model
 
 	}
 
+
+	public function add_to_exam_setting($data=false)
+	{
+
+			return $this->db->insert('exam_setting',$data);
+
+	}
 	public function countExamById($exam_id=0)
 	{
 		
@@ -68,6 +75,11 @@ class Quiz_m extends CI_Model
 	{
 		# code...
 		return $this->db->get_where('quizes_setting',array('quizes_title'=>$question))->result();
+	}
+		public function exam_category_exist($exam_id=0,$category_id=0)
+	{
+		# code...
+		return $this->db->get_where('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$category_id))->result();
 	}
 
 	public function set_category($data=false)
@@ -138,3 +150,10 @@ class Quiz_m extends CI_Model
 		return $this->db->delete('quizes_setting',array('quizes_id'=>$exam_id));
 	}
 }
+
+
+/*
+
+SELECT s.quizes_id,s.quizes_title,q.*,c.cat_id FROM q_quiz as q LEFT JOIN q_quiz_category as c ON c.post_id = q.post_id LEFT JOIN q_quizes as qq ON q.post_id = qq.quiz_id LEFT JOIN q_exam_setting as e ON e.exam_id = qq.quizes_setting_id LEFT JOIN q_quizes_setting as s ON e.exam_id = s.quizes_id ORDER BY s.quizes_id DESC
+
+*/
