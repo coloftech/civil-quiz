@@ -28,10 +28,15 @@
 							<div class="post-title"><a href="<?=site_url("exam/$key->quizes_title");?>" title='<?=$key->quizes_title?>'><h4><?=$this->auto_m->limit_title($key->quizes_title);?></h4></a></div>
 							<div class="post-content-desc">descriptions</div>
 							<div class="post-options">
-								<div class="posted-by">coloftech</div>
+								<div class="posted-by"></div>
 								<div class="post-category"><?php 
-
-								$key->cat_name;
+								$category = $this->quiz_m->getExamById($key->quizes_id);
+								$j = 1;
+								foreach ($category as $cat) {
+									# code...
+								echo "<p>$j) $cat->cat_name</p>";
+								$j++;
+								}
 
 								?></div>
 								<div class="post-details"><a href="<?=site_url("exam/$key->quizes_title");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>

@@ -64,10 +64,10 @@ class Quiz_m extends CI_Model
 	{
 		
 
-			$this->db->select('quizes_setting.*,category.cat_name')
-				->from('quizes_setting')				
-				->join('category','category.cat_id = quizes_setting.category_id','LEFT')
-				->where('quizes_id',$exam_id);
+			$this->db->select('exam_setting.*,category.cat_name')
+				->from('exam_setting')				
+				->join('category','category.cat_id = exam_setting.category_id','LEFT')
+				->where('exam_id',$exam_id);
 			return $this->db->get()->result();
 
 	}
@@ -116,9 +116,10 @@ class Quiz_m extends CI_Model
 
 		}else{
 
-			$this->db->select('quizes_setting.*,category.cat_name')
+			$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam')
 				->from('quizes_setting')
-				->join('category','category.cat_id = quizes_setting.category_id','LEFT')
+				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT')
+				->group_by('exam_setting.exam_id')
 				->order_by('quizes_setting.date_posted','DESC');
 			return $this->db->get()->result();
 		}

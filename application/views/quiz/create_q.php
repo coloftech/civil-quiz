@@ -1,8 +1,8 @@
 
 <ul class="nav nav-tabs" id="ul_new">
-  <li class="active"><a data-toggle="tab" href="#home" class="home">SETTING</a></li>
-  <li><a data-toggle="tab" href="#category" class="category">CATEGORY</a></li>
-  <li><a data-toggle="tab" href="#questions" class="questions">QUESTIONS</a></li>
+  <li class="li_home active"><a data-toggle="tab" href="#home" class="home">SETTING</a></li>
+  <li class="li_category disabled"><a data-toggle="tab" href="#category" class="category">CATEGORY</a></li>
+  <li class="li_questions disabled"><a data-toggle="tab" href="#questions" class="questions">QUESTIONS</a></li>
 
 </ul>
 
@@ -63,10 +63,11 @@
     <h3>Category</h3>
 
 
-      <button class="btn btn-default btn-sm" data-toggle="modal"  data-target="#category_modal" type="button" >Exam category <i class="fa fa-plus "></i></button>
+      <button class="btn btn-default btn-sm" data-toggle="modal"  data-target="#category_modal" type="button" >Exam category <i class="fa fa-plus "></i></button> &nbsp;
+      <a class="btn btn-info btn-sm"  href="../quiz/list_exam">Finnish <i class="fa fa-remove "></i></a>
       <p id="listexam">
         <table class="table table-bordered" id="tbl_exams">
-          <thead><tr><th>Exam Category</th><th>Type</th><th>Total exam</th><th></th></tr></thead>
+          <thead><tr><th>Exam Category</th><th>Type</th><th>Added question</th><th>Max question</th><th></th></tr></thead>
           <tbody></tbody>
         </table>
       </p>
@@ -228,6 +229,14 @@
   
   var total_question = 0;
   var max_question = 0;
+
+  $('a[data-toggle="tab"]').on('click', function(){
+  if ($(this).parent('li').hasClass('disabled')) {
+    return false;
+  };
+});
+
+
   $(function(){ 
     $("#question_added").html(total_question);
   });
@@ -255,6 +264,9 @@
     var type_id = $('#type_id').val();
     var choices = $('input[name="answer"]:checked').val();
 
+    var added = $('#input_questions_'+ecategory_id).val();
+
+
 
     if(question == '' || question == '<p></p>' || question == '<p><br></p>'){
 
@@ -267,11 +279,12 @@
       $('.user-profile').notify('Error! Please select an answer to this question.', { position:"bottom right", className:"error" }); 
       return false;
     }
-    //console.log(question)
 
-    //return false;
-
-    //data =  data + '&category_id='+category_id+'&type_id='+type_id;
+          if(parseInt(max_question) == parseInt(added)){
+            $('.user-profile').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
+            return false;
+          }
+   
 
     $.ajax({
 
@@ -283,13 +296,18 @@
       success: function(resp){
 
         console.log(resp);
-        return false;
+
         if(resp.stats == true){
-          total_question = total_question + 1;
+
+        total_question =parseInt(total_question) + 1;
+
         $("#question_added").html(total_question);
+
+        $("#added_question_"+ecategory_id).html(total_question);
+        $('#input_questions_'+ecategory_id).val(total_question);
         
           if(max_question == total_question){
-           $('#btn_add').prop('disabled',true);
+           //$('#btn_add').prop('disabled',true);
             $('#btn_publish').removeAttr('disabled');
           }
 
@@ -329,7 +347,10 @@
          console.log(resp);
         if(resp.stats == true){
 
-      $('#tbl_exams tbody').append('<tr><td>'+t_category+'</td><td>'+t_type+'</td><td>'+q_total+'</td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
+          ecategory_id = category;
+          etype = q_type;
+
+      $('#tbl_exams tbody').append('<tr><td>'+t_category+'</td><td>'+t_type+'</td><td><span id="added_question_'+category+'" class="red" color="red">0</span><input type="hidden" id="input_questions_'+category+'" value="0"/></td><td>'+q_total+' <input type="hidden" id="max_'+category+'" value="'+q_total+'" /></td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
 
               $('#category_modal').modal('hide');
 
@@ -348,12 +369,28 @@
   var ecategory_id = 0;
   var etotal = 0;
   var etype = 0; 
-  function add_questions(eid,ecategory_id,etotal,etype,t_category,t_type){
+  var input_questions = 0;
+  function add_questions(eqid,category_id,mtotal,eqtype,t_category,t_type){
     
-    eid = eid;
-    ecategory_id = ecategory_id;
-    etotal = etotal;
-    etype = etype;
+    eid = eqid;
+    ecategory_id = category_id;
+    etotal = mtotal;
+    etype = eqtype;
+
+    max_question = mtotal;
+
+    ad_q = $('#input_questions_'+ecategory_id).val();
+    console.log(ad_q);
+
+    if(parseInt(ad_q) == parseInt(etotal)){
+      $('.user-profile').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
+      return false;
+    }
+
+
+    input_questions = $('#input_questions_'+ecategory_id).val();
+    total_question = input_questions ;
+    $("#question_added").html(total_question);
 
 
       $('#category_id').val(ecategory_id);
@@ -364,20 +401,22 @@
     $('#exam_category').html(t_category);
     $('#exam_type').html(t_type);
 
+    $('.li_questions').removeClass('disabled');
     $('.questions').click();
 
     return false;
 
   }
 
+  $('.category').on('click',function(){
+    $('.li_questions').addClass('disabled');
+  });
+
 	$('#frmnew').on('submit',function(){
     var data = $(this).serialize();
     var data = $(this).serialize();
     max_question = $('#q_total').val();
 
-
-         // $('#btn_publish').removeAttr('disabled');
-          // return false;
     $.ajax({
 
       type: 'post',
@@ -388,7 +427,7 @@
       success: function(resp){
          console.log(resp);
          if (resp.stats ==  true) {
-
+          $('.li_category').removeClass('disabled');
           $('.category').click();
 
           $('.user-profile').notify("Question settings added successfully", { position:"bottom right", className:"success" }); 
@@ -396,7 +435,6 @@
           $("#quizes_id").val(resp.quizes_id);
 
           $('#exam_title').html($('#q_title').val());
-
 
           $('#btn_set').attr('disabled');
 

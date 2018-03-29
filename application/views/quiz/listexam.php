@@ -3,11 +3,11 @@
 	<thead>
 		
 	<tr>
-		<th>#</th>
+		<th>Date added</th>
 		<th>Exam title</th>
-		<th>Question</th>
-		<th>Category</th>
-		<th>Status</th>
+		<th>Total exam</th>
+		<th>Shuffle Choices</th>
+		<th>Live Status</th>
 		<th></th>
 	</tr>
 	</thead>	<tbody>
@@ -37,12 +37,12 @@
 
 		  ?>
 	<tr id="tr_<?=$key->quizes_id ?>">
-		<td><?=$key->quizes_id ?></td>
+		<td width="100px"><?=date('Y-m-d',strtotime($key->date_posted)) ?></td>
 		<td><?=$key->quizes_title ?></td>
-		<td><?php echo "$added_q/$key->total"; ?></td>
-		<td><?=$key->cat_name ?></td>
-		<td><?=$Status ?></td>
-		<td width="80px"><i class="fa fa-edit btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-remove btn" onclick="removeExam(<?=$key->quizes_id ?>);"></i></td>
+		<td  width="100px"><?=$key->totalexam?></td>
+		<td  width="130px"><?=$choices ?></td>
+		<td  width="120px"><?=$Status ?></td>
+		<td width="120px"><i class="fa fa-eye btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-edit btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-remove btn" onclick="removeExam(<?=$key->quizes_id ?>);"></i></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>
