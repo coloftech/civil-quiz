@@ -5,10 +5,10 @@
 	<tr>
 		<th>Date added</th>
 		<th>Exam title</th>
+		<th>Category</th>
 		<th>Total exam</th>
-		<th>Exam category</th>
 		<th>Shuffle Choices</th>
-		<th>Live Status</th>
+		<th>Status</th>
 		<th></th>
 	</tr>
 	</thead>	<tbody>
@@ -19,10 +19,7 @@
 		//print_r($lists);exit();
 		$i++;
 		$added_q = 0;
-		if($total = $this->quiz_m->countExamById($key->quizes_id)){
-
-			$added_q = $total;
-		}
+		
 
 		 	$choices = 'No';
 		if ($key->shuffle_choices == 1) {
@@ -42,10 +39,10 @@
 	<tr id="tr_<?=$key->quizes_id ?>">
 		<td width="100px"><?=date('Y-m-d',strtotime($key->date_posted)) ?></td>
 		<td><?=$key->quizes_title ?></td>
+		<td><?php echo implode(', ', $key->category_names);?></td>
 		<td  width="100px"><?=$key->exam_total?></td>
-		<td  width="100px"><?=$key->totalexam?></td>
 		<td  width="130px"><?=$choices ?></td>
-		<td  width="120px"><?=$Status ?></td>
+		<td  width="80px"><?=$Status ?></td>
 		<td width="120px"><i class="fa fa-eye btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-edit btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-remove btn" onclick="removeExam(<?=$key->quizes_id ?>);"></i></td>
 	</tr>
 	<?php endforeach ?>

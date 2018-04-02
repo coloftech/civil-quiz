@@ -1,8 +1,8 @@
 
 <ul class="nav nav-tabs" id="ul_new">
   <li class="li_home active"><a data-toggle="tab" href="#home" class="home">SETTING</a></li>
-  <li class="li_category disabled"><a data-toggle="tab" href="#category" class="category">CATEGORY</a></li>
-  <li class="li_questions disabled"><a data-toggle="tab" href="#questions" class="questions">QUESTIONS</a></li>
+  <li class="li_category"><a data-toggle="tab" href="#category" class="category">CATEGORY</a></li>
+  <li class="li_questions"><a data-toggle="tab" href="#questions" class="questions">QUESTIONS</a></li>
 
 </ul>
 
@@ -18,13 +18,13 @@
             <div class="form-group">
               
           <label>Title of the quiz</label>
-          <input type="text" name="q_title" id="q_title" class="form-control" />
+          <input type="text" name="q_title" id="q_title" class="form-control" value="<?=isset($q_title) ? $q_title : '' ; ?>" />
             </div>
             
             <div class="form-group">
               
           <label>Exam description</label>
-          <textarea class="form-control" id="e_description" name="e_description" rows="8" required></textarea> 
+          <textarea class="form-control" id="e_description" name="e_description" rows="8" required><?=isset($e_description) ? $e_description : '' ; ?></textarea> 
             </div>
 
 
@@ -32,8 +32,8 @@
               
           <label>Allow shuffle</label>
           <br />
-          <label for="q_random_choices" style="font-weight: normal;cursor: pointer"><input type="checkbox" name="q_random_choices" id="q_random_choices" class="checkbox-inline" value="1" /> Shuffle choices </label><br />
-          <label for="q_random_question" style="font-weight: normal;cursor: pointer"><input type="checkbox" name="q_random_question" id="q_random_question" class="checkbox-inline" value="1" /> Suffle questions</label><br />
+          <label for="q_random_choices" style="font-weight: normal;cursor: pointer"><input type="checkbox" name="q_random_choices" id="q_random_choices" class="checkbox-inline" value="1"  <?=isset($isChoice) ? $isChoice : '' ; ?> /> Shuffle choices </label><br />
+          <label for="q_random_question" style="font-weight: normal;cursor: pointer"><input type="checkbox" name="q_random_question" id="q_random_question" class="checkbox-inline" value="1" <?=isset($isQuestion) ? $isQuestion : '' ; ?> /> Suffle questions</label><br />
             </div>
 
             <div class="form-group">
@@ -68,7 +68,9 @@
       <p id="listexam">
         <table class="table table-bordered" id="tbl_exams">
           <thead><tr><th>Exam Category</th><th>Type</th><th>Added question</th><th>Max question</th><th></th></tr></thead>
-          <tbody></tbody>
+          <tbody>
+            <?=isset($tr) ? $tr : '' ; ?>
+          </tbody>
         </table>
       </p>
   </div>
@@ -119,7 +121,7 @@
       </div>
 
     <div class="form-group">
-      <label for="exam_title">Exam title: </label><span id="exam_title"></span><input type="hidden" name="e_title_id" id="etitle_id">
+      <label for="exam_title">Exam title: </label><span id="exam_title"><?=isset($q_title) ? $q_title : '' ; ?></span><input type="hidden" name="e_title_id" id="etitle_id" value="<?=isset($examId) ? $examId : 0 ; ?>">
     </div>
     <div class="form-group">
       <label for="exam_category">Exam Category: </label><span id="exam_category"></span><input type="hidden" name="ecategory" id="ecategory">
@@ -380,17 +382,18 @@
   var etotal = 0;
   var etype = 0; 
   var input_questions = 0;
-  function add_questions(eqid,category_id,mtotal,eqtype,t_category,t_type){
+  function add_questions(eqid,category_id,added_questions,mtotal,eqtype,t_category,t_type){
     
     eid = eqid;
     ecategory_id = category_id;
     etotal = mtotal;
     etype = eqtype;
+    total_question = added_questions;
 
     max_question = mtotal;
 
     ad_q = $('#input_questions_'+ecategory_id).val();
-    console.log(ad_q);
+    //console.log(ad_q);
 
     if(parseInt(ad_q) == parseInt(etotal)){
       $('.user-profile').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
@@ -398,9 +401,14 @@
     }
 
 
-    input_questions = $('#input_questions_'+ecategory_id).val();
-    total_question = input_questions ;
+   // input_questions = $('#input_questions_'+ecategory_id).val();
+    //total_question = input_questions ;
+
+    console.log(total_question);
+
     $("#question_added").html(total_question);
+    $("#total_question").html(etotal);
+
 
 
       $('#category_id').val(ecategory_id);
@@ -419,7 +427,7 @@
   }
 
   $('.category').on('click',function(){
-    $('.li_questions').addClass('disabled');
+    //$('.li_questions').addClass('disabled');
   });
 
 	$('#frmnew').on('submit',function(){

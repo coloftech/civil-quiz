@@ -60,15 +60,72 @@ class Quiz_m extends CI_Model
 			}
 	}
 
+
+	public function countExamByCategory($exam_id=0,$category_id=0)
+	{
+		
+
+			$this->db->select('count(*) as total')
+				->from('quizes')
+				->where(array('quizes_setting_id'=>$exam_id,'category_id'=>$category_id));
+			if($result = $this->db->get()->result()){
+				return $result[0]->total;
+			}else{
+				return 0;
+			}
+	}
+
+
 	public function getExamById($exam_id=0)
 	{
 		
 
-			$this->db->select('exam_setting.*,category.cat_name')
-				->from('exam_setting')				
-				->join('category','category.cat_id = exam_setting.category_id','LEFT')
-				->where('exam_id',$exam_id);
-			return $this->db->get()->result();
+		$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam,, SUM('.$this->db->dbprefix("exam_setting").'.exam_total) as exam_total')
+				->from('quizes_setting')
+				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT')
+				->where('quizes_setting.quizes_id',$exam_id)
+				->group_by('exam_setting.exam_id')
+				->order_by('quizes_setting.date_posted','DESC');
+			$result =  $this->db->get()->result();
+			$ar = '';
+			foreach ($result as $key) {
+				# code...
+				//$ar[] = $key;
+				$cat_names = '';
+				$category = '';
+				$categories = '';
+				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
+					->from('exam_setting')
+					->join('category','category.cat_id = exam_setting.category_id','left')
+					->where('exam_id',$key->quizes_id);
+					$category = $this->db->get()->result();
+					foreach ($category as $cat) {
+						# code...
+						$cat_names[] = $cat->cat_name;
+						//$cat_ids[] = $cat->category_id;
+						$categories[] =(object) array('category_id'=>$cat->category_id,'category_name'=>$cat->cat_name);
+					}
+					
+
+					$ar[] =(object) array(
+						'quizes_id'=>$key->quizes_id,		
+						'quizes_title'=>$key->quizes_title,
+						'e_description'=>$key->e_description,
+						'slug'=>$key->slug,
+						'shuffle_choices'=>$key->shuffle_choices,
+						'suffle_questions'=>$key->suffle_questions,
+						'date_posted'=>$key->date_posted,
+						'status'=>$key->status,
+						'category_names'=>$cat_names,
+						//'category_ids'=>$cat_ids,
+						'category'=>$categories,
+						'totalexam'=>$key->totalexam,
+						'exam_total'=>$key->exam_total
+					);
+
+
+			}
+			return $ar;
 
 	}
 	public function exam_exist($question='')
@@ -81,6 +138,7 @@ class Quiz_m extends CI_Model
 		# code...
 		return $this->db->get_where('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$category_id))->result();
 	}
+
 
 	public function set_category($data=false)
 	{

@@ -56,7 +56,7 @@
             <div class="row  main">
               <div class="wrapper admin-wrapper create">
 
-                <div class="col-md-12">
+                <div class="col-md-12" style="padding:1px;">
                   
               
             <?php echo $body; ?>

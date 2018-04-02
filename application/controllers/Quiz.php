@@ -77,11 +77,11 @@ class Quiz extends CI_Controller
 			exit();
 		}
 		if($exam = $this->quiz_m->getExamById($examId)){
-
+			//print_r($exam);exit();
 			$data['examId'] = $examId;
-
 			$data['q_title'] = $exam[0]->quizes_title;
-			$data['q_total'] = $exam[0]->total;
+			$data['e_description'] = $exam[0]->e_description;
+
 			if($exam[0]->shuffle_choices == 1){
 				$data['isChoice'] = 'checked';
 			}
@@ -91,30 +91,57 @@ class Quiz extends CI_Controller
 			if($total = $this->quiz_m->countExamById($examId)){
 				$data['q_questions'] = $total;
 			}
-			$cat_id = $exam[0]->category_id;
-		}
-		
+
+			$categories = $exam[0]->category;
+			$tr = '';
+			foreach ($categories as $key) {
+
+				$category = $this->quiz_m->exam_category_exist($examId,$key->category_id);
+
+				$total_questions = $this->quiz_m->countExamById($examId,$key->category_id);
+				# code...
+				foreach ($category as $cat) {
+					# code...
+					$type = $cat->exam_type;
+					switch ($type) {
+						case 1:
+							# code...
+							$t = 'Multiple choice';
+							break;
+						case 2:
+							# code...
+							$t = 'Identification';
+							break;
+						default:
+							# code...
+							$t = 'Undefined';
+							break;
+					}
+
+				$tr .= "<tr><td>$key->category_name</td><td>$t</td><td>$total_questions<input type='hidden' id='input_questions_$key->category_id' value='$total_questions'/></td><td>$cat->exam_total <input type='hidden' id='max_$key->category_id' value='$cat->exam_total' /></td><td><button class='btn btn-sm btn-default' type='button' onclick='add_questions($examId,$key->category_id,$total_questions,$cat->exam_total,1,\"$key->category_name\",\"$t\")'><i class='fa fa-plus'></i> questions</button></td></tr>";
+
+				}
+			}
+			$data['tr'] = $tr;
+			
 		$cat = '<select class="form-control" name="s_category" id="s_category"><option value="0">No category</option></select>';
 		if($category = $this->category_m->get_Categories()){
 			$cat = '<select class="form-control" name="s_category" id="s_category">';
 			foreach ($category as $key) {
 				# code...
-				$selected = '';
-				if ($cat_id == $key->cat_id) {
-					# code...
-					$selected = 'selected';
-				}
-				$cat .= "<option value='$key->cat_id' $selected>$key->cat_name</option>";
+				$cat .= "<option value='$key->cat_id'>$key->cat_name</option>";
 			}
 
 			$cat .= '</select>';
 		}
-
+		$data['category']=$cat;
+		}
+		
+		
 		$data['editform'] = true;
 		$data['js_script'] = $this->is_cript();
-		$data['category']=$cat;
 		$data['site_title'] = 'Edit exam';
-		$this->template->load('admin','quiz/edit_q',$data);
+		$this->template->load('admin','quiz/edit',$data);
 		
 	}
 	public function removeExam($value='')
@@ -232,6 +259,7 @@ class Quiz extends CI_Controller
 
 			$cat .= '</select>';
 		}
+		$data['category']=$cat;
 
 		$data['editform'] = true;
 		$data['js_script'] = $this->is_cript();
