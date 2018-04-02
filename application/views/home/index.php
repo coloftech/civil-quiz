@@ -9,13 +9,14 @@
 			<?php // print_r($posts) ?>
 			<?php if (is_array($posts)): ?>
 				<?php foreach ($posts as $key): ?>
+
 					<div class="post">
 						<div class="col-md-6 post-featured-img">
 							<div class="year"><?=date('Y',strtotime($key->date_posted));?></div>
 							<div class="month"><?=date('M',strtotime($key->date_posted));?></div>
 							<div class="day"><?=date('d',strtotime($key->date_posted));?></div>
 							<div class="blured">
-								<a href="<?=site_url("exam/$key->quizes_title");?>">
+								<a href="<?=site_url("exam/info/$key->slug");?>">
 
 									
 									<div class="tiles">
@@ -25,18 +26,28 @@
 							
 						</div>
 						<div class="col-md-6 post-content">
-							<div class="post-title"><a href="<?=site_url("exam/$key->quizes_title");?>" title='<?=$key->quizes_title?>'><h4><?=$this->auto_m->limit_title($key->quizes_title);?></h4></a></div>
-							<div class="post-content-desc">descriptions</div>
+							<div class="post-title"><a href="<?=site_url("exam/info/$key->slug");?>" title='<?=$key->quizes_title?>'><h4><?=$this->auto_m->limit_title($key->quizes_title);?></h4></a></div>
+							<div class="post-content-desc"><?=$key->e_description ?></div>
 							<div class="post-options">
 								<div class="posted-by"></div>
-								<div class="post-category"><?php 
-								$category = $this->quiz_m->getExamById($key->quizes_id);
-								$j = 1;
+								<div class="post-category" style="font-size:11px;"><b stlye="color:black">Exam categories: </b><br /><?php 
+								//if(isset($key->category_names)){
+								//	echo implode(',',$key->category_names);
+								//}
+								echo "<ul>";
+								if(isset($key->category) && is_array($key->category)){
+									foreach ($key->category as $cat) {
+										# code...
+										echo "<li><a href='../exam/info/$key->slug/$cat->category_id'>$cat->category_name</a></li>";
+									}
+								}
+								echo "<ul>";
+								/*$j = 1;
 								foreach ($category as $cat) {
 									# code...
 								echo "<p>$j) $cat->cat_name</p>";
 								$j++;
-								}
+								}*/
 
 								?></div>
 								<div class="post-details"><a href="<?=site_url("exam/$key->quizes_title");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>

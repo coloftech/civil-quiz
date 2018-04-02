@@ -42,9 +42,9 @@ if(isset($description)){
 
 
  <!-- CORE PLUGINS -->
-        <script src="https://cdn.coloftech.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+        <script src="<?=base_url('public/assets/js/jquery-1.11.0.min.js')?>" type="text/javascript"></script>
         <script src="<?=base_url('public/assets/bootstrap/js/bootstrap.min.js')?>" type="text/javascript"></script>
-             
+          <?php /*   
 
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
@@ -53,6 +53,8 @@ if(isset($description)){
           enable_page_level_ads: true
      });
 </script>
+
+*/ ?>
 
 </head>
 <body class="site">

@@ -355,6 +355,7 @@ class Quiz extends CI_Controller
 			$data = array(
 				'quizes_title'=>$input->q_title,
 				'e_description'=>$input->e_description,
+				'slug'=>$this->slug->create($input->q_title),
 				'shuffle_choices'=>$choices,
 				'suffle_questions'=>$questions,
 				'date_posted'=>date('Y-m-d H:i:s')

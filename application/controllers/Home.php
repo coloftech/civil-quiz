@@ -36,6 +36,10 @@ class Home extends CI_Controller {
 		$data['is_index'] = true;
 
 		$quiz = $this->quiz_m->list_exams();
+		
+		//print_r($quiz);
+
+		//exit();
 		$data['posts'] = $quiz;
 
 		$data['site_path'] = $this->site_m->getSiteName(false,1)[0]->site_path;

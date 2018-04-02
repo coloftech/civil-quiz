@@ -121,7 +121,46 @@ class Quiz_m extends CI_Model
 				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT')
 				->group_by('exam_setting.exam_id')
 				->order_by('quizes_setting.date_posted','DESC');
-			return $this->db->get()->result();
+			$result =  $this->db->get()->result();
+			$ar = '';
+			foreach ($result as $key) {
+				# code...
+				//$ar[] = $key;
+				$cat_names = '';
+				$category = '';
+				$categories = '';
+				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
+					->from('exam_setting')
+					->join('category','category.cat_id = exam_setting.category_id','left')
+					->where('exam_id',$key->quizes_id);
+					$category = $this->db->get()->result();
+					foreach ($category as $cat) {
+						# code...
+						$cat_names[] = $cat->cat_name;
+						//$cat_ids[] = $cat->category_id;
+						$categories[] =(object) array('category_id'=>$cat->category_id,'category_name'=>$cat->cat_name);
+					}
+					
+
+					$ar[] =(object) array(
+						'quizes_id'=>$key->quizes_id,		
+						'quizes_title'=>$key->quizes_title,
+						'e_description'=>$key->e_description,
+						'slug'=>$key->slug,
+						'shuffle_choices'=>$key->shuffle_choices,
+						'suffle_questions'=>$key->suffle_questions,
+						'date_posted'=>$key->date_posted,
+						'status'=>$key->status,
+						'category_names'=>$cat_names,
+						//'category_ids'=>$cat_ids,
+						'category'=>$categories,
+						'totalexam'=>$key->totalexam
+					);
+
+
+			}
+			return $ar;
+			
 		}
 	}
 	public function list_questions($category=false)
@@ -148,6 +187,8 @@ class Quiz_m extends CI_Model
 	public function removeExam($exam_id=0)
 	{
 		# code...
+		$this->db->delete('exam_setting',array('exam_id'=>$exam_id));
+		$this->db->delete('quizes',array('quizes_setting_id'=>$exam_id));
 		return $this->db->delete('quizes_setting',array('quizes_id'=>$exam_id));
 	}
 }
