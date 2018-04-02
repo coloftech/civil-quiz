@@ -6,6 +6,7 @@
 		<th>Date added</th>
 		<th>Exam title</th>
 		<th>Total exam</th>
+		<th>Exam category</th>
 		<th>Shuffle Choices</th>
 		<th>Live Status</th>
 		<th></th>
@@ -14,6 +15,8 @@
 <?php if (isset($lists) && is_array($lists)): ?>
 	<?php $i=0; foreach ($lists as $key ): ?>
 		<?php 
+
+		//print_r($lists);exit();
 		$i++;
 		$added_q = 0;
 		if($total = $this->quiz_m->countExamById($key->quizes_id)){
@@ -39,6 +42,7 @@
 	<tr id="tr_<?=$key->quizes_id ?>">
 		<td width="100px"><?=date('Y-m-d',strtotime($key->date_posted)) ?></td>
 		<td><?=$key->quizes_title ?></td>
+		<td  width="100px"><?=$key->exam_total?></td>
 		<td  width="100px"><?=$key->totalexam?></td>
 		<td  width="130px"><?=$choices ?></td>
 		<td  width="120px"><?=$Status ?></td>

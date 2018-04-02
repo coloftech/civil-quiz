@@ -116,7 +116,7 @@ class Quiz_m extends CI_Model
 
 		}else{
 
-			$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam')
+			$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam,, SUM('.$this->db->dbprefix("exam_setting").'.exam_total) as exam_total')
 				->from('quizes_setting')
 				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT')
 				->group_by('exam_setting.exam_id')
@@ -154,7 +154,8 @@ class Quiz_m extends CI_Model
 						'category_names'=>$cat_names,
 						//'category_ids'=>$cat_ids,
 						'category'=>$categories,
-						'totalexam'=>$key->totalexam
+						'totalexam'=>$key->totalexam,
+						'exam_total'=>$key->exam_total
 					);
 
 
