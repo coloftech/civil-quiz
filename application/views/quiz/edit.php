@@ -346,7 +346,6 @@
 
       success: function(resp){
 
-        console.log(resp);
 
         if(resp.stats == true){
 
@@ -402,7 +401,7 @@
       url: '<?=site_url("quiz/add_exam_setting"); ?>',
       dataType: 'json',
       success: function(resp){
-         console.log(resp);
+
         if(resp.stats == true){
 
           ecategory_id = category;
@@ -461,10 +460,10 @@
       dataType: 'json',
 
       success: function(resp){
-        // console.log(resp);
+
         var n = 1;
          $.each(resp, function(i) {
-            //console.log(resp[i].date_posted);
+
             var list = '';
             list = '<div class="panel panel-info"><div class="panel-heading"><b style="display:block;width:100%;"><span style="display:inline-block;">'+n+') </span> <span style="display:inline-block;">'+resp[i].post_question+'</span></b></div><div class="panel-body"> <p style="color:green;">Answer: '+resp[i].post_answer+'</p><p>Choice: '+resp[i].post_choice1+'</p><p>Choice: '+resp[i].post_choice2+'</p><p>Choice: '+resp[i].post_choice3+'</p><p>Choice: '+resp[i].post_choice4+'</p></div></div>';
             $('.list_here').append(list);
@@ -487,7 +486,7 @@
 
   });
   function addQuestion(exam_id,category_id,a_question,mtotal,eqtype,t_category,t_type){
- //   console.log('hey');
+
   //}
   //function add_question(exam_id,category_id,a_question,mtotal,eqtype,t_category,t_type){
     
@@ -499,11 +498,10 @@
 
     max_question = mtotal;
 
-    //console.log(mtotal);
+
 
     ad_q = $('#input_questions_'+ecategory_id).val();
-  // console.log(ad_q);
-   // return false;
+
 
     if(parseInt(ad_q) == parseInt(etotal)){
       $('.user-profile').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
@@ -513,7 +511,7 @@
 
     total_question = ad_q ;
 
-    //console.log(total_question);
+
 
     $("#question_added").html(total_question);
     $("#total_question").html(etotal);
@@ -555,7 +553,7 @@
       dataType: 'json',
 
       success: function(resp){
-         console.log(resp);
+
          if (resp.stats ==  true) {
           $('.li_category').removeClass('disabled');
           $('.category').click();
@@ -620,7 +618,7 @@
       //$(this).focus();
       $(this).attr('placeholder','Warning: This field should be unique.');
     }
-    console.log(i);
+    
   });
 
 

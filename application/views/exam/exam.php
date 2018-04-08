@@ -41,7 +41,7 @@
   display: flex;
   align-items: center;
   padding: 0.75rem 0;
-  color: #fff;
+  color: #000;
   font-size: 1.25rem;
   text-transform: uppercase;
   cursor: pointer;

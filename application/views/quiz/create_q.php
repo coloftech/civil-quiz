@@ -246,7 +246,6 @@
     $("#question_added").html(total_question);
   });
   $('input[type="radio"]').on('click', function(e) {
-   // console.log(e.type);
 
    var  radio = $(this).val();
    var  answer = $('#choice'+radio).val();
@@ -307,7 +306,6 @@
 
       success: function(resp){
 
-        console.log(resp);
 
         if(resp.stats == true){
 
@@ -360,7 +358,7 @@
       url: '<?=site_url("quiz/add_exam_setting"); ?>',
       dataType: 'json',
       success: function(resp){
-         console.log(resp);
+
         if(resp.stats == true){
 
           ecategory_id = category;
@@ -396,7 +394,6 @@
     max_question = mtotal;
 
     ad_q = $('#input_questions_'+ecategory_id).val();
-    console.log(ad_q);
 
     if(parseInt(ad_q) == parseInt(etotal)){
       $('.user-profile').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
@@ -441,7 +438,6 @@
       dataType: 'json',
 
       success: function(resp){
-         console.log(resp);
          if (resp.stats ==  true) {
           $('.li_category').removeClass('disabled');
           $('.category').click();
@@ -506,7 +502,6 @@
       //$(this).focus();
       $(this).attr('placeholder','Warning: This field should be unique.');
     }
-    console.log(i);
   });
 
 

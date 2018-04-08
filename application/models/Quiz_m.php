@@ -184,15 +184,44 @@ class Quiz_m extends CI_Model
 
 	public function getInfoBySlug($slug=false)
 	{
-		if($slug){
-			$query = $this->db->select('quizes_id,quizes_title')
+				if($slug){
+			$object =  false;
+			$query = $this->db->select('quizes_id,quizes_title,e_description,date_posted,status')
 				->from('quizes_setting')
 				->where('slug',$slug)
 				->get();
-				$result =  $query->result();
+				if($result =  $query->result()){
 
-				return $result;
-				//exit();
+
+				$category = '';
+				$categories = '';
+
+				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
+					->from('exam_setting')
+					->join('category','category.cat_id = exam_setting.category_id','left')
+					->where('exam_id',$result[0]->quizes_id);
+					$category = $this->db->get()->result();
+					foreach ($category as $cat) {
+
+						$categories[] =(object) array('category_id'=>$cat->category_id,'category_name'=>$cat->cat_name);
+
+					}
+						$object[] =(object) array(
+						'quizes_id'=>$result[0]->quizes_id,		
+						'quizes_title'=>$result[0]->quizes_title,
+						'e_description'=>$result[0]->e_description,
+						'date_posted'=>$result[0]->date_posted,
+						'status'=>$result[0]->status,
+						'category'=>$categories,
+					);
+
+
+
+				}
+
+
+
+				return $object;
 		}
 		return false;
 
