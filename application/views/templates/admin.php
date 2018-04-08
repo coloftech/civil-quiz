@@ -47,7 +47,7 @@
 </head>
 <header>
     <div class="wrapper menu-header">
-     <?php require_once 'common/menu_admin.php'; ?>
+     <?php require_once 'common/admin_menu.php'; ?>
      </div>
 </header>
     <div id="page-wrapper">

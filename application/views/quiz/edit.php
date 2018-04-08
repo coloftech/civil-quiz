@@ -1,8 +1,27 @@
+<style type="text/css">
+  .list-question{
+    cursor: pointer;
 
+  }
+  .list-question:hover,.list:hover{
+    background-color: #FFF8DC;
+    color: #008080;
+  }
+  .list-question .span-hidden{
+    display: none;
+  }
+  .list-question:hover .span-hidden{
+    display: inline-block;
+    color: #696969;
+    font-size: 10px;
+    text-align: right;
+    float: right;
+  }
+</style>
 <ul class="nav nav-tabs" id="ul_new">
   <li class="li_home active"><a data-toggle="tab" href="#home" class="home">SETTING</a></li>
   <li class="li_category"><a data-toggle="tab" href="#category" class="category">CATEGORY</a></li>
-  <li class="li_questions"><a data-toggle="tab" href="#questions" class="questions">QUESTIONS</a></li>
+  <li class="li_questions disabled"><a data-toggle="tab" href="#questions" class="questions">QUESTION</a></li>
 
 </ul>
 
@@ -75,13 +94,15 @@
       </p>
   </div>
   <div id="questions" class="tab-pane fade">
-    <h3>Questions</h3>
+
+    <div class="create_question">
+       <h3>Create Question</h3>
     <p>
     <div class="form-responsive">
   <form class="form form-horizontal" action="<?=site_url('quiz/add');?>" method="post" autocomplete="off" id="frmquestion" name="frmquestion" >
     <div class="col-md-8">
       <div class="col-md-12">
-        <input type="hidden" name="quizes_id" id="quizes_id" value="0" />
+        <input type="hidden" name="quizes_id" id="quizes_id" value="<?=$examId?>" />
         <input type="hidden" name="quiz_total" id="quiz_total" value="0" />
         <input type="hidden" name="category_id" id="category_id" value="0" />
         <input type="hidden" name="type_id" id="type_id" value="0" />
@@ -155,6 +176,16 @@
     </div>
   </form>
 </p>
+    </div>
+
+      <div id="listofquestion" style="display: none;">
+
+        <h4>List of question <div class="pull-right"><i class="btn btn-default btn-close-list fa fa-sign-out"></i></div></h4>
+        
+        <br/>
+        <div class="list_here" style="display: block;"></div>
+      </div>
+   
   </div>
 </div>
 
@@ -186,6 +217,10 @@
              <div class="form-group">
               <label for="s_category">Select subject/category <i class="btn fa fa-plus"></i></label>
               <?php echo $category; ?>
+            </div>
+             <div class="form-group">
+              <label for="category_notes">Directions: </label>
+              <textarea id="directions" name="directions" class="form-control"  placeholder="(optional)"></textarea>
             </div>
 
             <div class="form-group">
@@ -232,6 +267,13 @@
   var total_question = 0;
   var max_question = 0;
 
+  var eid = <?=$examId?>;
+  var ecategory_id = 0;
+  var etotal = 0;
+  var etype = 0; 
+  var input_questions = 0;
+
+
   $('a[data-toggle="tab"]').on('click', function(){
   if ($(this).parent('li').hasClass('disabled')) {
     return false;
@@ -260,6 +302,7 @@
           $('input.form-control').css('border','solid #e5e5e5 1px');
           $('.choices').removeClass("alert alert-success"); 
           $('input[type="radio"]').parent().parent().removeClass("alert alert-success"); 
+          $('#question').summernote('code', '');
   }
 
 
@@ -325,6 +368,7 @@
 
           clearform();
 
+
         }else{
 
                   $('.user-profile').notify('Error! '+resp.msg, { position:"bottom right", className:"error" }); 
@@ -342,7 +386,9 @@
     var q_type = $('#q_type').val();
     var t_type = $('#q_type option:selected').text();
     var q_total = $('#q_total').val();
-    var quizes_id = $('#quizes_id').val();
+    //eid = $('#quizes_id').val();
+
+
     var type = '';
     var data = $(this).serialize();
     if (parseInt(q_type) == 1) {
@@ -352,8 +398,8 @@
     $.ajax({
 
       type: 'post',
-      data: data+'&quizes_id='+quizes_id,
-      url: '<?=site_url("quiz/examsetting"); ?>',
+      data: data+'&quizes_id='+eid,
+      url: '<?=site_url("quiz/add_exam_setting"); ?>',
       dataType: 'json',
       success: function(resp){
          console.log(resp);
@@ -362,10 +408,13 @@
           ecategory_id = category;
           etype = q_type;
 
-      $('#tbl_exams tbody').append('<tr><td>'+t_category+'</td><td>'+t_type+'</td><td><span id="added_question_'+category+'" class="red" color="red">0</span><input type="hidden" id="input_questions_'+category+'" value="0"/></td><td>'+q_total+' <input type="hidden" id="max_'+category+'" value="'+q_total+'" /></td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
+      $('#tbl_exams tbody').append('<tr class="list"><td>'+t_category+'</td><td>'+t_type+'</td><td  class="list-question" data-quiz='+eid+' data-category='+ecategory_id+'><span id="added_question_'+category+'" class="red" color="red">0</span><span class="span-hidden">List questions.</span><input type="hidden" id="input_questions_'+category+'" value="0"/></td><td>'+q_total+' <input type="hidden" id="max_'+category+'" value="'+q_total+'" /></td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
 
               $('#category_modal').modal('hide');
-
+               $('.list-question').on('click',function(){
+                  var action = $(this);
+                  list_question(action);
+               });
 
         }else{
 
@@ -377,23 +426,84 @@
     return false;
   });
 
-  var eid = 0;
-  var ecategory_id = 0;
-  var etotal = 0;
-  var etype = 0; 
-  var input_questions = 0;
-  function add_questions(eqid,category_id,added_questions,mtotal,eqtype,t_category,t_type){
+  $('.list-question').on('click',function(){
+    var action = $(this);
+    list_question(action);
+  });
+  function list_question(action){
+
+    var cat = action.data('category');
+    var quiz = action.data('quiz');
+    var q = $('#added_question_'+cat).text();
+
+
+    if(parseInt(q) <= 0){
+
+                  $('#added_question_'+cat).notify('No data. ', { position:"bottom right", className:"error" }); 
+      return false;
+    }
+    $('.li_questions').removeClass('disabled');
+    $('.questions').click();
+
+            $('.list_here').html('');
+
+
+    var data = 'exam_id='+quiz+'&category_id='+cat;
+
+    $('#listofquestion').show('slow');
+    $('.create_question').hide('fast');
+
+        $.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("quiz/list_question"); ?>',
+      dataType: 'json',
+
+      success: function(resp){
+        // console.log(resp);
+        var n = 1;
+         $.each(resp, function(i) {
+            //console.log(resp[i].date_posted);
+            var list = '';
+            list = '<div class="panel panel-info"><div class="panel-heading"><b style="display:block;width:100%;"><span style="display:inline-block;">'+n+') </span> <span style="display:inline-block;">'+resp[i].post_question+'</span></b></div><div class="panel-body"> <p style="color:green;">Answer: '+resp[i].post_answer+'</p><p>Choice: '+resp[i].post_choice1+'</p><p>Choice: '+resp[i].post_choice2+'</p><p>Choice: '+resp[i].post_choice3+'</p><p>Choice: '+resp[i].post_choice4+'</p></div></div>';
+            $('.list_here').append(list);
+            n++;
+          });
+      }
+
+    });
+    return false;
+  }
+
+  $('.btn-close-list').on('click',function(){
+
+    $('.li_questions').addClass('disabled');
+    $('.category').click();
+    $('.create_question').show('fast');
+    $('.table').show('slow');
+    $('#listofquestion').hide('fast');
     
-    eid = eqid;
+
+  });
+  function addQuestion(exam_id,category_id,a_question,mtotal,eqtype,t_category,t_type){
+ //   console.log('hey');
+  //}
+  //function add_question(exam_id,category_id,a_question,mtotal,eqtype,t_category,t_type){
+    
+    eid = exam_id;
     ecategory_id = category_id;
     etotal = mtotal;
     etype = eqtype;
-    total_question = added_questions;
+    total_question = a_question;
 
     max_question = mtotal;
 
+    //console.log(mtotal);
+
     ad_q = $('#input_questions_'+ecategory_id).val();
-    //console.log(ad_q);
+  // console.log(ad_q);
+   // return false;
 
     if(parseInt(ad_q) == parseInt(etotal)){
       $('.user-profile').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
@@ -401,10 +511,9 @@
     }
 
 
-   // input_questions = $('#input_questions_'+ecategory_id).val();
-    //total_question = input_questions ;
+    total_question = ad_q ;
 
-    console.log(total_question);
+    //console.log(total_question);
 
     $("#question_added").html(total_question);
     $("#total_question").html(etotal);
@@ -427,7 +536,10 @@
   }
 
   $('.category').on('click',function(){
-    //$('.li_questions').addClass('disabled');
+    $('.li_questions').addClass('disabled');
+  });
+  $('.home').on('click',function(){
+    $('.li_questions').addClass('disabled');
   });
 
 	$('#frmnew').on('submit',function(){

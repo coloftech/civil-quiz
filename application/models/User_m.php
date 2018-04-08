@@ -21,6 +21,38 @@ public function user($user=false,$pass=false)
 
 }
 
+public function info($user_id=false)
+{
+	if ($user_id) {
+
+
+		$query =  $this->db->get_where('users',array('user_id'=>$user_id));
+		if($result = $query->result()){
+			
+				
+			return $result;
+
+			
+		}
+
+
+	}
+	return false;
+
+}
+public function settings($title = false,$user_id = false)
+{
+	if($user_id == false){
+		$user_id = $this->session->userdata['id'];
+	}
+			$query = $this->db->get_where('user_settings',array('user_id'=>$user_id,'title'=>$title));
+				if($result = $query->result()){
+					return $result[0]->value;
+
+				}
+			
+		return false;
+}
 
 
 

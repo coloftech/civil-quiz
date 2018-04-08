@@ -1,8 +1,5 @@
-<div class="wrapper site-wrapper">
-	<div class="container site-container">
-
 <div class="col-md-12 post-index">
-	
+	fasfas
 <div class="col-md-9">
 
 		<?php if (isset($posts)): ?>
@@ -94,7 +91,5 @@
 	</div>
 
 </div>
-</div>
-	</div>
 </div>
 

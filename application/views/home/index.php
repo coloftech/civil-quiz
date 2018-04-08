@@ -1,6 +1,3 @@
-<div class="wrapper site-wrapper">
-	<div class="container site-container">
-
 <div class="col-md-12 post-index">
 	
 <div class="col-md-9">
@@ -97,6 +94,3 @@
 
 </div>
 </div>
-	</div>
-</div>
-

@@ -39,11 +39,11 @@
 	<tr id="tr_<?=$key->quizes_id ?>">
 		<td width="100px"><?=date('Y-m-d',strtotime($key->date_posted)) ?></td>
 		<td><?=$key->quizes_title ?></td>
-		<td><?php echo implode(', ', $key->category_names);?></td>
+		<td><?php if(!empty($key->category_names)) echo implode(', ', $key->category_names);?></td>
 		<td  width="100px"><?=$key->exam_total?></td>
 		<td  width="130px"><?=$choices ?></td>
 		<td  width="80px"><?=$Status ?></td>
-		<td width="120px"><i class="fa fa-eye btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-edit btn" onclick="editExam(<?=$key->quizes_id ?>)"></i> <i class="fa fa-remove btn" onclick="removeExam(<?=$key->quizes_id ?>);"></i></td>
+		<td width="120px"><a href="<?=site_url("quiz/take_exam/$key->quizes_id"); ?>"><i class="fa fa-briefcase btn" style="color:green;" title="Take this exam"></i></a> <a href="<?=site_url("quiz/edit/$key->quizes_id"); ?>"><i class="fa fa-edit btn" title="Edit exam"></i></a> <i class="fa fa-remove btn"  style="color:red;"  onclick="removeExam(<?=$key->quizes_id ?>);" title="Drop this exam"></i></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>
@@ -56,6 +56,9 @@
 	
 	function editExam(examid){
 		window.location = '<?=site_url("quiz/edit/")?>'+examid;
+	}
+	function testExam(examid){
+		window.location = '<?=site_url("quiz/take_exam/")?>'+examid;
 	}
 	function removeExam(examid){
 		//alert(examid);

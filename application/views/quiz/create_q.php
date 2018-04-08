@@ -186,6 +186,11 @@
               <?php echo $category; ?>
             </div>
 
+             <div class="form-group">
+              <label for="category_notes">Directions: </label>
+              <textarea id="directions" name="directions" class="form-control"  placeholder="(optional)"></textarea>
+            </div>
+
             <div class="form-group">
               <label for="question">Select quiz type </label>
               <select class="form-control" id="q_type" name="q_type">
@@ -258,6 +263,7 @@
           $('input.form-control').css('border','solid #e5e5e5 1px');
           $('.choices').removeClass("alert alert-success"); 
           $('input[type="radio"]').parent().parent().removeClass("alert alert-success"); 
+          $('#question').summernote('code', '');
   }
 
 
@@ -351,7 +357,7 @@
 
       type: 'post',
       data: data+'&quizes_id='+quizes_id,
-      url: '<?=site_url("quiz/examsetting"); ?>',
+      url: '<?=site_url("quiz/add_exam_setting"); ?>',
       dataType: 'json',
       success: function(resp){
          console.log(resp);

@@ -2,6 +2,10 @@
 <html>
 <head>
     <title><?php echo isset($site_title) ? $site_title : 'COLOFTECH' ;?></title>
+  <noscript>
+  <style>html{display:none;}</style>
+  <meta http-equiv="refresh" content="0.0;url=nojs/index.php">
+</noscript>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta charset="utf-8">
@@ -26,13 +30,13 @@ if(isset($description)){
 <meta name="keywords" content="<?=isset($keywords) ? $keywords : 'coloftech, harold rita, bisu bilar, bohol island state university, thesis hub, research study compilation system and monitoring system.coloftech project';?>  " />
 
 <meta name="propeller" content="6db29e64f9cb4b5e95f5e9b6bd5fd21b" />
+        <link rel="shortcut icon" href="<?=base_url();?>public/images/logo-only-icon.png"/>
 
 
         <link href="<?=base_url('public/assets/bootstrap/css/bootstrap.min.css');?>" rel="stylesheet">
         <link href="<?=base_url('public/assets/bootstrap');?>/css/font-awesome.css" rel="stylesheet">
         <link href="<?=base_url('public/assets/css/animate.css');?>" rel="stylesheet">
 
-        <link rel="icon" type="image/png" href="<?=base_url();?>favicon.png">
        
 
         <?php // add css files
@@ -60,6 +64,29 @@ if(isset($description)){
 <body class="site">
 
   <!--
+
+
+  ''''''''''  '''    '''  '''''''''         '''         '''''''''''''''
+''''''''''''  '''    '''  '''''''''        '''''        '''''''''''''''
+'''       ''  '''    '''  '''             ''' '''             '''
+'''           '''    '''  '''            '''   '''            '''
+'''           ''''''''''  ''''''''      '''''''''''           '''
+'''           ''''''''''  ''''''''     '''''''''''''          '''
+'''       ''  '''    '''  '''         '''         '''         '''
+''''''''''''  '''    '''  '''''''''  '''           '''        '''
+  ''''''''''  '''    '''  ''''''''' '''             '''       '''
+
+CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE
+
+
+
+
+
+
+
+
+
+
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -82,34 +109,28 @@ if(isset($description)){
 </header>
 
 <div class="site-body" >
+  <div class="wrapper site-wrapper">
+  <div class="container site-container">
     <?php echo $body; ?>
+
+  </div>
+  </div>
 </div>
 <footer>
     <div class="container">
         
     <div class="footer-top">
         <div class="col-md-4 aboutus">
-            <h3>HOSTED SITE</h3>
-            <ul id="menu-campuses-menu" class="menu">
-                <?=$this->auto_m->getSites()?>
-</ul>
+
         </div>
         <div class="col-md-4 recentspost">
-            <h3>RECENT POST</h3>
-            <?php //echo $this->auto_m->recent_post_footer(); ?>
-            </div>
+
         <div class="col-md-4 campuses">
             
-            <h3>PROJECTS</h3>
-<ul id="menu-campuses-menu" class="menu">
-    
-<li class="menu-balilihan-campus"><a href="http://bilar.bisu.edu.ph">BISU BILAR WEBSITE</a></li>
-<li class="menu-balilihan-campus"><a href="http://www.coloftech.com/thesis/index.php">BISU BILAR THESIS HUB</a></li>
-<li class="menu-balilihan-campus"><a href="http://www.bisuresearchjournals.edu.ph">BISU RESEARCH JOURNALS</a></li>
-</ul>
+
         </div>
     </div>
-    <div class="footer-center"><a href="#top" class="btn btn-top">TOP</a></div>
+    
      <div class="footer-bottom">
          
      </div> 
@@ -133,7 +154,36 @@ if(isset($description)){
 /**/</script>
 
       <?php echo isset($js_script) ? $js_script : '';?>
+<script>
+  /*
+document.onkeydown = function(e) {
+        if (e.ctrlKey && 
+            (e.keyCode === 67 || 
+             e.keyCode === 86 || 
+             e.keyCode === 85 || 
+             e.keyCode === 117)) {
+            return false;
+        } else {
+            return true;
+        }
+};
+$(document).keypress("u",function(e) {
+  if(e.ctrlKey)
+  {
+return false;
+}
+else
+{
+return true;
+}
+});
+$(document).on("contextmenu", function (e) {        
+    e.preventDefault();
+    return false;
+});
 
+*/
+</script>
 </body>
 </html>
 

@@ -71,6 +71,11 @@ class User extends CI_Controller {
 		$data['site_title'] = 'Change password';
 		$this->template->load('admin','admin/user/change_pass',$data);
 	}
+	public function info($user_id='')
+	{
+		# code...
+		
+	}
 
 
 

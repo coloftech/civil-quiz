@@ -35,6 +35,19 @@ class Quiz extends CI_Controller
 		$data['site_title'] = 'List all';
 		$this->template->load('admin','quiz/listexam',$data);
 	}
+	public function take_exam($exam_id=0,$cat=0)
+	{
+		# code...
+		$data['list_exam'] = 'Not found!';
+		if($list_exam = $this->quiz_m->take_exam($exam_id)){
+			$data['list_exam'] = $list_exam;
+		}
+
+		$data['exam_id'] = $exam_id;
+		$data['site_title'] = 'Take exam';
+		$this->template->load('admin','exam/exam',$data);
+
+	}
 
 	public function edit($examId='')
 	{
@@ -79,6 +92,7 @@ class Quiz extends CI_Controller
 		if($exam = $this->quiz_m->getExamById($examId)){
 			//print_r($exam);exit();
 			$data['examId'] = $examId;
+			$exam_id = $examId;
 			$data['q_title'] = $exam[0]->quizes_title;
 			$data['e_description'] = $exam[0]->e_description;
 
@@ -97,8 +111,8 @@ class Quiz extends CI_Controller
 			foreach ($categories as $key) {
 
 				$category = $this->quiz_m->exam_category_exist($examId,$key->category_id);
-
-				$total_questions = $this->quiz_m->countExamById($examId,$key->category_id);
+				
+				$total_questions = $this->quiz_m->countExamByCategory($examId,$key->category_id);
 				# code...
 				foreach ($category as $cat) {
 					# code...
@@ -118,7 +132,14 @@ class Quiz extends CI_Controller
 							break;
 					}
 
-				$tr .= "<tr><td>$key->category_name</td><td>$t</td><td>$total_questions<input type='hidden' id='input_questions_$key->category_id' value='$total_questions'/></td><td>$cat->exam_total <input type='hidden' id='max_$key->category_id' value='$cat->exam_total' /></td><td><button class='btn btn-sm btn-default' type='button' onclick='add_questions($examId,$key->category_id,$total_questions,$cat->exam_total,1,\"$key->category_name\",\"$t\")'><i class='fa fa-plus'></i> questions</button></td></tr>";
+				//$tr .= "<tr class='list'><td class='list'>$key->category_name</td><td class='list'>$t</td><td class='list-question' data-quiz='$examId' data-category='$key->category_id'>$total_questions<span class='span-hidden'>List questions.</span></td><td class='hidden'><input type='hidden' id='input_questions_$key->category_id' value='$total_questions'/></td><td class='list'>$cat->exam_total <input type='hidden' id='max_$key->category_id' value='$cat->exam_total' /></td><td><button class='btn btn-sm btn-default' type='button' onclick='add_questions($examId,$key->category_id,$total_questions,$cat->exam_total,1,\"$key->category_name\",\"$t\")'><i class='fa fa-plus'></i> questions</button></td></tr>";
+					$tr .='<tr class="list">
+					<td>'.$key->category_name.'</td>
+					<td>'.$t.'</td>
+					<td  class="list-question" data-quiz='.$exam_id.' data-category='.$key->category_id.'><span id="added_question_'.$key->category_id.'" class="red" color="red">'.$total_questions.'</span><span class="span-hidden">List questions.</span><input type="hidden" id="input_questions_'.$key->category_id.'" value="'.$total_questions.'"/></td>
+					<td>'.$cat->exam_total.' <input type="hidden" id="max_'.$key->category_id.'" value="'.$cat->exam_total.'" /></td>
+					<td><button class="btn btn-sm btn-default" type="button" onclick="addQuestion('.$exam_id.','.$key->category_id.','.$total_questions.','.$cat->exam_total.',1,\''.$key->category_name.'\',\''.$t.'\')"><i class="fa fa-plus"></i> questions</button></td>
+					</tr>';
 
 				}
 			}
@@ -284,8 +305,6 @@ class Quiz extends CI_Controller
 
 			}
 
-			//echo json_encode($input);
-			//exit();
 
 			$data = array(
 				'post_question'=>$input->question,
@@ -300,24 +319,40 @@ class Quiz extends CI_Controller
 			);
 
 
-			$isExist = $this->quiz_m->question_exist($input->question);
-			if(count($isExist) > 0){
+			//$isExist = $this->quiz_m->question_exist($input->question);
+			//if(count($isExist) > 0){
 
-				echo json_encode(array('stats'=>false,'msg'=>'Post failed! The question already exist.'));
+			//	echo json_encode(array('stats'=>false,'msg'=>'Post failed! The question already exist.'));
 
-			}else{
+			//}else{
 
 
 				if($id = $this->quiz_m->add_quiz($data)){
 
-				$category = array('post_id'=>$id,'cat_id'=>$input->category_id);
-				$set_category = $this->quiz_m->set_category($category);
 
-				$add_to_exam = $this->quiz_m->add_to_exam(array('quiz_id'=>$id,'quizes_setting_id'=>$input->quizes_id));
+					$answer_id = $this->quiz_m->add_to_choices(array('quiz_id'=>$id,'choice_label'=>$answer,'is_answer'=>1));
+					//echo $answer_id;
+					//exit();
+					foreach ($choice as $choi) {
+						# code...
+						if(!empty($choi)){
+
+						$this->quiz_m->add_to_choices(array('quiz_id'=>$id,'choice_label'=>$choi,'is_answer'=>0));
+						}
+					}
+					$set_answer = $this->quiz_m->update_quiz(array('choice_id'=>$answer_id),$id);
+
+					//var_dump($set_answer);
+					//exit();
+
+				//$category = array('quiz_id'=>$id,'cat_id'=>$input->category_id);
+				//$set_category = $this->quiz_m->set_category($category);
+
+				$add_to_exam = $this->quiz_m->add_to_exam(array('quiz_id'=>$id,'exam_id'=>$input->quizes_id,'category_id'=>$input->category_id));
 
 				echo json_encode(array('stats'=>true,'msg'=>'Question added','quiz_id'=>$id));
 				}
-			}
+			//}
 			exit();
 		
 
@@ -328,7 +363,7 @@ class Quiz extends CI_Controller
 
 	}
 
-	public function examsetting($value='')
+	public function add_exam_setting($value='')
 	{
 
 		if ($this->input->post()) {
@@ -347,7 +382,8 @@ class Quiz extends CI_Controller
 				'exam_id'=>$input->quizes_id,
 				'category_id'=>$input->s_category,
 				'exam_total'=>$input->q_total,
-				'exam_type'=>$input->q_type
+				'exam_type'=>$input->q_type,
+				'directions'=>$input->directions
 			);
 			if($quizes_id = $this->quiz_m->add_to_exam_setting($data)){
 
@@ -391,6 +427,15 @@ class Quiz extends CI_Controller
 			$quizes_id = $this->quiz_m->add_exam($data);
 			echo json_encode(array('stats'=>true,'msg'=>'Quiz settings added successfuly.','quizes_id'=>$quizes_id));
 			exit();
+		}
+	}
+	public function list_question($exam_id=0,$category_id = 0){
+		if($this->input->post()){
+			$obj = (object) $this->input->post();
+			//echo json_encode($obj);
+			//exit();
+			$lists = $this->quiz_m->list_question($obj->category_id,$obj->exam_id);
+			echo json_encode($lists);
 		}
 	}
 

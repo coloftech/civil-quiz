@@ -31,6 +31,12 @@ class Quiz_m extends CI_Model
 			return $this->db->update('quizes_setting',$data);
 
 	}
+		public function update_quiz($data=false,$quiz_id=0)
+	{
+			$this->db->where('quiz_id',$quiz_id);
+			return $this->db->update('quiz',$data);
+
+	}
 
 	public function add_to_exam($data=false)
 	{
@@ -46,13 +52,21 @@ class Quiz_m extends CI_Model
 			return $this->db->insert('exam_setting',$data);
 
 	}
+
+	public function add_to_choices($data=false)
+	{
+
+			$this->db->insert('quiz_choices',$data);
+			return $this->db->insert_id();
+
+	}
 	public function countExamById($exam_id=0)
 	{
 		
 
 			$this->db->select('count(*) as total')
 				->from('quizes')
-				->where('quizes_setting_id',$exam_id);
+				->where('exam_id',$exam_id);
 			if($result = $this->db->get()->result()){
 				return $result[0]->total;
 			}else{
@@ -61,18 +75,57 @@ class Quiz_m extends CI_Model
 	}
 
 
+
+
 	public function countExamByCategory($exam_id=0,$category_id=0)
 	{
 		
 
 			$this->db->select('count(*) as total')
 				->from('quizes')
-				->where(array('quizes_setting_id'=>$exam_id,'category_id'=>$category_id));
+				->where(array('exam_id'=>$exam_id,'category_id'=>$category_id));
 			if($result = $this->db->get()->result()){
 				return $result[0]->total;
 			}else{
 				return 0;
 			}
+	}
+
+	public function getCategoryName($category_id=0)
+	{
+		# code...
+		if ($category_id > 0) {
+			# code...
+			$query = $this->db->select('cat_name')
+				->from('category')
+				->where('cat_id',$category_id)
+				->get();
+				if($result = $query->result()){
+					return $result[0]->cat_name;
+				}
+				return false;
+
+
+		}
+		return false;
+	}
+	public function getCategoryDirection($category_id=0,$exam_id=0)
+	{
+		# code...
+		if ($category_id > 0) {
+			# code...
+			$query = $this->db->select('directions')
+				->from('exam_setting')
+				->where(array('category_id'=>$category_id,'exam_id'=>$exam_id))
+				->get();
+				if($result = $query->result()){
+					return $result[0]->directions;
+				}
+				return false;
+
+
+		}
+		return false;
 	}
 
 
@@ -128,6 +181,123 @@ class Quiz_m extends CI_Model
 			return $ar;
 
 	}
+
+	public function getInfoBySlug($slug=false)
+	{
+		if($slug){
+			$query = $this->db->select('quizes_id,quizes_title')
+				->from('quizes_setting')
+				->where('slug',$slug)
+				->get();
+				$result =  $query->result();
+
+				return $result;
+				//exit();
+		}
+		return false;
+
+	}
+	public function take_exam($exam_id='')
+	{
+		# code...
+		$query = $this->db->select('quiz.*,quizes.category_id')
+			->from('quiz')
+			->join('quizes','quizes.quiz_id = quiz.quiz_id')
+			->where('quizes.exam_id',$exam_id)
+			->order_by('quizes.category_id','ASC')
+			//->order_by('quizes.category_id','RANDOM')
+			->get();
+		if($result = $query->result()){
+			$object = '';
+			foreach ($result as $key) {
+				# code...
+				$choice = '';
+				$s_choice = '';
+
+				$choice = array(
+					$key->post_answer,
+					$key->post_choice1,
+					$key->post_choice2,
+					$key->post_choice3,
+					$key->post_choice4);
+
+				shuffle($choice);
+				
+				$object[] = (object) array(
+					'question_id'=>$key->quiz_id,
+					'question_title'=>$key->post_question,
+					'choice_1' =>$choice[0],
+					'choice_2' =>$choice[1],
+					'choice_3' =>$choice[2],
+					'choice_4' =>$choice[3],
+					'choice_5' =>$choice[4],
+					'category_id'=>$key->category_id
+				);
+			}
+			return $object;
+		}
+		return false;
+
+	}
+
+	public function randomByCategory($exam_id='')
+	{
+		# code...
+		$object = false;
+
+		$query = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id));
+		if($result = $query->result()){
+
+			foreach ($result as $cat) {
+				# code...
+				$query2 = '';
+				$result2 = '';
+
+				$query2 = $this->db->select('quiz.*,quizes.category_id,category.cat_name as category_name')
+					->from('quiz')
+					->join('quizes','quizes.quiz_id = quiz.quiz_id','left')
+					->join('category','category.cat_id = quizes.category_id','left')
+					->where(array('quizes.exam_id'=>$exam_id,'quizes.category_id'=>$cat->category_id))
+					->order_by('quizes.category_id','ASC')
+					->get();
+					if($result2 = $query2->result())
+					{
+						shuffle($result2);
+						//$object[] = $result2;
+									//$object2 = '';
+									foreach ($result2 as $key) {
+										# code...
+										$choice = '';
+										$s_choice = '';
+
+										$choice = array(
+											$key->post_answer,
+											$key->post_choice1,
+											$key->post_choice2,
+											$key->post_choice3,
+											$key->post_choice4);
+
+										shuffle($choice);
+										
+										$object[] = (object) array(
+											'question_id'=>$key->quiz_id,
+											'question_title'=>$key->post_question,
+											'choice_1' =>$choice[0],
+											'choice_2' =>$choice[1],
+											'choice_3' =>$choice[2],
+											'choice_4' =>$choice[3],
+											'choice_5' =>$choice[4],
+											'category_id'=>$key->category_id,
+											'category_name'=>$key->category_name
+										);
+									}
+					}
+
+			}
+		}
+		return $object;
+
+	}
 	public function exam_exist($question='')
 	{
 		# code...
@@ -155,7 +325,7 @@ class Quiz_m extends CI_Model
 	public function isAnswer($question=0, $answer = '')
 	{
 
-		if($this->db->get_where('quiz',array('post_id'=>$question,'post_answer'=>$answer))->result()){
+		if($this->db->get_where('quiz',array('quiz_id'=>$question,'post_answer'=>$answer))->result()){
 			return true;
 		}else{
 			return false;
@@ -222,32 +392,43 @@ class Quiz_m extends CI_Model
 			
 		}
 	}
-	public function list_questions($category=false)
+
+	public function list_question($category=false,$exam_id= false)
 	{
-		if($category){
+		if($category && $exam_id){
 
-			$this->db->select('quiz.*,quiz_category.cat_id,category.cat_name')
+			$this->db->select('quiz.*')
 				->from('quiz')
-				->join('quiz_category','quiz_category.post_id = quiz.post_id','LEFT')
-				->join('category','category.cat_id = quiz_category.cat_id','LEFT')
-				->where('quiz_category.cat_id',$category);
+				->join('quizes','quizes.quiz_id = quiz.quiz_id','LEFT')
+				->where(array('quizes.category_id'=>$category,'quizes.exam_id'=>$exam_id));
 			return $this->db->get()->result();
 
-		}else{
-
-			$this->db->select('quiz.*,quiz_category.cat_id,category.cat_name')
-				->from('quiz')
-				->join('quiz_category','quiz_category.post_id = quiz.post_id','LEFT')
-				->join('category','category.cat_id = quiz_category.cat_id','LEFT');
-			return $this->db->get()->result();
+		
 		}
+		return false;
 	}
+
 
 	public function removeExam($exam_id=0)
 	{
 		# code...
+
+		$query = $this->db->select('quiz_id')
+					->from('quizes')
+					->where('exam_id',$exam_id)
+					->get();
+					if($result = $query->result()){
+						foreach ($result as $key) {
+							# code...
+
+							$this->db->delete(array('quiz','quiz_choices'),array('quiz_id'=>$key->quiz_id));
+
+						}
+					}
+
 		$this->db->delete('exam_setting',array('exam_id'=>$exam_id));
-		$this->db->delete('quizes',array('quizes_setting_id'=>$exam_id));
+		$this->db->delete('quizes',array('exam_id'=>$exam_id));
+
 		return $this->db->delete('quizes_setting',array('quizes_id'=>$exam_id));
 	}
 }
@@ -255,6 +436,6 @@ class Quiz_m extends CI_Model
 
 /*
 
-SELECT s.quizes_id,s.quizes_title,q.*,c.cat_id FROM q_quiz as q LEFT JOIN q_quiz_category as c ON c.post_id = q.post_id LEFT JOIN q_quizes as qq ON q.post_id = qq.quiz_id LEFT JOIN q_exam_setting as e ON e.exam_id = qq.quizes_setting_id LEFT JOIN q_quizes_setting as s ON e.exam_id = s.quizes_id ORDER BY s.quizes_id DESC
+SELECT s.quizes_id,s.quizes_title,q.*,c.cat_id FROM q_quiz as q LEFT JOIN q_quiz_category as c ON c.quiz_id = q.quiz_id LEFT JOIN q_quizes as qq ON q.quiz_id = qq.quiz_id LEFT JOIN q_exam_setting as e ON e.exam_id = qq.exam_id LEFT JOIN q_quizes_setting as s ON e.exam_id = s.quizes_id ORDER BY s.quizes_id DESC
 
 */

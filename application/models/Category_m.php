@@ -14,6 +14,6 @@ class Category_m extends CI_Model
 	public function get_Categories($value='')
 	{
 
-		return $this->db->get('category')->result();
+		return $this->db->order_by('cat_name','ASC')->get('category')->result();
 	}
 }
