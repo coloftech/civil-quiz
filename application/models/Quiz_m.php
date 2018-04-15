@@ -226,6 +226,50 @@ class Quiz_m extends CI_Model
 		return false;
 
 	}
+	public function getInfoByexamId($exam_id=false)
+	{
+				if($exam_id){
+			$object =  false;
+			$query = $this->db->select('quizes_id,quizes_title,e_description,date_posted,status')
+				->from('quizes_setting')
+				->where('quizes_id',$exam_id)
+				->get();
+				if($result =  $query->result()){
+
+
+				$category = '';
+				$categories = '';
+
+				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
+					->from('exam_setting')
+					->join('category','category.cat_id = exam_setting.category_id','left')
+					->where('exam_id',$exam_id);
+					$category = $this->db->get()->result();
+					foreach ($category as $cat) {
+
+						$categories[] =(object) array('category_id'=>$cat->category_id,'category_name'=>$cat->cat_name);
+
+					}
+						$object[] =(object) array(
+						'quizes_id'=>$result[0]->quizes_id,		
+						'quizes_title'=>$result[0]->quizes_title,
+						'e_description'=>$result[0]->e_description,
+						'date_posted'=>$result[0]->date_posted,
+						'status'=>$result[0]->status,
+						'category'=>$categories,
+					);
+
+
+
+				}
+
+
+
+				return $object;
+		}
+		return false;
+
+	}
 	public function take_exam($exam_id='')
 	{
 		# code...
@@ -254,7 +298,7 @@ class Quiz_m extends CI_Model
 				
 				$object[] = (object) array(
 					'question_id'=>$key->quiz_id,
-					'question_title'=>$key->post_question,
+					'question_title'=>strip_tags($key->post_question,'<div><i><b><a><span><label>'),
 					'choice_1' =>$choice[0],
 					'choice_2' =>$choice[1],
 					'choice_3' =>$choice[2],
@@ -269,7 +313,68 @@ class Quiz_m extends CI_Model
 
 	}
 
-	public function randomByCategory($exam_id='')
+	public function randomByCategory($exam_id=0,$category_id = 0)
+	{
+		# code...
+		//return  $category_id;
+
+		$object = false;
+
+		//$query = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id));
+		//if($result = $query->result()){
+
+			//foreach ($result as $cat) {
+				# code...
+				$query2 = '';
+				$result2 = '';
+
+				$query2 = $this->db->select('quiz.*,quizes.category_id,category.cat_name as category_name')
+					->from('quiz')
+					->join('quizes','quizes.quiz_id = quiz.quiz_id','left')
+					->join('category','category.cat_id = quizes.category_id','left')
+					->where(array('quizes.exam_id'=>$exam_id,'quizes.category_id'=>$category_id))
+					->order_by('quizes.category_id','ASC')
+					->get();
+					if($result2 = $query2->result())
+					{
+						shuffle($result2);
+						//$object[] = $result2;
+									//$object2 = '';
+									foreach ($result2 as $key) {
+										# code...
+										$choice = '';
+										$s_choice = '';
+
+										$choice = array(
+											$key->post_answer,
+											$key->post_choice1,
+											$key->post_choice2,
+											$key->post_choice3,
+											$key->post_choice4);
+
+										shuffle($choice);
+										
+										$object[] = (object) array(
+											'question_id'=>$key->quiz_id,
+											'question_title'=>strip_tags($key->post_question,'<div><i><b><a><span><label>'),
+											'choice_1' =>$choice[0],
+											'choice_2' =>$choice[1],
+											'choice_3' =>$choice[2],
+											'choice_4' =>$choice[3],
+											'choice_5' =>$choice[4],
+											'category_id'=>$key->category_id,
+											'category_name'=>$key->category_name,
+											'q_id'=>$key->token
+										);
+									}
+					}
+
+			//}
+		//}
+		return $object;
+
+	}
+	public function randomAllByCategory($exam_id='')
 	{
 		# code...
 		$object = false;
@@ -310,7 +415,7 @@ class Quiz_m extends CI_Model
 										
 										$object[] = (object) array(
 											'question_id'=>$key->quiz_id,
-											'question_title'=>$key->post_question,
+											'question_title'=>strip_tags($key->post_question,'<div><i><b><a><span><label>'),
 											'choice_1' =>$choice[0],
 											'choice_2' =>$choice[1],
 											'choice_3' =>$choice[2],
@@ -460,6 +565,50 @@ class Quiz_m extends CI_Model
 
 		return $this->db->delete('quizes_setting',array('quizes_id'=>$exam_id));
 	}
+
+
+
+
+
+
+
+	//$parseStr = removeTag($html,'page-break','<hr','/>');
+
+function removeTag($str,$id,$start_tag,$end_tag)
+ {
+    //str - string to search 
+    //id - text to search for
+    //start_tag - start delimiter to remove
+   //end_tag - end delimiter to remove
+
+ //find position of tag identifier. loops until all instance of text removed
+ while(($pos_srch = strpos($str,$id))!==false)
+ {
+         //get text before identifier
+         $beg = substr($str,0,$pos_srch);
+         //get position of start tag
+         $pos_start_tag = strrpos($beg,$start_tag);
+         //echo 'start: '.$pos_start_tag.'<br>';
+         //extract text up to but not including start tag
+         $beg = substr($beg,0,$pos_start_tag);
+         //echo "beg: ".$beg."<br>";
+        
+         //get text from identifier and on
+         $end = substr($str,$pos_srch);
+        
+         //get length of end tag
+         $end_tag_len = strlen($end_tag);
+         //find position of end tag
+         $pos_end_tag = strpos($end,$end_tag);
+         //extract after end tag and on
+         $end = substr($end,$pos_end_tag+$end_tag_len);
+        
+         $str = $beg.$end;
+ }
+
+ //return processed string
+ return $str;
+ }
 }
 
 

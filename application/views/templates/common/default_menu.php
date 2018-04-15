@@ -40,8 +40,8 @@
                           <li><a href="<?=site_url('setting/security');?>"> <span>My account</span></a></li>
                          -->
                             
+                          <li><a href="<?=site_url('user');?>"> <span>Profile</span></a></li>
                           <li><a href="<?=site_url('exam');?>"> <span>Exam</span></a></li>
-                          <li><a href="<?=site_url('exam/rating');?>"> <span>My rating</span></a></li>
                           <li><a href="<?=site_url('admin');?>"> <span>Administration</span></a></li>
                      
                           

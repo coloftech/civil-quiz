@@ -96,7 +96,7 @@ CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE
 </script>
 
 -->
-<header class="wrapper" >
+<header class="wrapper navbar-fixed-top" >
     <div class="container" >
         
 
@@ -116,7 +116,7 @@ CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE
   </div>
   </div>
 </div>
-<footer>
+<footer class="navbar-fixed-bottom">
     <div class="container">
         
     <div class="footer-top">
@@ -142,7 +142,7 @@ CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE
         <script src="<?=base_url('public/assets/js/notify/dist/notify.js');?>" type="text/javascript"></script>
         <script src="<?=base_url('public/assets/js/col-script.js');?>" type="text/javascript"></script>
       
-<script> /**/
+<script> /**
 (function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;

@@ -1,143 +1,415 @@
 <style type="text/css">
-.panel > .panel-body.panel-choices label{cursor:pointer;font-weight: normal;font-size: 13px;}
+	.btn{
+		border-radius: 0;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+		color: #fff;
+	}
+	.btn-stop{
+		color: #fff;
+		background-color: rgba(70, 168, 55,0.7);
+	}
 
-.list {
-  flex: 0 0 20rem;
-  list-style: none;
-}
+	.btn-stop:hover,.btn-stop:active,.btn-stop:focus{
+		color: #fff;
+		background-color: rgba(70, 168, 55,0.9);
+	}
 
-.list__item {
-  position: relative;
-}
-.list__item:hover > .label {
-  color: #009688;
-}
-.list__item:hover > .label::before {
-  border: 0.5rem solid #009688;
-  margin-right: 2rem;
-}
+	.btn-pause{
 
-.radio-btn {
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
-}
-.radio-btn:checked + .label {
-  color: #009688;
-}
-.radio-btn:checked + .label::before {
-  margin-right: 2rem;
-  border: 0.5rem solid #009688;
-  background: #fff;
-}
 
-.label {
+		color: #000;
+		background-color: rgba(250,73,73,0.8);
+	}
+	.btn-continue{
+
+	}
+	.panel-result-btn{
+
+	}
+	.disabled{
+		cursor: not-allowed;
+		cursor: no-drop;
+	}
+	}
+	.stopwatch {
+  width: 300px;
+  background-color: #0af;
+  border-radius: 5px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.75), 0 0 1px rgba(0, 0, 0, 0.15);
+  padding: 2px;
+}
+.stopwatch, .stopwatch * {
+  transition: all 0.15s ease-out;
+}
+.stopwatch .controls {
   display: flex;
-  align-items: center;
-  padding: 0.75rem 0;
-  color: #000;
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.25s linear;
 }
-
-.label::before {
-  display: inline-block;
-  content: "";
-  height: 1.125rem;
-  width: 1.125rem;
-  margin-right: 0.625rem;
-  border: 0.5rem solid #fff;
-  border-radius: 50%;
-  transition: all 0.25s linear;
+.stopwatch .controls button {
+  flex-grow: 1;
+  margin: 0 5px 4px;
+  padding: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.75);
+  border: 0;
+  outline: 0;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+.stopwatch .controls button:active {
+  margin-bottom: 0;
+  margin-top: 4px;
+  box-shadow: none;
+}
+.stopwatch .controls .start {
+  background-color: #5d5;
+}
+.stopwatch .controls .start:hover {
+  background-color: #6e6;
+}
+.stopwatch .controls .stop {
+  background-color: #d55;
+}
+.stopwatch .controls .stop:hover {
+  background-color: #e66;
+}
+.stopwatch .controls .reset {
+  background-color: #55d;
+}
+.stopwatch .controls .reset:hover {
+  background-color: #66e;
+}
+.stopwatch .display {
+  font-size: 16px;
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 10px;
+}
+.stopwatch .display :not(:last-child):after {
+  content: ':';
 }
 
 </style>
-<?php
-//print_r($list_exam);
-
-if(isset($list_exam) && is_array($list_exam)){
-	$i = 1;$j=1;
-		$category = 0;
-?>
-<?php foreach ($list_exam as $key): ?>
-
-	<?php
-		
-		if ( $category != (int)$key->category_id) {
-			$category = $key->category_id;
-			?>
-			<h3>Test <?php echo $j; ?> - <?php echo $this->quiz_m->getCategoryName($key->category_id); ?></h3>
-			<p>Directions: <?=($result = $this->quiz_m->getCategoryDirection($key->category_id,$exam_id)) ? $result : '' ;?></p>
-			<?php
-			 $j++;
-		}
-	?>
-	
-	<div class="panel panel-default">
-		<div class="panel-heading panel-question">
-			<?php echo "<span style='display: inline-block;font-weight:bold;font-size:15px;'>$i)</span> <span style='display: inline-block;font-weight:bold;font-size:15px;'>$key->question_title </span>"; ?>
-				
-		</div>
-		<div class="panel-body panel-choices">
-			<ul class="list">
-				<li class="list__item">
-					<input type="radio" name="answer_<?=$key->question_id;?>" id="choice_1_<?=$key->question_id;?>" class="radio radio-inline radio-btn"><label for="choice_1_<?=$key->question_id;?>"  class="label"> A. <?=$key->choice_1?></label>
-				</li>
-
-				<li class="list__item">
-				<input type="radio" name="answer_<?=$key->question_id;?>" id="choice_2_<?=$key->question_id;?>" class="radio radio-inline radio-btn"><label for="choice_2_<?=$key->question_id;?>"  class="label"> B. <?=$key->choice_2?></label>
+<div class="panel exam-info">
+	<div class="panel-body">
+		<h3><?=($examinfo[0]->quizes_title) ? $examinfo[0]->quizes_title : '';?></h3>
+		<?php if ($examinfo[0]->category): ?>
+				<ul class="list-unstyled" style="margin-left: 10px;"><h4>CATEGORY</h4>
 					
-				</li>
-				<li class="list__item">
-				<input type="radio" name="answer_<?=$key->question_id;?>" id="choice_3_<?=$key->question_id;?>" class="radio radio-inline radio-btn"><label for="choice_3_<?=$key->question_id;?>"  class="label"> C. <?=$key->choice_3?></label>
-					
-				</li>
-				<li class="list__item">
-				<input type="radio" name="answer_<?=$key->question_id;?>" id="choice_4_<?=$key->question_id;?>" class="radio radio-inline radio-btn"><label for="choice_4_<?=$key->question_id;?>"  class="label"> D. <?=$key->choice_4?></label>
-					
-				</li>
-				<li class="list__item">
-				<input type="radio" name="answer_<?=$key->question_id;?>" id="choice_5_<?=$key->question_id;?>" class="radio radio-inline radio-btn"><label for="choice_5_<?=$key->question_id;?>"  class="label"> E. <?=$key->choice_5?></label>
-					
-				</li>
-			</ul>
-			<p>
-				
-			</p>
+			<?php $i=0; foreach ($examinfo[0]->category as $key): ?>
+				<li><?=$key->category_name ?><input type="hidden" name="category[]" id="category<?=$i?>" value="<?=$key->category_id ?>"></li>
+			<?php $i++; endforeach ?>
 
-			<p>
-			</p>
+				</ul>
 
-			<p>
-			</p>
-
-			<p>
-			</p>
-
-			<p>
-			</p>
-		</div>
+		<?php endif ?>
+		<button class="btn btn-success" id="btn_start">Start exam</button>
 	</div>
-<?php $i++; endforeach ?>
 
-<?php
+</div>
+<div class="panel exam-starter" style="display: none;border-radius: 0;width: 100%;">
+	<div class="on-pause">
+		
+		
+	</div>
+	<div class="panel-body panel-choices list-exam"></div>
 
-}
+	<br/>
+	<br/>
+	<br/>
+	<div class="panel-body panel-result-btn" style="position: fixed;z-index: 99;bottom: 50px;width: 100%;background-color: #fff;">
 
-;?>
+
+
+		
+		<div class="col-md-10">
+
+		<div class="col-md-4-custom not-mobile"><span class="answer-total">answer</span>/<span class="answer-question">question</span></div><div class="col-md-4-custom not-mobile"><button class="btn btn-stop disabled" id="btn_stop" disabled="true"><i class="fa fa-check"></i> Show result</button>  <button class="btn btn-pause" id="btn_pause" data-val='Pause'> <i class="fa fa-pause"></i> Pause</button></div><div class="col-md-4-custom not-mobile"><button class="btn btn-info btn-next" id="btn_next" data-val='Next'> <i class="fa fa-forward"></i> Next</button></div>
+
+		<div class="col-md-4-custom in-mobile answer-question"><span class="answer-total">0</span>/<span class="answer-question">0</span></div><div class="col-md-4-custom in-mobile"><button class="btn btn-stop" id="btn_stop-2"><i class="fa fa-check"></i> <i class="fa fa-check"></i></button>  <button class="btn btn-pause" id="btn_pause-2" data-val='Pause'> <i class="fa fa-pause"></i></button></div><div class="col-md-4-custom in-mobile"><button class="btn btn-info btn-next" id="btn_next-2" data-val='Next'> <i class="fa fa-forward"></i></button></div>
+			
+		</div>
+		<div class="col-md-2 stopwatch">
+            <div class="controls hidden">
+                <button class="start">Start</button>
+                <button class="stop">Stop</button>
+                <button class="reset">Reset</button>
+            </div>
+            <div class="display">
+                <span class="minutes">00</span><span class="seconds">00</span><span class="centiseconds">00</span>
+            </div>
+        </div></div>
+		
+
+	</div>
+</div>
+
 
 <script type="text/javascript">
+	
+	var btn_pause_2 = false;
+	var btn_stop_2 = false;
+	var btn_next = false;
 
-	/*
+    var j=0;
+    var t=0;
+
+/*	
 window.onbeforeunload = function() {
   return "Data will be lost if you leave the page, are you sure?";
-};*/
+};
+//*/
+
+
+function start_timer() {
+	// body...
+
+	var data = 'timer=start';
+	$.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("timer/start"); ?>',
+      dataType: 'json',
+      success: function(resp){
+
+      }
+	});
+}
+
+function pause_timer() {
+	// body...
+	//alert('hey');
+	var data = 'timer=start';
+	$.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("timer/pause"); ?>',
+      dataType: 'html',
+      success: function(resp){
+
+      	//console.log(resp)
+      }
+	});
+}
+function continue_timer() {
+	// body...
+	var data = 'timer=start';
+	$.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("timer/continue_timer"); ?>',
+      dataType: 'html',
+      success: function(resp){
+      	//console.log(resp)
+      }
+	});
+}
+function current_timer() {
+	// body...
+	var data = 'timer=start';
+	$.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("timer/timerlapse"); ?>',
+      dataType: 'html',
+      success: function(resp){
+      	//console.log(resp);
+      }
+	});
+}
+
+$('#btn_stop').on('click',function() {
+	var data = 'timer=stop';
+	$('.reset').click();
+
+
+        	$('.exam-info').show('fast');
+        	$('.exam-starter').hide('slow');
+        	in_answer = [];
+        	j = 0;
+        	t=0;
+        	started = false;
+        	$(this).attr('disabled',true);
+
+
+	$.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("exam/show_result"); ?>',
+      dataType: 'html',
+      success: function(resp){
+
+      	console.log(resp);
+      }
+	});
+
+	});
+$('#btn_pause').on('click',function() {
+
+	 var btn = $(this).text();
+	 btn = btn.trim();
+
+	 ////console.log(btn);
+
+	 //return false;
+	 if(btn_pause_2 == false){
+
+		$('.stop').click();
+		$('.on-pause').show('slow');
+	 	pause_timer();
+	 	btn_pause_2 = true;
+
+	 $('#btn_pause-2').html('<i class="fa fa-undo"></i>')
+	 $(this).html('<i class="fa fa-undo"></i> Return')
+	 }else{
+
+		$('.on-pause').hide('fast');
+		$('.start').click();
+	 	pause_timer();
+	 	btn_pause_2 = false;
+	 $('#btn_pause-2').html('<i class="fa fa-pause"></i>')
+	 $(this).html('<i class="fa fa-pause"></i> Pause')
+	 }
+	
+});
+$('#btn_stop-2').on('click',function() {
+	$('#btn_stop').click();
+
+	});
+$('#btn_pause-2').on('click',function() {
+
+	
+
+	 //return false;
+	 if(btn_pause_2 == false){
+	 	btn_pause_2 = true;
+		$('.on-pause').show('slow');
+	 	pause_timer();
+
+	$('.stop').click();
+	 $('#btn_pause').html('<i class="fa fa-undo"></i> Return')
+	 $(this).html('<i class="fa fa-undo"></i>')
+	 }else{
+		$('.on-pause').hide('fast');
+
+	$('.start').click();
+	 	btn_pause_2 = false;
+	 	continue_timer();
+
+	 $('#btn_pause').html('<i class="fa fa-pause"></i> Pause')
+	 $(this).html('<i class="fa fa-pause"></i>')
+	 }
+	
+});
+$('#btn_start').on('click',function() {
+
+
+	var data = 'exam_id=<?=$exam_id?>'+'&category_id='+$('#category0').val()
+
+    $.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("exam/startexam"); ?>',
+      dataType: 'json',
+
+      success: function(resp){
+
+        	////console.log(resp);
+
+        if(resp.stats == true){
+        	$('.exam-info').hide('fast');
+        	$('.exam-starter').show('slow');
+
+        	////console.log(resp.exam);
+        	var i=1;
+        	var question = '<ul class="list">';
+        	$.each(resp.exam, function(k, v) {
+
+    			////console.log(v.q_id);
+
+    			question = question + '<div class="panel panel-info"><div class="panel-heading"> <span class="counter-i">'+i+')</span> '+v.question_title+'</div><div class="panel-body">'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_1_'+v.question_id+'" class="radio radio-inline radio-btn" onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_1+'\')"><label for="choice_1_'+v.question_id+'" class="label" > A) '+v.choice_1+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_2_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_2+'\')"><label for="choice_2_'+v.question_id+'"  class="label" > B) '+v.choice_2+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_3_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_3+'\')"><label for="choice_3_'+v.question_id+'" class="label" > C) '+v.choice_3+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_4_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_4+'\')"><label for="choice_4_'+v.question_id+'"  class="label" > D) '+v.choice_4+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_5_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_5+'\')"><label for="choice_5_'+v.question_id+'"  class="label" > E) '+v.choice_5+'</label></li>'+'</div></div>';
+    			i++;j++;
+			});
+			$('.answer-total').html('0');
+			$('.answer-question').html(j);
+			$('.list-exam').html(question+'</ul>');
+
+				 // $('input[type="radio"]').on('click', function(e) {
+
+					  // var  radio = $('input[type="radio"]:checked').val();
+					        //save_answer(1,radio);
+					//});
+
+
+        }else{
+        	//console.log(resp.msg);
+
+                  $('.navbar-coloftech').notify('Warning! '+resp.msg, { position:"bottom right", className:"warning" }); 
+        }
+      }
+
+    });
+    return false;
+});
+
+var answer_selected = false;
+var in_answer = [];
+var started = false;
+function save_answer(question,answer,quiz) {
+	if(started == false){
+		started = true;
+
+        	$('.start').click();
+			start_timer();
+			$('#btn_stop').removeAttr("disabled");
+			$('#btn_stop').removeClass('disabled');
+
+	}
+
+	if(answer_selected == quiz){
+
+		return false;
+	}
+	if (jQuery.inArray(answer, in_answer)!='-1') {
+            //alert(name + ' is in the array!');
+           
+
+        } else {
+           // alert(name + ' is NOT in the array...');
+           in_answer.push(answer);
+           t++;
+        }
+         if(in_answer.length == j){
+         	//$('.on-pause').show('slow');
+         ////console.log(in_answer.length);
+         $('#btn_pause').click();
+         }
+        $('.answer-total').html(t);
+
+	answer_selected = quiz;
+	
+		var data = 'question='+answer+'&answer='+quiz;
+	$.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("exam/save_answer"); ?>',
+      dataType: 'html',
+      success: function(resp){
+      	////console.log(resp)
+      	$('.navbar-coloftech').notify(resp,{position: "bottom right",className: "success"})
+
+      }
+	});
+}
 </script>
+<script type="text/javascript" src="<?=base_url('public/assets/js/stopwatch.js')?>"></script>
+<?php 
+uniqid() ?>

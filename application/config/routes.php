@@ -84,6 +84,10 @@ $route['exam'] = 'exam';
 $route['exam/(:any)'] = 'exam/$1';
 $route['exam/(:any)/(:any)'] = 'exam/$1/$2';
 
+$route['timer'] = 'timer';
+$route['timer/(:any)'] = 'timer/$1';
+$route['timer/(:any)/(:any)'] = 'timer/$1/$2';
+
 
 $route['(:any)'] = 'home/index';
 $route['(:any)'] = 'home/$1';

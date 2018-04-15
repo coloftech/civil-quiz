@@ -35,7 +35,7 @@
 								if(isset($key->category) && is_array($key->category)){
 									foreach ($key->category as $cat) {
 										# code...
-										echo "<li><a href='../exam/info/$key->slug/$cat->category_id'>$cat->category_name</a></li>";
+										echo "<li><a href='#trylater'>$cat->category_name</a></li>";
 									}
 								}
 								echo "<ul>";
@@ -47,7 +47,7 @@
 								}*/
 
 								?></div>
-								<div class="post-details"><a href="<?=site_url("exam/$key->quizes_title");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>
+								<div class="post-details"><a href="<?=site_url("exam/info/$key->slug");?>" class="btn btn-default">Details <i class="fa fa-angle-right"></i></a href="#"></div>
 							</div>
 						</div>
 					</div>

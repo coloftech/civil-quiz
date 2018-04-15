@@ -20,18 +20,27 @@ class User extends CI_Controller {
 		 $this->uid = $this->session->userdata['id'];
 		 $this->username = $this->session->userdata['username'];
 
-		$this->load->model('admin_m');
+		$this->load->model('category_m');
+		$this->load->model('quiz_m');
+		$this->load->model('user_m');
+		$this->load->model('Userexam_m');
 
-
-		$this->auto_m->free_space();
 	}
 	public function index($value='')
 	{
-		$data['display'] = 'none';
-		$data['list_user'] = $this->permission->list_user();
-		//var_dump($data['list_user']);
-		$data['site_title'] = 'User';
-		$this->template->load('admin','admin/user/user',$data);
+
+		$quiz = $this->quiz_m->list_exams();
+		$data['lists'] = $quiz;
+
+
+		$ratings = $this->Userexam_m->best_rating($this->uid);
+		//var_dump($ratings);exit();
+		$data['ratings'] = $ratings;
+
+		$data['profile'] = $this->user_m->info($this->uid);
+
+		$data['site_title'] = 'My account';
+		$this->template->load(false,'user/index',$data);
 	}
 	public function create($value='')
 	{

@@ -54,7 +54,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('minify','database','template','permission','slug','visitors');
+$autoload['libraries'] = array('minify','database','template','permission','slug','visitors','session');
 
 
 /*

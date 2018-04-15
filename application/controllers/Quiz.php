@@ -305,15 +305,16 @@ class Quiz extends CI_Controller
 
 			}
 
-
+			$uniqid =uniqid();
 			$data = array(
-				'post_question'=>$input->question,
+				'post_question'=>strip_tags($input->question,'<div><i><b><a><span><label>'),
 				'post_answer'=>$answer,
 				'post_choice1'=>$choice[0],
 				'post_choice2'=>$choice[1],
 				'post_choice3'=>$choice[2],
 				'post_choice4'=>$choice[3],
-				'date_posted'=>date('Y-m-d H:i:s')
+				'date_posted'=>date('Y-m-d H:i:s'),
+				'token'=>$uniqid
 
 
 			);

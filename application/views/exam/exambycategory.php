@@ -1,65 +1,19 @@
-<style type="text/css">
-.panel > .panel-body.panel-choices label{cursor:pointer;font-weight: normal;font-size: 13px;}
+<div class="panel">
+	<div class="panel-body">
+		<h3><?=($examinfo[0]->quizes_title) ? $examinfo[0]->quizes_title : '';?></h3>
+		<?php if ($examinfo[0]->category): ?>
+				<ul class="list-unstyled" style="margin-left: 10px;"><h4>CATEGORY</h4>
+					
+			<?php foreach ($examinfo[0]->category as $key): ?>
+				<li><?=$key->category_name ?></li>
+			<?php endforeach ?>
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+				</ul>
 
-.list {
-  flex: 0 0 20rem;
-  list-style: none;
-}
-
-.list__item {
-  position: relative;
-}
-.list__item:hover > .label {
-  color: #009688;
-}
-.list__item:hover > .label::before {
-  border: 0.5rem solid #009688;
-  margin-right: 2rem;
-}
-
-.radio-btn {
-  position: absolute;
-  opacity: 0;
-  visibility: hidden;
-}
-.radio-btn:checked + .label {
-  color: #009688;
-}
-.radio-btn:checked + .label::before {
-  margin-right: 2rem;
-  border: 0.5rem solid #009688;
-  background: #fff;
-}
-
-.label {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 0;
-  color: #fff;
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.25s linear;
-}
-
-.label::before {
-  display: inline-block;
-  content: "";
-  height: 1.125rem;
-  width: 1.125rem;
-  margin-right: 0.625rem;
-  border: 0.5rem solid #fff;
-  border-radius: 50%;
-  transition: all 0.25s linear;
-}
-
-</style>
+		<?php endif ?>
+		<button class="btn btn-success" id="btn_start">Start exam</button>
+	</div>
+</div>
 <?php
 //print_r($list_exam);
 

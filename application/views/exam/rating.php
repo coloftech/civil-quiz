@@ -1,1 +1,1 @@
-rating.php
+<div class="post-index">rating</div>
