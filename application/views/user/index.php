@@ -34,6 +34,7 @@
 		
 	<tr>
 		<th>Date taken</th>
+		<th>Time</th>
 		<th>Exam title</th>
 		<th>No of times taken</th>
 		<th>Best score</th>
@@ -52,9 +53,10 @@
 		  ?>
 	<tr id="tr_<?=$key->exam_id ?>">
 		<td width="100px"><?=date('Y-m-d',strtotime($key->date_taken)) ?></td>
+		<td width="100px"><?=date('H:i:s',strtotime($key->date_taken)) ?></td>
 		<td><?=$key->quizes_title ?></td>
 		<td><?=$key->retake_total;?></td>
-		<td  width="100px"><?=$key->results?></td>
+		<td  width="100px"><?=$key->results?>/<?php echo $this->Userexam_m->exam_total($key->exam_id); ?></td>
 		<td width="50px"><a href="<?=site_url("exam/take_exam/$key->exam_id"); ?>"><i class="fa fa-briefcase btn" style="color:green;" title="Re-Take this exam"></i></a></td>
 	</tr>
 	<?php endforeach ?>

@@ -6,12 +6,12 @@
 	}
 	.btn-stop{
 		color: #fff;
-		background-color: rgba(70, 168, 55,0.7);
+		background-color: rgba(70, 168, 55,0.8);
 	}
 
 	.btn-stop:hover,.btn-stop:active,.btn-stop:focus{
 		color: #fff;
-		background-color: rgba(70, 168, 55,0.9);
+		background-color: rgba(70, 168, 55,1);
 	}
 
 	.btn-pause{
@@ -89,6 +89,10 @@
 .stopwatch .display :not(:last-child):after {
   content: ':';
 }
+.exam-rating{
+	font-size: 85px;
+	text-align: center;
+}
 
 </style>
 <div class="panel exam-info">
@@ -98,6 +102,7 @@
 				<ul class="list-unstyled" style="margin-left: 10px;"><h4>CATEGORY</h4>
 					
 			<?php $i=0; foreach ($examinfo[0]->category as $key): ?>
+			<?php $catergories[] = $key->category_id; ?>
 				<li><?=$key->category_name ?><input type="hidden" name="category[]" id="category<?=$i?>" value="<?=$key->category_id ?>"></li>
 			<?php $i++; endforeach ?>
 
@@ -105,6 +110,10 @@
 
 		<?php endif ?>
 		<button class="btn btn-success" id="btn_start">Start exam</button>
+	</div>
+	<div class="panel-body exam-result">
+		<div class="exam-rating"></div>
+
 	</div>
 
 </div>
@@ -215,16 +224,52 @@ function current_timer() {
 
       type: 'post',
       data: data,
-      url: '<?=site_url("timer/timerlapse"); ?>',
+      url: '<?=site_url("exam/stop_exam"); ?>',
       dataType: 'html',
       success: function(resp){
-      	//console.log(resp);
+      	console.log(resp);
       }
 	});
 }
 
+<?php
+	if(isset($_SESSION['catergories'])){
+		$cat = $_SESSION['catergories'];
+	}else{
+		$cat = 0;
+	}
+
+?>
+var cat = [];
+$('.btn-next').on('click',function() {
+	console.log(cat);
+
+	if(catergories.length <= next_i){
+		//console.log('End of exam');
+
+			$('#btn_stop').removeAttr("disabled");
+			$('#btn_stop').removeClass('disabled');
+			$(this).attr('disabled',true);
+	return false;
+	}
+	next = catergories[next_i];
+
+	var data = 'exam_id='+exam_id+'&category_id='+next;
+
+	next_i++;
+	j = 0;t=0;
+
+		$('.on-pause').hide('fast');
+		//btn_pause = false;
+
+    show_questionaire(data);
+	//console.log(next);
+});
 $('#btn_stop').on('click',function() {
-	var data = 'timer=stop';
+	var data = 'timer=stop'+'&catergories='+JSON.stringify(cat);
+
+	//console.log(data);
+	//return false;
 	$('.reset').click();
 
 
@@ -242,10 +287,16 @@ $('#btn_stop').on('click',function() {
       type: 'post',
       data: data,
       url: '<?=site_url("exam/show_result"); ?>',
-      dataType: 'html',
+      dataType: 'json',
       success: function(resp){
 
       	console.log(resp);
+      	if(resp.stats == true){
+
+      	$('.exam-rating').html(resp.result+'/'+resp.total_exam);
+      }else{
+      	console.log(resp.msg)
+      }
       }
 	});
 
@@ -307,12 +358,29 @@ $('#btn_pause-2').on('click',function() {
 	 }
 	
 });
+var catergories = <?php echo json_encode($catergories); ?>;
+var next_i = 0;
+var next = catergories[next_i];
+var exam_id = <?=$exam_id?>;
 $('#btn_start').on('click',function() {
+//console.log(catergories);
+//return false;
+if(catergories.length <= next_i){
+	return false;
+}
+next_i++;
 
 
-	var data = 'exam_id=<?=$exam_id?>'+'&category_id='+$('#category0').val()
+	var data = 'exam_id='+exam_id+'&category_id='+next;
+    show_questionaire(data);
 
-    $.ajax({
+    return false;
+});
+
+function show_questionaire(data){
+	//console.log(data);
+	cat.push(next);
+$.ajax({
 
       type: 'post',
       data: data,
@@ -341,23 +409,18 @@ $('#btn_start').on('click',function() {
 			$('.answer-question').html(j);
 			$('.list-exam').html(question+'</ul>');
 
-				 // $('input[type="radio"]').on('click', function(e) {
-
-					  // var  radio = $('input[type="radio"]:checked').val();
-					        //save_answer(1,radio);
-					//});
+				 
 
 
         }else{
-        	//console.log(resp.msg);
+
 
                   $('.navbar-coloftech').notify('Warning! '+resp.msg, { position:"bottom right", className:"warning" }); 
         }
       }
 
     });
-    return false;
-});
+}
 
 var answer_selected = false;
 var in_answer = [];
@@ -368,8 +431,6 @@ function save_answer(question,answer,quiz) {
 
         	$('.start').click();
 			start_timer();
-			$('#btn_stop').removeAttr("disabled");
-			$('#btn_stop').removeClass('disabled');
 
 	}
 

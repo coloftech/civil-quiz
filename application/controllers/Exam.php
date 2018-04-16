@@ -92,8 +92,11 @@ class Exam extends CI_Controller
 		$_SESSION['user_exam_id'] = false;
 		$_SESSION['category_id'] = false;
 		$_SESSION['exam_id'] = $exam_id;
-		
+		$_SESSION['categories'] = false;
+		if(!$this->session->LAST_ACTIVITY){
+
 		$_SESSION['LAST_ACTIVITY'] = false;
+		}
 
 		$data['exam_id'] = $exam_id;
 		$data['site_title'] = 'Take exam';
@@ -103,10 +106,12 @@ class Exam extends CI_Controller
 
 	public function stop_exam()
 	{
-		if($this->input->post()){
+		//if($this->input->post()){
 			
-		echo $this->Userexam_m->save_answer(1,2,1,'gwegawg',1);
-		}
+		//echo $this->Userexam_m->save_answer(1,2,1,'gwegawg',1);
+		//}
+		//echo "string";exit();
+		echo $this->session->categories;
 	}
 	public function save_answer()
 	{
@@ -137,6 +142,8 @@ class Exam extends CI_Controller
 		# code...
 		if($this->input->post()){
 
+			$object = (object)$this->input->post();
+
 			$user_exam_id =  $this->session->user_exam_id;
 			$category_id = $this->session->category_id;
 			$exam_id = $this->session->exam_id;
@@ -144,10 +151,19 @@ class Exam extends CI_Controller
 			$result = $this->Userexam_m->get_result($exam_id,$category_id,$user_exam_id);
 
 			$save_result = $this->Userexam_m->save_result($exam_id,$category_id,$user_exam_id,$result);
+			
+			$categories = json_decode($object->catergories);
+				$total_exam = 0;
+				foreach ($categories as $key) {
+					# code...
 
+				$t = $this->quiz_m->countExamByCategory($exam_id,$key);
+				$total_exam = $total_exam + $t;
+				}
 
+			
 
-			echo json_encode(array('stats'=>true,'msg'=>$result));
+			echo json_encode(array('stats'=>true,'result'=>$result,'total_exam'=>$total_exam));
 
 
 			$time = $_SERVER['REQUEST_TIME'];
@@ -161,7 +177,7 @@ class Exam extends CI_Controller
 	{
 		# code...
 				$time = $_SERVER['REQUEST_TIME'];
-				$timeout_duration = 300;
+				$timeout_duration = 30;
 				if($this->session->LAST_ACTIVITY && ($time - $this->session->LAST_ACTIVITY < $timeout_duration)){
 					$timeout =$timeout_duration - ( $time - $this->session->LAST_ACTIVITY);
 					#2
@@ -171,10 +187,9 @@ class Exam extends CI_Controller
 				}
 
 
-			//echo json_encode(array('test'));exit();
 		if($this->input->post()){
 			$object = (object)$this->input->post();
-			//echo json_encode($object);exit();
+
 
 			if($exam = $this->quiz_m->randomByCategory($object->exam_id,$object->category_id)){
 				if(!$this->session->user_exam_id){
@@ -183,10 +198,8 @@ class Exam extends CI_Controller
 				$_SESSION['user_exam_id'] = $user_exam_id;
 				$_SESSION['category_id'] = $object->category_id;
 
+
 				}
-
-
-
 				echo json_encode(array('stats'=>true,'exam'=>$exam));
 				exit();
 			}
