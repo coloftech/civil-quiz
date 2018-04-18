@@ -32,7 +32,8 @@
 
                           <?php if (!$this->permission->is_loggedin()): ?>
                             
-                          <li class="<?php  ?>"><a href="<?php echo site_url('login'); ?>"> Login</a></li>
+                          <li class="<?php  ?>"><a href="<?php echo site_url('login?redirect=').urlencode($_SERVER['PHP_SELF']); ?>"> Login</a></li>
+                          <li class="<?php  ?>"><a href="<?php echo site_url('register'); ?>"> Signup</a></li>
                           <?php endif ?>
                           <?php if ($this->permission->is_loggedin()): ?>
                           <!--
@@ -42,7 +43,11 @@
                             
                           <li><a href="<?=site_url('user');?>"> <span>Profile</span></a></li>
                           <li><a href="<?=site_url('exam');?>"> <span>Exam</span></a></li>
+
+                          <?php if ($this->permission->is_admin($this->session->userdata['id'])): ?>
+                            
                           <li><a href="<?=site_url('admin');?>"> <span>Administration</span></a></li>
+                          <?php endif ?>
                      
                           
                      

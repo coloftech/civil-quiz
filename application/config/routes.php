@@ -89,6 +89,7 @@ $route['timer/(:any)'] = 'timer/$1';
 $route['timer/(:any)/(:any)'] = 'timer/$1/$2';
 
 
+$route['home'] = 'home/index';
 $route['(:any)'] = 'home/index';
 $route['(:any)'] = 'home/$1';
 $route['(:any)/(:any)'] = 'home/$1/$2';

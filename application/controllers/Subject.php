@@ -14,6 +14,9 @@ class Subject extends CI_Controller
 	}
 	public function init($value='')
 	{
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+		 	redirect();
+		 }
 		# code...
 	}
 	public function index($value='')

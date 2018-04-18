@@ -14,7 +14,7 @@ class Administration extends CI_Controller {
 	}
 	public function init($value='')
 	{
-			 if (!$this->permission->is_loggedIn()){
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
 		 	redirect();
 		 }
 		 $this->uid = $this->session->userdata['id'];

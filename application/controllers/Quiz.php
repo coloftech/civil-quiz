@@ -11,6 +11,10 @@ class Quiz extends CI_Controller
 		$this->init();
 	}
 	public function init(){
+
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+			 	redirect();
+			 }
 		$this->load->model('category_m');
 		$this->load->model('quiz_m');
 	}

@@ -454,8 +454,8 @@ function save_answer(question,answer,quiz) {
          }
         $('.answer-total').html(t);
 
-	answer_selected = quiz;
-	
+	answer_selected = answer+'_'+quiz;
+	console.log(in_answer);
 		var data = 'question='+answer+'&answer='+quiz;
 	$.ajax({
 

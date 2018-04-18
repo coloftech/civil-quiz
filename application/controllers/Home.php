@@ -29,6 +29,7 @@ class Home extends CI_Controller {
 		$this->load->model('site_m');
 		$this->load->model('user_m');
 		$this->load->model('quiz_m');
+		$this->load->model('email_m');
 	}
 
 	public function index()
@@ -55,6 +56,16 @@ class Home extends CI_Controller {
 
 			redirect($page);
 		}
+		$redirect = '';
+		if ($this->input->get('redirect')) {
+			# code...
+			$redirect = urldecode($this->input->get('redirect'));
+		}
+		if ($redirect == '/index.php/login.html' ||$redirect == '/index.php/login' || $redirect == 'login') {
+			# code...
+			$redirect = '';
+		}
+
 
 		$data['js_script'] = "
 			<script>
@@ -71,7 +82,7 @@ class Home extends CI_Controller {
 				             $('header').notify(res.msg, { position:\"bottom right\", className:\"success\" }); 
 
 				             setTimeout(function(){
-				              window.location = '".site_url()."';//.reload() = true;
+				              window.location = '".base_url($redirect)."';//.reload() = true;
 				             },2000);
 				             return false;
 				          }else{
@@ -116,5 +127,79 @@ class Home extends CI_Controller {
 	{
 		$this->permission->logout();
 		redirect();
+	}
+
+	public function register($value='')
+	{
+		# code...
+		if($this->input->post()){
+
+
+
+		}
+		$data['to_verify'] = false;
+		$_SESSION['to_verify'] = false;
+		$data['site_title'] = 'Signup';
+		$this->template->load(false,'home/register',$data);
+	}
+
+	public function verify($value='')
+	{
+
+		//$this->email_m->verify_code('5ad548a8f0fc9','rhoy');
+		//exit();
+
+				$data['to_verify'] = true;
+				
+	    if($this->input->post()){
+	    	$object = (object) $this->input->post();
+	    	if(!isset($object->verify)){
+
+	    	
+	    	if(empty($object->username) || empty($object->mail) || empty($object->pass_word)){
+
+				redirect('register?stats=false');
+	    		exit();
+	    	}
+
+	        $this->load->model('email_m');
+	        $code = uniqid();
+			//if($is_verify =
+			if($create_user = $this->permission->create_user($object->username,$object->pass_word,0,$object->mail)){
+				$data = array(
+					'verify_code'=>$code
+				);
+				$this->user_m->update_user($object->username,$data);
+			 	
+			 	$this->email_m->verify_email($this->input->post('mail'),$code);
+				
+
+
+				$this->session->set_userdata('username', $object->username);
+				$_SESSION['to_verify'] = true;
+				redirect('verify?stats=true');
+			}
+
+		}else{
+
+			if($this->email_m->verify_code($object->verify,$this->session->userdata('username'))){
+
+				$_SESSION['to_verify'] = false;
+				
+				redirect('login');
+			}else{
+
+				$_SESSION['to_verify'] = true;
+				redirect('verify?stats=true&is_verify=false');
+				$data['is_verify'] = false;
+			}
+		}
+
+
+	    }
+	    $data['site_title'] = 'verify account';
+	    $this->template->load(false,'home/register',$data);
+		
+		
 	}
 }

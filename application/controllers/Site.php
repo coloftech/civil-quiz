@@ -11,6 +11,9 @@ class Site extends CI_Controller {
 	}
 	public function init()
 	{
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+		 	redirect();
+		 }
 		$this->load->model('site_m');
 		$this->load->model('user_m');
 		$this->load->model('post_m');

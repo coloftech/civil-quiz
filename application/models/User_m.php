@@ -6,7 +6,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 class User_m extends CI_Model
 {
+public function update_user($username,$data=false)
+{
+	# code...
+	if($data){
+		$this->db->where('user_name',$username);
+		return $this->db->update('users',$data);
+	}
+	return false;
 
+}
 public function user($user=false,$pass=false)
 {
 	if ($user && $pass) {

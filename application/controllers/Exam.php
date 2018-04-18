@@ -14,9 +14,6 @@ class Exam extends CI_Controller
 	}
 	public function init($value='')
 	{
-		if(!$this->permission->is_loggedIn()){
-			redirect();
-		}
 		if($this->permission->is_loggedIn()){
 
 		$this->uid = $this->session->userdata['id'];
@@ -32,6 +29,9 @@ class Exam extends CI_Controller
 	{
 		# code...
 
+		if(!$this->permission->is_loggedIn()){
+			redirect('login');
+		}
 		$quiz = $this->quiz_m->list_exams();
 		$data['lists'] = $quiz;
 
@@ -42,6 +42,9 @@ class Exam extends CI_Controller
 
 	public function create($value='')
 	{
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+			redirect('login');
+		}
 		# code...
 		$data['site_title'] = 'Create exam';
 		$this->template->load(false,'exam/exam',$data);
@@ -50,7 +53,7 @@ class Exam extends CI_Controller
 	{
 		# code...
 		$info = $this->quiz_m->getInfoBySlug($slug);
-
+		//var_dump($info);exit();
 		$data['info'] = $info;
 		$data['site_title'] = 'Exam information';
 		$this->template->load(false,'exam/info',$data);
@@ -61,6 +64,9 @@ class Exam extends CI_Controller
 	{
 		# code...
 		
+		if(!$this->permission->is_loggedIn()){
+			redirect('login');
+		}
 
 		$quiz = $this->quiz_m->list_exams();
 		$data['lists'] = $quiz;
@@ -80,6 +86,9 @@ class Exam extends CI_Controller
 	}
 		public function take_exam($exam_id=0,$cat=0)
 	{
+		if(!$this->permission->is_loggedIn()){
+			redirect('login');
+		}
 		# code...
 		$data['list_exam'] = 'Not found!';
 		//if($list_exam = $this->quiz_m->take_exam($exam_id)){
@@ -116,6 +125,9 @@ class Exam extends CI_Controller
 	public function save_answer()
 	{
 
+		if(!$this->permission->is_loggedIn()){
+			redirect('login');
+		}
 
 		if($this->input->post()){
 			$object = (object)$this->input->post();
@@ -139,6 +151,9 @@ class Exam extends CI_Controller
 	}
 	public function show_result()
 	{
+		if(!$this->permission->is_loggedIn()){
+			redirect('login');
+		}
 		# code...
 		if($this->input->post()){
 
@@ -175,6 +190,9 @@ class Exam extends CI_Controller
 	}
 	public function startexam()
 	{
+		if(!$this->permission->is_loggedIn()){
+			redirect('login');
+		}
 		# code...
 				$time = $_SERVER['REQUEST_TIME'];
 				$timeout_duration = 30;

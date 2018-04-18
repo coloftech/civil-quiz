@@ -24,6 +24,7 @@ class User extends CI_Controller {
 		$this->load->model('quiz_m');
 		$this->load->model('user_m');
 		$this->load->model('Userexam_m');
+		$this->load->model('email_m');
 
 	}
 	public function index($value='')
@@ -45,6 +46,9 @@ class User extends CI_Controller {
 	public function create($value='')
 	{
 
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+		 	redirect();
+		 }
 		$data['display'] = 'block';
 		$data['site_title'] = 'Create user';
 		$this->template->load('admin','admin/user/user',$data);
@@ -52,6 +56,11 @@ class User extends CI_Controller {
 
 	public function add_user($value='')
 	{
+			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+		 	redirect();
+		 }
+		$this->email_m->verify_email('test@mail.com','sfijfifksifsfwef');
+		exit();
 		if($this->input->post()){
 			$input = (object)$this->input->post();
 			if(!empty($input->username) && !empty($input->password)){
