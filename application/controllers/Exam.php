@@ -67,13 +67,14 @@ class Exam extends CI_Controller
 		if(!$this->permission->is_loggedIn()){
 			redirect('login');
 		}
-
+		$exam_id = $this->input->get('exam');
 		$quiz = $this->quiz_m->list_exams();
 		$data['lists'] = $quiz;
 
 		$data['profile'] = $this->user_m->info($this->uid);
-		$ratings = $this->Userexam_m->best_rating($this->uid);
-		$data['$ratings'] = $ratings;
+		$ratings = $this->Userexam_m->rating_by_exam_id($this->uid,$exam_id);
+		//var_dump($ratings);
+		$data['ratings'] = $ratings;
 		$data['site_title'] = 'Exam rating';
 		$this->template->load(false,'exam/rating',$data);
 	}
@@ -229,6 +230,10 @@ class Exam extends CI_Controller
 		}
 			echo json_encode(array('stats'=>false,'msg'=>'Exam not found!'));
 				exit();
+	}
+
+	public function js_script(){
+		$js_script = '';
 	}
 
 	

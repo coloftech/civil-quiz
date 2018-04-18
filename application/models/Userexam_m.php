@@ -56,12 +56,30 @@ class Userexam_m extends CI_Model
 	public function best_rating($user_id = 0)
 	{
 		if($user_id > 0){
-			$query = $this->db->select('user_exam.exam_id,quizes_title,count("exam_id") as retake_total,MAX(result) as results,date_taken')
+			$query = $this->db->select('user_exam_id,user_exam.exam_id,quizes_title,count("exam_id") as retake_total,MAX(result) as results,date_taken')
 				->from('user_exam')
 				->join('quizes_setting','quizes_setting.quizes_id = user_exam.exam_id','LEFT')
 
 
 				->where('user_id',$user_id)
+				//->group_by('result')
+				->order_by('result','DESC')
+				->get();
+
+				return $query->result();
+				
+		}
+	}
+
+	public function rating_by_exam_id($user_id = 0,$exam_id=0)
+	{
+		if($user_id > 0){
+			$query = $this->db->select('user_exam.*,user_exam.exam_id,quizes_title,result,date_taken')
+				->from('user_exam')
+				->join('quizes_setting','quizes_setting.quizes_id = user_exam.exam_id','LEFT')
+
+
+				->where(array('user_id'=>$user_id,'exam_id'=>$exam_id))
 				//->group_by('result')
 				->order_by('result','DESC')
 				->get();

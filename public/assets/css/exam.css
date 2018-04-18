@@ -1,0 +1,94 @@
+.btn{
+		border-radius: 0;
+
+		color: #fff;
+	}
+	.btn-stop{
+		color: #fff;
+		background-color: rgba(70, 168, 55,0.8);
+	}
+
+	.btn-stop:hover,.btn-stop:active,.btn-stop:focus{
+		color: #fff;
+		background-color: rgba(70, 168, 55,1);
+	}
+
+	.btn-pause{
+
+
+		color: #000;
+		background-color: rgba(250,73,73,0.8);
+	}
+	.btn-continue{
+
+	}
+	.panel-result-btn{
+
+	}
+	.disabled{
+		cursor: not-allowed;
+		cursor: no-drop;
+	}
+	}
+	.stopwatch {
+  width: 300px;
+  background-color: #0af;
+  border-radius: 5px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.75), 0 0 1px rgba(0, 0, 0, 0.15);
+  padding: 2px;
+}
+.stopwatch, .stopwatch * {
+  transition: all 0.15s ease-out;
+}
+.stopwatch .controls {
+  display: flex;
+}
+.stopwatch .controls button {
+  flex-grow: 1;
+  margin: 0 5px 4px;
+  padding: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0 4px rgba(0, 0, 0, 0.75);
+  border: 0;
+  outline: 0;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+.stopwatch .controls button:active {
+  margin-bottom: 0;
+  margin-top: 4px;
+  box-shadow: none;
+}
+.stopwatch .controls .start {
+  background-color: #5d5;
+}
+.stopwatch .controls .start:hover {
+  background-color: #6e6;
+}
+.stopwatch .controls .stop {
+  background-color: #d55;
+}
+.stopwatch .controls .stop:hover {
+  background-color: #e66;
+}
+.stopwatch .controls .reset {
+  background-color: #55d;
+}
+.stopwatch .controls .reset:hover {
+  background-color: #66e;
+}
+.stopwatch .display {
+  font-size: 16px;
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 10px;
+}
+.stopwatch .display :not(:last-child):after {
+  content: ':';
+}
+.exam-rating{
+	font-size: 85px;
+	text-align: center;
+}

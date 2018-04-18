@@ -3,7 +3,6 @@
 <head>
     <title><?php echo isset($site_title) ? $site_title : 'COLOFTECH' ;?></title>
   <noscript>
-  <style>html{display:none;}</style>
   <meta http-equiv="refresh" content="0.0;url=nojs/index.php">
 </noscript>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -40,12 +39,14 @@ if(isset($description)){
        
 
         <?php // add css files
-        $this->minify->css(array('default.css'));
+        $this->minify->css(array('default.css','exam.css'));
         echo $this->minify->deploy_css();
         ?>
 
 
  <!-- CORE PLUGINS -->
+
+        <?php // echo Minifier::minify('public/assets/js/jquery-1.11.0.min.js'); ?>
         <script src="<?=base_url('public/assets/js/jquery-1.11.0.min.js')?>" type="text/javascript"></script>
         <script src="<?=base_url('public/assets/bootstrap/js/bootstrap.min.js')?>" type="text/javascript"></script>
           <?php /*   

@@ -1,102 +1,9 @@
 <style type="text/css">
-	.btn{
-		border-radius: 0;
-
-		color: #fff;
-	}
-	.btn-stop{
-		color: #fff;
-		background-color: rgba(70, 168, 55,0.8);
-	}
-
-	.btn-stop:hover,.btn-stop:active,.btn-stop:focus{
-		color: #fff;
-		background-color: rgba(70, 168, 55,1);
-	}
-
-	.btn-pause{
-
-
-		color: #000;
-		background-color: rgba(250,73,73,0.8);
-	}
-	.btn-continue{
-
-	}
-	.panel-result-btn{
-
-	}
-	.disabled{
-		cursor: not-allowed;
-		cursor: no-drop;
-	}
-	}
-	.stopwatch {
-  width: 300px;
-  background-color: #0af;
-  border-radius: 5px;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.75), 0 0 1px rgba(0, 0, 0, 0.15);
-  padding: 2px;
-}
-.stopwatch, .stopwatch * {
-  transition: all 0.15s ease-out;
-}
-.stopwatch .controls {
-  display: flex;
-}
-.stopwatch .controls button {
-  flex-grow: 1;
-  margin: 0 5px 4px;
-  padding: 5px 0;
-  border-radius: 5px;
-  box-shadow: 0 4px rgba(0, 0, 0, 0.75);
-  border: 0;
-  outline: 0;
-  font-size: 16px;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-}
-.stopwatch .controls button:active {
-  margin-bottom: 0;
-  margin-top: 4px;
-  box-shadow: none;
-}
-.stopwatch .controls .start {
-  background-color: #5d5;
-}
-.stopwatch .controls .start:hover {
-  background-color: #6e6;
-}
-.stopwatch .controls .stop {
-  background-color: #d55;
-}
-.stopwatch .controls .stop:hover {
-  background-color: #e66;
-}
-.stopwatch .controls .reset {
-  background-color: #55d;
-}
-.stopwatch .controls .reset:hover {
-  background-color: #66e;
-}
-.stopwatch .display {
-  font-size: 16px;
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 10px;
-}
-.stopwatch .display :not(:last-child):after {
-  content: ':';
-}
-.exam-rating{
-	font-size: 85px;
-	text-align: center;
-}
+	
 
 </style>
 <div class="panel exam-info">
-	<div class="panel-body">
+	<div class="panel-body exam-start">
 		<h3><?=($examinfo[0]->quizes_title) ? $examinfo[0]->quizes_title : '';?></h3>
 		<?php if ($examinfo[0]->category): ?>
 				<ul class="list-unstyled" style="margin-left: 10px;"><h4>CATEGORY</h4>
@@ -111,8 +18,12 @@
 		<?php endif ?>
 		<button class="btn btn-success" id="btn_start">Start exam</button>
 	</div>
-	<div class="panel-body exam-result">
+	<div class="panel-body exam-result hidden">
+		<center>
+			<h2>Your score</h2>
 		<div class="exam-rating"></div>
+		<div class="restart"><a href="<?php echo $_SERVER['REQUEST_URI']; ?>" class="btn btn-info">Retake</a></div>
+		</center>
 
 	</div>
 
@@ -199,7 +110,7 @@ function pause_timer() {
       dataType: 'html',
       success: function(resp){
 
-      	//console.log(resp)
+      	////
       }
 	});
 }
@@ -213,7 +124,7 @@ function continue_timer() {
       url: '<?=site_url("timer/continue_timer"); ?>',
       dataType: 'html',
       success: function(resp){
-      	//console.log(resp)
+      	////
       }
 	});
 }
@@ -227,25 +138,17 @@ function current_timer() {
       url: '<?=site_url("exam/stop_exam"); ?>',
       dataType: 'html',
       success: function(resp){
-      	console.log(resp);
+      	//;
       }
 	});
 }
 
-<?php
-	if(isset($_SESSION['catergories'])){
-		$cat = $_SESSION['catergories'];
-	}else{
-		$cat = 0;
-	}
-
-?>
 var cat = [];
 $('.btn-next').on('click',function() {
-	console.log(cat);
+	////console.log(cat);
 
 	if(catergories.length <= next_i){
-		//console.log('End of exam');
+		////console.log('End of exam');
 
 			$('#btn_stop').removeAttr("disabled");
 			$('#btn_stop').removeClass('disabled');
@@ -263,12 +166,12 @@ $('.btn-next').on('click',function() {
 		//btn_pause = false;
 
     show_questionaire(data);
-	//console.log(next);
+	////console.log(next);
 });
 $('#btn_stop').on('click',function() {
 	var data = 'timer=stop'+'&catergories='+JSON.stringify(cat);
 
-	//console.log(data);
+	////console.log(data);
 	//return false;
 	$('.reset').click();
 
@@ -290,12 +193,13 @@ $('#btn_stop').on('click',function() {
       dataType: 'json',
       success: function(resp){
 
-      	console.log(resp);
+      	////;
       	if(resp.stats == true){
-
+      		$('.exam-start').hide('fast');
+      		$('.exam-result').removeClass('hidden');
       	$('.exam-rating').html(resp.result+'/'+resp.total_exam);
       }else{
-      	console.log(resp.msg)
+      	//console.log(resp.msg)
       }
       }
 	});
@@ -306,7 +210,7 @@ $('#btn_pause').on('click',function() {
 	 var btn = $(this).text();
 	 btn = btn.trim();
 
-	 ////console.log(btn);
+	 //////console.log(btn);
 
 	 //return false;
 	 if(btn_pause_2 == false){
@@ -363,7 +267,7 @@ var next_i = 0;
 var next = catergories[next_i];
 var exam_id = <?=$exam_id?>;
 $('#btn_start').on('click',function() {
-//console.log(catergories);
+////console.log(catergories);
 //return false;
 if(catergories.length <= next_i){
 	return false;
@@ -378,7 +282,7 @@ next_i++;
 });
 
 function show_questionaire(data){
-	//console.log(data);
+	////console.log(data);
 	cat.push(next);
 $.ajax({
 
@@ -389,18 +293,18 @@ $.ajax({
 
       success: function(resp){
 
-        	////console.log(resp);
+        	//////;
 
         if(resp.stats == true){
         	$('.exam-info').hide('fast');
         	$('.exam-starter').show('slow');
 
-        	////console.log(resp.exam);
+        	//////console.log(resp.exam);
         	var i=1;
         	var question = '<ul class="list">';
         	$.each(resp.exam, function(k, v) {
 
-    			////console.log(v.q_id);
+    			//////console.log(v.q_id);
 
     			question = question + '<div class="panel panel-info"><div class="panel-heading"> <span class="counter-i">'+i+')</span> '+v.question_title+'</div><div class="panel-body">'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_1_'+v.question_id+'" class="radio radio-inline radio-btn" onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_1+'\')"><label for="choice_1_'+v.question_id+'" class="label" > A) '+v.choice_1+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_2_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_2+'\')"><label for="choice_2_'+v.question_id+'"  class="label" > B) '+v.choice_2+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_3_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_3+'\')"><label for="choice_3_'+v.question_id+'" class="label" > C) '+v.choice_3+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_4_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_4+'\')"><label for="choice_4_'+v.question_id+'"  class="label" > D) '+v.choice_4+'</label></li>'+'<li class="list__item"><input type="radio" name="answer_'+v.question_id+'" id="choice_5_'+v.question_id+'" class="radio radio-inline radio-btn"  onclick="save_answer(\'<?=uniqid()?>\','+v.question_id+',\''+v.choice_5+'\')"><label for="choice_5_'+v.question_id+'"  class="label" > E) '+v.choice_5+'</label></li>'+'</div></div>';
     			i++;j++;
@@ -449,13 +353,13 @@ function save_answer(question,answer,quiz) {
         }
          if(in_answer.length == j){
          	//$('.on-pause').show('slow');
-         ////console.log(in_answer.length);
+         //////console.log(in_answer.length);
          $('#btn_pause').click();
          }
         $('.answer-total').html(t);
 
 	answer_selected = answer+'_'+quiz;
-	console.log(in_answer);
+	//console.log(in_answer);
 		var data = 'question='+answer+'&answer='+quiz;
 	$.ajax({
 
@@ -464,7 +368,7 @@ function save_answer(question,answer,quiz) {
       url: '<?=site_url("exam/save_answer"); ?>',
       dataType: 'html',
       success: function(resp){
-      	////console.log(resp)
+      	//////
       	$('.navbar-coloftech').notify(resp,{position: "bottom right",className: "success"})
 
       }
