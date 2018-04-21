@@ -17,7 +17,6 @@ class Auto_m extends CI_Model
         $this->load->library('minify');
         $this->load->library('session');
         $this->load->library('pagination');
-        $this->load->library('timer');
 
                     // integrate bootstrap pagination
         $config['full_tag_open'] = '<ul class="pagination">';

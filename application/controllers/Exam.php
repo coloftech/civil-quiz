@@ -55,7 +55,12 @@ class Exam extends CI_Controller
 		$info = $this->quiz_m->getInfoBySlug($slug);
 		//var_dump($info);exit();
 		$data['info'] = $info;
-		$data['site_title'] = 'Exam information';
+		$title = isset($info[0]->quizes_title) ? $info[0]->quizes_title : '';
+		$data['link'] = base_url($_SERVER['REQUEST_URI']);
+		$data['keywords'] = 'CIVIL SERVICE EXAM, ONLINE REVIEW, DOWNLOAD REVIEWER, PH REVIEW CENTER, '.$title;
+		$data['description'] = isset($info[0]->e_description) ? $info[0]->e_description : '';
+		$data['meta_title'] = isset($title) ? $title : false;
+		$data['site_title'] = isset($title) ? $title : 'Exam info';
 		$this->template->load(false,'exam/info',$data);
 	}
 
@@ -67,12 +72,29 @@ class Exam extends CI_Controller
 		if(!$this->permission->is_loggedIn()){
 			redirect('login');
 		}
-		$exam_id = $this->input->get('exam');
+		$exam_id = $this->uri->segment(3);
 		$quiz = $this->quiz_m->list_exams();
 		$data['lists'] = $quiz;
 
 		$data['profile'] = $this->user_m->info($this->uid);
+		$d = $this->input->get('d');
+		$r = $this->input->get('r');
+		if (isset($r) && isset($d)) {
+			# code...
+			if($r){
+
+			$ratings = $this->Userexam_m->rating_by_exam_id($this->uid,$exam_id,$d,$r);
+			}else{
+
+			$ratings = $this->Userexam_m->rating_by_exam_id($this->uid,$exam_id,$d);
+			}
+
+
+		}else{
+
 		$ratings = $this->Userexam_m->rating_by_exam_id($this->uid,$exam_id);
+		}
+
 		//var_dump($ratings);
 		$data['ratings'] = $ratings;
 		$data['site_title'] = 'Exam rating';
@@ -110,7 +132,7 @@ class Exam extends CI_Controller
 
 		$data['exam_id'] = $exam_id;
 		$data['site_title'] = 'Take exam';
-		$this->template->load(false,'exam/exam',$data);
+		$this->template->load(false,'exam/start',$data);
 
 	}
 
@@ -166,7 +188,7 @@ class Exam extends CI_Controller
 
 			$result = $this->Userexam_m->get_result($exam_id,$category_id,$user_exam_id);
 
-			$save_result = $this->Userexam_m->save_result($exam_id,$category_id,$user_exam_id,$result);
+			$save_result = $this->Userexam_m->save_result($exam_id,$category_id,$user_exam_id,$result,$object->timer);
 			
 			$categories = json_decode($object->catergories);
 				$total_exam = 0;
@@ -191,9 +213,12 @@ class Exam extends CI_Controller
 	}
 	public function startexam()
 	{
+		//*
 		if(!$this->permission->is_loggedIn()){
-			redirect('login');
+			//redirect('login');
+			
 		}
+		/**/
 		# code...
 				$time = $_SERVER['REQUEST_TIME'];
 				$timeout_duration = 30;
@@ -201,7 +226,7 @@ class Exam extends CI_Controller
 					$timeout =$timeout_duration - ( $time - $this->session->LAST_ACTIVITY);
 					#2
 					$remain = floor($timeout/60) . ":" . $timeout % 60;
-					echo json_encode(array('stats'=>false,'msg'=>'Exam is on hold for '.$remain.' minutes.'));
+					echo json_encode(array('stats'=>false,'msg'=>'Exam is on hold for '.$remain.' second.'));
 					exit();
 				}
 

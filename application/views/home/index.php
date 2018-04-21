@@ -17,7 +17,7 @@
 
 									
 									<div class="tiles">
-										<div class="tile" data-scale="1.1" data-image="<?=base_url('public/images/civil-quiz.png')?>"></div>
+										<div class="tile" data-scale="1.1" data-image="<?=base_url('public/images/default-img.png')?>"></div>
 									</div>
 							</div>
 							

@@ -80,9 +80,20 @@ $route['quiz/(:any)'] = 'quiz/$1';
 $route['quiz/(:any)/(:any)'] = 'quiz/$1/$2';
 
 
+
+$route['examination'] = 'examination';
+$route['examination/(:any)'] = 'examination/$1';
+$route['examination/(:any)/(:any)'] = 'examination/$1/$2';
+
+
 $route['exam'] = 'exam';
 $route['exam/(:any)'] = 'exam/$1';
 $route['exam/(:any)/(:any)'] = 'exam/$1/$2';
+
+$route['guest'] = 'guest';
+$route['guest/(:any)'] = 'guest/$1';
+$route['guest/(:any)/(:any)'] = 'guest/$1/$2';
+
 
 $route['timer'] = 'timer';
 $route['timer/(:any)'] = 'timer/$1';

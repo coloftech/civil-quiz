@@ -27,27 +27,31 @@ class Userexam_m extends CI_Model
 			return $this->db->insert_id();
 		}
 	}
-	public function save_answer($user_exam_id=0,$category_id=0,$user_id=0,$answer='',$quiz_id=0)
+
+
+	public function saveAnswer($user_exam_id=0,$category_id=0,$user_id=0,$answer='',$quiz_id=0)
 	{
 		# code...
 		if($user_exam_id > 0 && $category_id > 0 && $user_id > 0 && !empty($answer) && $quiz_id > 0){
 			
+			$this->db->select('choice_id');
 			$query1 = $this->db->get_where('quiz_choices',array('choice_label'=>$answer,'quiz_id'=>$quiz_id));
 			if($result = $query1->result()){
 
-				$choice_id = $result[0]->choice_id;
-				$data1 = array('category_id'=>$category_id,'user_exam_id'=>$user_exam_id,'quiz_id'=>$quiz_id);
-				$data2 = array('category_id'=>$category_id,'user_exam_id'=>$user_exam_id,'quiz_id'=>$quiz_id,'answer_id'=>$choice_id);
+					$choice_id = $result[0]->choice_id;
 
-				$query2 = $this->db->get_where('user_exam_answer',$data1);
-				if($query2->result()){
-					$this->db->where($data1);
-					return $this->db->update('user_exam_answer',$data2);
-				}else{
+					$if_exist = array('category_id'=>$category_id,'user_exam_id'=>$user_exam_id,'quiz_id'=>$quiz_id);
+					
+					//$this->db->select('count(*) as answered');
+					$query2 = $this->db->get_where('user_exam_answer',$if_exist);
 
-					return $this->db->insert('user_exam_answer',$data2);
-				}
-
+					if($query2->result()){
+						$this->db->where($if_exist);
+						return $this->db->update('user_exam_answer',array('answer_id'=>$choice_id));
+					}else{
+						$data2 = array('category_id'=>$category_id,'user_exam_id'=>$user_exam_id,'quiz_id'=>$quiz_id,'answer_id'=>$choice_id);
+						return $this->db->insert('user_exam_answer',$data2);
+					}
 			}
 
 		}
@@ -71,18 +75,35 @@ class Userexam_m extends CI_Model
 		}
 	}
 
-	public function rating_by_exam_id($user_id = 0,$exam_id=0)
+	public function rating_by_exam_id($user_id = 0,$exam_id=0,$dsort=false,$rsort=false)
 	{
 		if($user_id > 0){
-			$query = $this->db->select('user_exam.*,user_exam.exam_id,quizes_title,result,date_taken')
+			$this->db->select('user_exam.*,user_exam.exam_id,quizes_title,result,date_taken')
 				->from('user_exam')
 				->join('quizes_setting','quizes_setting.quizes_id = user_exam.exam_id','LEFT')
 
 
-				->where(array('user_id'=>$user_id,'exam_id'=>$exam_id))
+				->where(array('user_id'=>$user_id,'exam_id'=>$exam_id));
 				//->group_by('result')
-				->order_by('result','DESC')
-				->get();
+				if (strtolower($rsort) == 'date_taken' || strtolower($rsort) == 'result' ) {
+					# code...
+					if (strtoupper($dsort) == 'ASC') {
+
+					$this->db->order_by($rsort,$dsort);
+					}else{
+
+					$this->db->order_by($rsort,'DESC');
+						}
+
+				}elseif (strtoupper($dsort) == 'DESC' ||  strtoupper($dsort) == 'ASC') {
+					# code...
+				$this->db->order_by('date_taken',$dsort);
+
+				}else{
+				$this->db->order_by('date_taken','DESC');
+
+				}
+				$query = $this->db->get();
 
 				return $query->result();
 				
@@ -140,12 +161,12 @@ class Userexam_m extends CI_Model
 			return 0;
 		}
 	}
-	public function save_result($exam_id = 0,$category_id = 0,$user_exam_id = 0,$result=0)
+	public function save_result($exam_id = 0,$category_id = 0,$user_exam_id = 0,$result=0,$timer=false)
 	{
 		# code...
 		if($user_exam_id > 0 && $category_id > 0){
 			$this->save_final_result($exam_id,$category_id,$user_exam_id,$result);
-			return $this->db->insert('user_exam_result',array('user_exam_id'=>$user_exam_id,'category_id'=>$category_id,'result'=>$result,'exam_id'=>$exam_id));
+			return $this->db->insert('user_exam_result',array('user_exam_id'=>$user_exam_id,'category_id'=>$category_id,'result'=>$result,'exam_id'=>$exam_id,'timer_finnish'=>$timer));
 		}
 		return false;
 	}

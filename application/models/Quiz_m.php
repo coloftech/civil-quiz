@@ -298,7 +298,7 @@ class Quiz_m extends CI_Model
 				
 				$object[] = (object) array(
 					'question_id'=>$key->quiz_id,
-					'question_title'=>strip_tags($key->post_question,'<div><i><b><a><span><label>'),
+					'question_title'=>$key->post_question,
 					'choice_1' =>$choice[0],
 					'choice_2' =>$choice[1],
 					'choice_3' =>$choice[2],
@@ -319,6 +319,15 @@ class Quiz_m extends CI_Model
 		//return  $category_id;
 
 		$object = false;
+
+		$is_shuffle = 0;
+		if($q_shuffle = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$category_id))){
+
+			if($shuffle = $q_shuffle->result()){
+				
+			$is_shuffle = $shuffle[0]->is_shuffle;
+			}
+		}
 
 		//$query = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id));
 		//if($result = $query->result()){
@@ -352,11 +361,17 @@ class Quiz_m extends CI_Model
 											$key->post_choice3,
 											$key->post_choice4);
 
+										if((int)$is_shuffle == 0 && (int)$category_id != 17){
+
 										shuffle($choice);
+										}elseif ((int)$category_id == 17){
+											$choice = array('No. 1','No. 2','No. 3','No. 4','No. 5');
+										}
+										
 										
 										$object[] = (object) array(
 											'question_id'=>$key->quiz_id,
-											'question_title'=>strip_tags($key->post_question,'<div><i><b><a><span><label>'),
+											'question_title'=>$key->post_question,
 											'choice_1' =>$choice[0],
 											'choice_2' =>$choice[1],
 											'choice_3' =>$choice[2],
@@ -378,7 +393,16 @@ class Quiz_m extends CI_Model
 	{
 		# code...
 		$object = false;
+		$is_shuffle = 0;
+		/*if($q_shuffle = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$category_id))){
 
+			if($shuffle = $q_shuffle->result()){
+
+			$is_shuffle = $shuffle[0]->is_shuffle;
+			}
+		}
+
+		*/
 		$query = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id));
 		if($result = $query->result()){
 
@@ -386,7 +410,19 @@ class Quiz_m extends CI_Model
 				# code...
 				$query2 = '';
 				$result2 = '';
+				$category_id = $cat->category_id;
 
+		//*
+
+		if($q_shuffle = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$cat->category_id))){
+
+			if($shuffle = $q_shuffle->result()){
+
+			$is_shuffle = $shuffle[0]->is_shuffle;
+			}
+		}
+
+		/**/
 				$query2 = $this->db->select('quiz.*,quizes.category_id,category.cat_name as category_name')
 					->from('quiz')
 					->join('quizes','quizes.quiz_id = quiz.quiz_id','left')
@@ -397,8 +433,9 @@ class Quiz_m extends CI_Model
 					if($result2 = $query2->result())
 					{
 						shuffle($result2);
-						//$object[] = $result2;
-									//$object2 = '';
+
+
+
 									foreach ($result2 as $key) {
 										# code...
 										$choice = '';
@@ -411,11 +448,17 @@ class Quiz_m extends CI_Model
 											$key->post_choice3,
 											$key->post_choice4);
 
+										if((int)$is_shuffle == 0 && (int)$category_id != 17){
+
 										shuffle($choice);
+										}elseif ((int)$category_id == 17){
+											$choice = array('No. 1','No. 2','No. 3','No. 4','No. 5');
+										}
+										
 										
 										$object[] = (object) array(
 											'question_id'=>$key->quiz_id,
-											'question_title'=>strip_tags($key->post_question,'<div><i><b><a><span><label>'),
+											'question_title'=>$key->post_question,
 											'choice_1' =>$choice[0],
 											'choice_2' =>$choice[1],
 											'choice_3' =>$choice[2],
@@ -566,6 +609,19 @@ class Quiz_m extends CI_Model
 		return $this->db->delete('quizes_setting',array('quizes_id'=>$exam_id));
 	}
 
+
+	public function removeExamCategory($exam_id=0,$category_id=0)
+	{
+
+			$this->db->delete('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$category_id));
+			$haveError =  $this->db->affected_rows();
+			if($haveError > 0){
+				return true;
+			}else{
+				return $this->db->error();
+			}
+		
+	}
 
 
 

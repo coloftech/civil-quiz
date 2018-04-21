@@ -112,7 +112,8 @@ class Quiz extends CI_Controller
 
 			$categories = $exam[0]->category;
 			$tr = '';
-			foreach ($categories as $key) {
+			if(is_array($categories)){
+				foreach ($categories as $key) {
 
 				$category = $this->quiz_m->exam_category_exist($examId,$key->category_id);
 				
@@ -136,17 +137,18 @@ class Quiz extends CI_Controller
 							break;
 					}
 
-				//$tr .= "<tr class='list'><td class='list'>$key->category_name</td><td class='list'>$t</td><td class='list-question' data-quiz='$examId' data-category='$key->category_id'>$total_questions<span class='span-hidden'>List questions.</span></td><td class='hidden'><input type='hidden' id='input_questions_$key->category_id' value='$total_questions'/></td><td class='list'>$cat->exam_total <input type='hidden' id='max_$key->category_id' value='$cat->exam_total' /></td><td><button class='btn btn-sm btn-default' type='button' onclick='add_questions($examId,$key->category_id,$total_questions,$cat->exam_total,1,\"$key->category_name\",\"$t\")'><i class='fa fa-plus'></i> questions</button></td></tr>";
-					$tr .='<tr class="list">
+					$tr .='<tr class="list" id="tr_'.$exam_id.'_'.$key->category_id.'">
 					<td>'.$key->category_name.'</td>
 					<td>'.$t.'</td>
 					<td  class="list-question" data-quiz='.$exam_id.' data-category='.$key->category_id.'><span id="added_question_'.$key->category_id.'" class="red" color="red">'.$total_questions.'</span><span class="span-hidden">List questions.</span><input type="hidden" id="input_questions_'.$key->category_id.'" value="'.$total_questions.'"/></td>
 					<td>'.$cat->exam_total.' <input type="hidden" id="max_'.$key->category_id.'" value="'.$cat->exam_total.'" /></td>
-					<td><button class="btn btn-sm btn-default" type="button" onclick="addQuestion('.$exam_id.','.$key->category_id.','.$total_questions.','.$cat->exam_total.',1,\''.$key->category_name.'\',\''.$t.'\')"><i class="fa fa-plus"></i> questions</button></td>
+					<td><button class="btn btn-sm btn-default" type="button" onclick="addQuestion('.$exam_id.','.$key->category_id.','.$total_questions.','.$cat->exam_total.',1,\''.$key->category_name.'\',\''.$t.'\')"><i class="fa fa-plus"></i> questions</button> <button class="btn btn-danger btn-sm" type="button" onclick="removeAcategory('.$exam_id.','.$key->category_id.')"><i class="fa fa-remove"></i></button></td>
 					</tr>';
 
 				}
+				}
 			}
+			
 			$data['tr'] = $tr;
 			
 		$cat = '<select class="form-control" name="s_category" id="s_category"><option value="0">No category</option></select>';
@@ -311,7 +313,7 @@ class Quiz extends CI_Controller
 
 			$uniqid =uniqid();
 			$data = array(
-				'post_question'=>strip_tags($input->question,'<div><i><b><a><span><label>'),
+				'post_question'=>$input->question,
 				'post_answer'=>$answer,
 				'post_choice1'=>$choice[0],
 				'post_choice2'=>$choice[1],
@@ -383,13 +385,21 @@ class Quiz extends CI_Controller
 			
 			}
 
+			$shuffle_choices = (isset($input->q_random_choices)) ? 1 : 0;
+			$shuffle_question = (isset($input->q_random_question)) ? 1 : 0;
+
 			$data = array(
 				'exam_id'=>$input->quizes_id,
 				'category_id'=>$input->s_category,
 				'exam_total'=>$input->q_total,
 				'exam_type'=>$input->q_type,
-				'directions'=>$input->directions
+				'directions'=>$input->directions,
+				'is_shuffle'=>$shuffle_choices,
+				'is_shuffle_question'=>$shuffle_question
 			);
+
+			//echo json_encode(array('stats'=>false,'msg'=>'No changes made.','data'=>$data));
+			//exit();
 			if($quizes_id = $this->quiz_m->add_to_exam_setting($data)){
 
 			echo json_encode(array('stats'=>true,'msg'=>'Exam setting added'));
@@ -397,6 +407,22 @@ class Quiz extends CI_Controller
 
 			echo json_encode(array('stats'=>false,'msg'=>'No changes made.'));
 			}
+		}
+	}
+
+	public function removeexamcategory($ex='')
+	{
+		if($this->input->post()){
+
+			$is_remove = $this->quiz_m->removeExamCategory($this->input->post('exam_id'),$this->input->post('category_id'));
+			if(is_array($is_remove)){
+				echo json_encode(array('stats'=>false,'msg'=>$is_remove['message']));
+			}else{
+				echo json_encode(array('stats'=>true,'msg'=>'Removed successfuly.'));
+			}
+
+		}else{
+			echo json_encode(array('stats'=>false,'msg'=>'No input received!'));
 		}
 	}
 	public function addexam($value='')

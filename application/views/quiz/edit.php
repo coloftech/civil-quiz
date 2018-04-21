@@ -236,6 +236,15 @@
             </div>
 
             <div class="form-group">
+              
+          <label>Allow shuffle</label>
+          <br />
+          <label for="q_random_choices" style="font-weight: normal;cursor: pointer"><input type="checkbox" name="q_random_choices" id="q_random_choices" class="checkbox-inline" value="1" /> Shuffle choices </label><br />
+          <label for="q_random_question" style="font-weight: normal;cursor: pointer"><input type="checkbox" name="q_random_question" id="q_random_question" class="checkbox-inline" value="1" /> Suffle questions</label><br />
+            </div>
+
+
+            <div class="form-group">
         <label style="width:12px;"></label><button class="btn btn-sm btn-info upload" type="submit" id="btn_category">Set</button>
             </div>
             <div class="form-group">
@@ -407,7 +416,7 @@
           ecategory_id = category;
           etype = q_type;
 
-      $('#tbl_exams tbody').append('<tr class="list"><td>'+t_category+'</td><td>'+t_type+'</td><td  class="list-question" data-quiz='+eid+' data-category='+ecategory_id+'><span id="added_question_'+category+'" class="red" color="red">0</span><span class="span-hidden">List questions.</span><input type="hidden" id="input_questions_'+category+'" value="0"/></td><td>'+q_total+' <input type="hidden" id="max_'+category+'" value="'+q_total+'" /></td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button></td></tr>');
+      $('#tbl_exams tbody').append('<tr class="list" id="tr_'+eid+'_'+category+'"><td>'+t_category+'</td><td>'+t_type+'</td><td  class="list-question" data-quiz='+eid+' data-category='+ecategory_id+'><span id="added_question_'+category+'" class="red" color="red">0</span><span class="span-hidden">List questions.</span><input type="hidden" id="input_questions_'+category+'" value="0"/></td><td>'+q_total+' <input type="hidden" id="max_'+category+'" value="'+q_total+'" /></td><td><button class="btn btn-sm btn-default" type="button" onclick="add_questions('+quizes_id+','+category+','+q_total+','+q_type+',\''+t_category+'\',\''+t_type+'\')"><i class="fa fa-plus"></i> questions</button> <button class="btn btn-danger btn-sm" type="button" onclick="removeAcategory('+eid+','+category+')"><i class="fa fa-remove"></i></button></td></tr>');
 
               $('#category_modal').modal('hide');
                $('.list-question').on('click',function(){
@@ -424,6 +433,39 @@
 
     return false;
   });
+
+  function removeAcategory(ex_id,cat_id) {
+    // body...
+    var data = 'exam_id='+ex_id+'&category_id='+cat_id;
+    //console.log(data);
+    //return false;
+            $.ajax({
+
+      type: 'post',
+      data: data,
+      url: '<?=site_url("quiz/removeexamcategory"); ?>',
+      dataType: 'json',
+
+      success: function(resp){
+
+      console.log(resp);
+      if(resp.stats == true){
+
+        $('#tr_'+ex_id+'_'+cat_id).remove();
+
+
+                  $('#tbl_exams').notify(resp.msg, { position:"top right", className:"success" }); 
+      }else{
+
+                  $('#tbl_exams').notify(resp.msg, { position:"top right", className:"warning" }); 
+      }
+      }
+
+    });
+    return false;
+
+  }
+
 
   $('.list-question').on('click',function(){
     var action = $(this);

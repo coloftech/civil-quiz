@@ -57,7 +57,7 @@
 		<td><?=$key->quizes_title ?></td>
 		<td><?=$key->retake_total;?></td>
 		<td  width="100px"><?=$key->results?>/<?php echo $this->Userexam_m->exam_total($key->exam_id); ?></td>
-		<td width="80px"><a href="<?=site_url("exam/rating?exam=$key->exam_id&uexam=$key->user_exam_id"); ?>" class="" style="display: inline-block; margin-left: 10px" title="More info"><i class="fa fa fa-list-ol"></i></a> <a href="<?=site_url("exam/take_exam/$key->exam_id"); ?>" class="" style="display: inline-block; margin-left: 10px"><i class="fa fa-rotate-left" style="color:green;" title="Re-Take this exam"></i></a></td>
+		<td width="80px"><a href="<?=site_url("exam/rating/$key->exam_id/$key->user_exam_id"); ?>" class="" style="display: inline-block; margin-left: 10px" title="More info"><i class="fa fa fa-list-ol"></i></a> <a href="<?=site_url("exam/take_exam/$key->exam_id"); ?>" class="" style="display: inline-block; margin-left: 10px"><i class="fa fa-rotate-left" style="color:green;" title="Re-Take this exam"></i></a></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>

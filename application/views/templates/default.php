@@ -14,9 +14,9 @@
   <meta property="og:type"          content="article" />
   <meta property="og:locale"          content="en_US" />
   <meta property="og:title"         content="<?=isset($meta_title) ? $meta_title : 'Coloftech State of the Arts & technology'; ?>" />
-  <meta property="og:description"   content="<?=isset($description) ? $description : 'Coloftech State of the Arts & Tecnology is a PHP code and tutorials blog passionately published by Roy Rita.  PHP, jQuery, MySql, Ajax, CodeIgniter framework are the main technologies in focus here. You can find code to make your web application better. Code present here are simple and easy to use with suitable examples and free source downloads. Welcome!'; ?>" />
-  <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/logo-only.png'); ?>" />
-  <meta property="fb:page_id" content="908155116011125" />
+  <meta property="og:description"   content="<?=isset($description) ? $description : 'Coloftech Online Review Center is a number one free online civil service exam review center and other licensure exam in the Philippines. Welcome! start yourreview today.'; ?>" />
+  <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/default-img.png'); ?>" />
+  <meta property="fb:app_id" content="908155116011125" />
 <?php
 if(isset($description)){
     
@@ -39,7 +39,7 @@ if(isset($description)){
        
 
         <?php // add css files
-        $this->minify->css(array('default.css','exam.css'));
+        $this->minify->css(array('default-2.css','civil-exam.css'));
         echo $this->minify->deploy_css();
         ?>
 
@@ -117,7 +117,9 @@ CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE | CHEAT PA MORE
   </div>
   </div>
 </div>
-<footer class="navbar-fixed-bottom">
+
+<div class="move-top">&nbsp;<a href="javascript:void(0)"  onclick="move_top()" class="btn btn-info" id="movetotop" style="display: none;"><i class="fa fa-angle-double-up"></i>Top</a></div>
+<footer class="footer ">
     <div class="container">
         
     <div class="footer-top">
@@ -184,6 +186,43 @@ $(document).on("contextmenu", function (e) {
 });
 
 */
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("movetotop").style.display = "block";
+    } else {
+        document.getElementById("movetotop").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function move_top() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+(function($) {
+    var $window = $(window),
+        $footer = $('.footer');
+        $custom_div = $('.result-controls')
+
+    function resize() {
+        if ($window.width() > 768) {
+            $custom_div.removeClass('col-md-4-c');
+            $custom_div.addClass('col-md-4');
+            return $footer.addClass('navbar-fixed-bottom');
+        }
+
+        $custom_div.addClass('col-md-4-c');
+        $custom_div.removeClass('col-md-4');
+        $footer.removeClass('navbar-fixed-bottom');
+    }
+
+    $window
+        .resize(resize)
+        .trigger('resize');
+})(jQuery);
 </script>
 </body>
 </html>
