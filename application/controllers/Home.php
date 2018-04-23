@@ -38,13 +38,10 @@ class Home extends CI_Controller {
 
 		$quiz = $this->quiz_m->list_exams();
 		
-		//print_r($quiz);
-
-		//exit();
 		$data['posts'] = $quiz;
 
 		$data['site_path'] = $this->site_m->getSiteName(false,1)[0]->site_path;
-		$data['site_title'] = 'Coloftech: Civil Service Exam Review';
+		$data['site_title'] = 'Online Review Center by Coloftech';
 		$data['meta_title'] = $data['site_title'];
 		$this->template->load(false,'home/index',$data);
 	}

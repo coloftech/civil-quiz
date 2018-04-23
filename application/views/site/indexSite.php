@@ -1,4 +1,6 @@
-
+<div class="wrapper site-wrapper">
+	<br />
+	<div class="container site-container">
 <div class="col-md-9 site-index">
 
  
@@ -116,5 +118,7 @@ $page = $this->input->get('p') ? $this->input->get('p') : 'bilar';
 
 	</div>
 
+</div>
+	</div>
 </div>
 

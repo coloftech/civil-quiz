@@ -25,6 +25,7 @@ class Guest extends CI_Controller
 		$this->load->model('quiz_m');
 		$this->load->model('user_m');
 		$this->load->model('Userexam_m');
+		$this->load->model('exam_m');
 	}
 	public function index($value='')
 	{
@@ -50,11 +51,7 @@ class Guest extends CI_Controller
 					'verify_code'=>$code
 				);
 				$this->user_m->update_user($guest_username,$data); 
-				/*	
-				$this->session->set_userdata('username', $guest_username);
-				$this->session->set_userdata('id', $create_user);				
-				$this->ci->session->userdata['is_logged_in'] = true;
-				*/
+				
 				$this->permission->login($guest_username, $pass);
 
 				redirect(base_url($_SERVER['REQUEST_URI']));
@@ -64,27 +61,39 @@ class Guest extends CI_Controller
 			}
 
 		}
-		$data['list_exam'] = 'Not found!';
-		//if($list_exam = $this->quiz_m->take_exam($exam_id)){
-		if($list_exam = $this->quiz_m->randomAllByCategory($exam_id)){
-			$data['list_exam'] = $list_exam;
-		}
-		if($info = $this->quiz_m->getInfoByexamId($exam_id)){
-			$data['examinfo'] = $info;
-		}
-		$_SESSION['user_exam_id'] = false;
-		$_SESSION['category_id'] = false;
-		$_SESSION['exam_id'] = $exam_id;
-		$_SESSION['categories'] = false;
-		if(!$this->session->LAST_ACTIVITY){
 
-		$_SESSION['LAST_ACTIVITY'] = false;
+			$info = false;
+			$categories=false;
+
+		if($exam_id){
+			$info = $this->exam_m->getExamById($exam_id);
+			
+				if($category = $this->exam_m->getExamCategories($exam_id)){
+					foreach ($category as $key) {
+						# code...
+						$categories[] = $key->category_id;
+
+					}
+				}
+
+
+
+			$_SESSION['user_exam_id'] = false;
+			$_SESSION['category_id'] = false;
+			$_SESSION['exam_id'] = $exam_id;
+			$_SESSION['categories'] = false;
+			if(!$this->session->LAST_ACTIVITY){
+
+			$_SESSION['LAST_ACTIVITY'] = false;
+			}
 		}
 
+		$data['exam'] = $info;
+		$data['categories'] = (is_array($categories)) ? implode(',', $categories) : false;
 		$data['exam_id'] = $exam_id;
 		$data['site_title'] = 'Take exam as guest';
 
-		$this->template->load(false,'exam/guest',$data);
+		$this->template->load(false,'examination/guest_exam',$data);
 	}
 	public function saveAnswer($value='')
 	{

@@ -78,14 +78,13 @@
 			
 		</div>
 		<div class="panel-body">
-		     <p>
+		<p>
         
-    Hello! I am Roy, a PHP Developer and COLFTECH is my programming blog. I'm fond of developing modern web applications.<br />
+    	Welcome to Online Review Center - a free online review for government licensure examination and civil service exam.
 
-    Contact me, I accept paid work.<br /><br />
-
-    roy.rita@coloftech.com
-      </p>
+      	</p>
+      <p>
+    	Contact: roy.rita@coloftech.com</p>
       <!-- p>
           <div class="fb-page" data-href="https://www.facebook.com/coloftech/" data-tabs="about" data-width="350" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true"><blockquote cite="https://www.facebook.com/coloftech/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/coloftech/">Coloftech - State of the Art &amp; Technology</a></blockquote></div>
       </p -->

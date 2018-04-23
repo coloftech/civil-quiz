@@ -13,8 +13,8 @@
   <meta property="og:url"           content="<?=isset($link) ? $link : site_url();?>" />
   <meta property="og:type"          content="article" />
   <meta property="og:locale"          content="en_US" />
-  <meta property="og:title"         content="<?=isset($meta_title) ? $meta_title : 'Coloftech State of the Arts & technology'; ?>" />
-  <meta property="og:description"   content="<?=isset($description) ? $description : 'Coloftech Online Review Center is a number one free online civil service exam review center and other licensure exam in the Philippines. Welcome! start yourreview today.'; ?>" />
+  <meta property="og:title"         content="<?=isset($meta_title) ? $meta_title : 'Online Review Center by Coloftech'; ?>" />
+  <meta property="og:description"   content="<?=isset($description) ? $description : 'Online Review Center by Coloftech is a number one free online civil service exam review center and other licensure exam in the Philippines. Welcome! start your review today.'; ?>" />
   <meta property="og:image"         content="<?=isset($featured_image) ? $featured_image : base_url('public/images/default-img.png'); ?>" />
   <meta property="fb:app_id" content="908155116011125" />
 <?php

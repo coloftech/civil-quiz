@@ -83,7 +83,7 @@
 <script type="text/javascript">
 	function start_timer() {
 	// body...
-
+	/*
 	var data = 'timer=start';
 	$.ajax({
 
@@ -95,12 +95,13 @@
 
       }
 	});
+	*/
 }
 
 function pause_timer() {
 	// body...
 	//alert('hey');
-	var data = 'timer=start';
+	/*var data = 'timer=start';
 	$.ajax({
 
       type: 'post',
@@ -112,6 +113,7 @@ function pause_timer() {
       	////
       }
 	});
+	*/
 }
 
 </script>
@@ -182,14 +184,14 @@ $('#btn_stop').on('click',function() {
       url: '<?=site_url("exam/show_result"); ?>',
       dataType: 'json',
       success: function(resp){
-
+      	console.log(resp);
       	////;
       	if(resp.stats == true){
       		$('.exam-start').hide('fast');
       		$('.exam-result').removeClass('hidden');
       	$('.exam-rating').html(resp.result+'/'+resp.total_exam);
       }else{
-      	//console.log(resp.msg)
+      	console.log(resp)
       }
       }
 	});
@@ -353,10 +355,10 @@ function saveAnswer(answers) {
       type: 'post',
       data: data,
       url: '<?=site_url("examination/saveAnswer"); ?>',
-      dataType: 'html',
+      dataType: 'json',
       success: function(resp){
       	//////
-      	console.log(resp)
+      	//console.log(resp)
       	return false;
       	if(resp.stats == true){
 

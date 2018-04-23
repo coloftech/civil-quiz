@@ -24,6 +24,7 @@ class User extends CI_Controller {
 		$this->load->model('quiz_m');
 		$this->load->model('user_m');
 		$this->load->model('Userexam_m');
+		$this->load->model('exam_m');
 		$this->load->model('email_m');
 
 	}
@@ -33,8 +34,19 @@ class User extends CI_Controller {
 		$quiz = $this->quiz_m->list_exams();
 		$data['lists'] = $quiz;
 
+		$ratings = false;
+		$rating = $this->exam_m->get_ratings($this->uid);
+		foreach ($rating as $key) {
+			# code...
+			if($key->user_exam_id != NULL){
 
-		$ratings = $this->Userexam_m->best_rating($this->uid);
+			$ratings[] = $key;
+			print_r($key);
+			echo "<br/>";
+			}
+		}
+
+		exit();
 		//var_dump($ratings);exit();
 		$data['ratings'] = $ratings;
 

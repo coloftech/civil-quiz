@@ -112,6 +112,8 @@ class Exam extends CI_Controller
 		if(!$this->permission->is_loggedIn()){
 			redirect('login');
 		}
+		redirect('examination/review/'.$exam_id);
+		exit();
 		# code...
 		$data['list_exam'] = 'Not found!';
 		//if($list_exam = $this->quiz_m->take_exam($exam_id)){
@@ -145,33 +147,7 @@ class Exam extends CI_Controller
 		//echo "string";exit();
 		echo $this->session->categories;
 	}
-	public function save_answer()
-	{
 
-		if(!$this->permission->is_loggedIn()){
-			redirect('login');
-		}
-
-		if($this->input->post()){
-			$object = (object)$this->input->post();
-			$user_exam_id = $this->session->user_exam_id;
-			$category_id = $this->session->category_id;
-			//echo $object->answer;
-			//echo "- $category_id";
-			//exit();
-			if($category_id > 0 && $user_exam_id > 0){
-
-			$is_added =  $this->Userexam_m->save_answer($user_exam_id,$category_id,$this->uid,$object->answer,$object->question);
-			echo "Answer save";
-			}else{
-			echo "No answer";
-			}
-			
-		}else{
-			echo "No input";
-		}
-		//echo $this->session->user_exam_id;
-	}
 	public function show_result()
 	{
 		if(!$this->permission->is_loggedIn()){
@@ -183,17 +159,23 @@ class Exam extends CI_Controller
 			$object = (object)$this->input->post();
 
 			$user_exam_id =  $this->session->user_exam_id;
-			$category_id = $this->session->category_id;
 			$exam_id = $this->session->exam_id;
+			/*$data = array($user_exam_id,$exam_id);
 
+			echo json_encode(array('stats'=>false,'msg'=>$data));
+			exit();
+			/*
 			$result = $this->Userexam_m->get_result($exam_id,$category_id,$user_exam_id);
 
 			$save_result = $this->Userexam_m->save_result($exam_id,$category_id,$user_exam_id,$result,$object->timer);
-			
+			*/
 			$categories = json_decode($object->catergories);
 				$total_exam = 0;
 				foreach ($categories as $key) {
 					# code...
+				
+					$result = $this->Userexam_m->get_result($exam_id,$key,$user_exam_id);
+					$save_result = $this->Userexam_m->save_result($exam_id,$key,$user_exam_id,$result,$object->timer);
 
 				$t = $this->quiz_m->countExamByCategory($exam_id,$key);
 				$total_exam = $total_exam + $t;
@@ -206,6 +188,8 @@ class Exam extends CI_Controller
 
 			$time = $_SERVER['REQUEST_TIME'];
 			$_SESSION['LAST_ACTIVITY'] = $time;
+
+			/**/
 
 		}else{
 			echo json_encode(array('stats'=>false,'msg'=>'No action done.'));

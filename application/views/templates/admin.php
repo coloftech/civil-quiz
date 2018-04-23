@@ -128,7 +128,7 @@ $('#question').summernote({
           notStyle: 'position:absolute;top:0;left:0;right:0', 
           icon: '<i class="note-icon">[Your Button]</i>',
           keepHtml: false, // Remove all Html formats
-          keepOnlyTags: ['<p>', '<br>', '<ul>', '<li>', '<b>', '<strong>','<i>', '<a>'], // If keepHtml is true, remove all tags except these
+          keepOnlyTags: ['<div>', '<br>', '<ul>', '<li>', '<b>', '<strong>','<i>', '<a>','<u>'], // If keepHtml is true, remove all tags except these
           keepClasses: false, // Remove Classes
           badTags: ['style', 'script', 'applet', 'embed', 'noframes', 'noscript', 'html'], // Remove full tags with contents
           badAttributes: ['style', 'start'], 
