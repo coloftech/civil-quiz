@@ -36,9 +36,10 @@ class User extends CI_Controller {
 
 		$ratings = false;
 		$rating = $this->exam_m->get_ratings($this->uid);
+		//var_dump($rating);
 		foreach ($rating as $key) {
 			# code...
-			if($key->user_exam_id != NULL){
+			if($key->exam_id != NULL){
 
 			$ratings[] = $key;
 			print_r($key);
@@ -46,7 +47,7 @@ class User extends CI_Controller {
 			}
 		}
 
-		exit();
+		//exit();
 		//var_dump($ratings);exit();
 		$data['ratings'] = $ratings;
 

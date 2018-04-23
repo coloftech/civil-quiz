@@ -151,6 +151,14 @@ class Exam_m extends CI_Model
 			$this->db->insert('user_exam_result',$data);
 			return true;
 	}
+	public function save_final_result($user_exam_id = 0,$result=0)
+	{
+		# code...
+		$this->db->set("result",$result);
+		$this->db->where('user_exam_id',$user_exam_id);
+		return $this->db->update('user_exam');
+
+	}
 
 	public function saveAnswer($user_exam_id=false,$category_id=false,$user_id=false,$answer=false,$quiz_id=false)
 	{
@@ -193,19 +201,20 @@ class Exam_m extends CI_Model
 
 	public function get_ratings($user_id=0)
 	{
-		# code...
+		
 		if($user_id > 0){
-			$query = $this->db->select('user_exam.user_exam_id,user_exam.exam_id,user_exam_result.result')
-					->from('user_exam')
-					->join('user_exam_result','user_exam_result.user_exam_id = user_exam.user_exam_id','left')
-					->where('user_id',$user_id)
-					->order_by('exam_id, user_exam_id','ASC')
-					->get();
+			$query = $this->db->select('exam_id,count("exam_id") as retake_total,MAX(result) as results,quizes_title as exam_title')
+				->from('user_exam')
+				->join('quizes_setting','quizes_setting.quizes_id = user_exam.exam_id','LEFT')
 
-			if($result = $query->result()){
-				return $result;
-			}
 
+				->where('user_id',$user_id)
+				->group_by('exam_id')
+				//->order_by('result','DESC')
+				->get();
+
+				return $query->result();
+				
 		}
 		return false;
 	}

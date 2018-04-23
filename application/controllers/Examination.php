@@ -199,7 +199,7 @@ class Examination extends CI_Controller
 				$total = 0;
 				
 				$total = $this->exam_m->get_results($user_exam_id,$key,$object->exam_id);
-				$res++;
+				//$res++;
 
 
 				usleep(150000);
@@ -207,6 +207,7 @@ class Examination extends CI_Controller
 				//echo " $total |";
 
 			}
+			$res = $this->exam_m->save_final_result($user_exam_id,$total_exam);
 
 
 			echo json_encode(array('stats'=>true,'total_exam'=>$total_exam,'res'=>$res));
