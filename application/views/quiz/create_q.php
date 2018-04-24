@@ -27,12 +27,18 @@
           <textarea class="form-control" id="e_description" name="e_description" rows="8" required></textarea> 
             </div>
 
+            <div class="form-group">
+              
+            <label>Exam type</label>
+            <select class="form-control" id="examtype" name="examtype"><?=$exam_type ?></select>
+            </div>
+
 
 
             <div class="form-group">
               
           <label></label>
-          <button class="btn btn-info btn-sm" style="" type="submit" id="btn_set">Set</button>
+          <button class="btn btn-info btn-sm" style="" type="submit" id="btn_set">CREATE</button>
             </div>
 
     <div class="form-group append_exam ">
@@ -463,7 +469,7 @@
 
 	$('#frmnew').on('submit',function(){
     var data = $(this).serialize();
-    var data = $(this).serialize();
+    //console.log(data);
     max_question = $('#q_total').val();
 
     $.ajax({
@@ -474,6 +480,8 @@
       dataType: 'json',
 
       success: function(resp){
+       // console.log(resp);
+    //return false;
          if (resp.stats ==  true) {
           $('.li_category').removeClass('disabled');
           $('.category').click();

@@ -1,7 +1,7 @@
 <div class="post-index">
 	<div class="panel-show-exam">
 		
-	<a class="btn btn-info btn-sm btn-show-exam" href="javascript:void(0);" data-exam="<?=$exam_id?>">Show exam</a>
+	<a class="btn btn-success btn-sm btn-show-exam" href="javascript:void(0);" data-exam="<?=$exam_id?>">Show exam</a>
 	<input type="hidden" name="categories" id="categories" value="<?php echo isset($categories) ? $categories : false; ?>" 	\>
 
 	</div>
@@ -25,8 +25,9 @@
 	<div class="panel panel-show-result">
 		<center>
 		<div class="loader hidden"></div>
+
 		<div class="result hidden" style="font-size:30px; ">Result</div>
-			
+		
 		</center>
 
 	</div>
@@ -34,8 +35,16 @@
 
 </div>
 <style type="text/css">
+
+	.list-questions .panel-question{
+		font-size: 16px;
+	}
 	.list-questions .panel-question p{
 		display: inline;
+	}
+
+	.list-questions .panel-choices{
+		font-size: 12px;
 	}
 </style>
 
@@ -71,6 +80,8 @@
 		var data = $(this).serialize();
 		data = data+'&exam_id='+exam_id+"&category_id="+a_category_id+"&questions_id="+JSON.stringify(questions_id);
 		//console.log(questions_id);
+		$('.loader').removeClass('hidden');
+		$('.panel-exam-questions').addClass('hidden');
 		if(i_question != 0 && i_question == i_answer){
 
 			saveMyAnswer(data);
@@ -78,6 +89,10 @@
 
 
 		}else{
+
+		$('.panel-exam-questions').removeClass('hidden');
+		$('.loader').addClass('hidden');
+
 			if(i_question != i_answer){
 
 				$('.navbar-coloftech').notify('You missed some question.You have only answer '+i_answer+' out of '+i_question+' questions.', { position:"bottom right", className:"warning" });
@@ -113,9 +128,14 @@
 	        }
    			 },
 			dataType: 'json',
+			beforeSend: function(){
+				$('.loader').removeClass('hidden');
+			},
 			success: function(result) {
 				// body...
 				// console.log(result);
+
+				$('.loader').addClass('hidden');
 				if(result.stats == true){
 
 					$('.panel-exam-questions').removeClass('hidden');
@@ -127,7 +147,7 @@
 						i_question = 0;
 						i_answer = 0;
 					$.each(result.questions, function(key, exam) {
-						list = list+'<div class="panel panel-default"><div class="panel-body panel-question"><i>'+num+')</i>&nbsp;<span>'+exam.question+'</span></div><div class="panel-body panel-choices"><ul class="list"><li class="list_item"> <input type="radio" value="'+exam.choice_1+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_1_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_1_'+exam.quiz_id+'" class="label"> A) '+exam.choice_1+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_2+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_2_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_2_'+exam.quiz_id+'" class="label"> B) '+exam.choice_2+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_3+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_3_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_3_'+exam.quiz_id+'" class="label"> C) '+exam.choice_3+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_4+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_4_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_4_'+exam.quiz_id+'" class="label"> A) '+exam.choice_4+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_5+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_5_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_5_'+exam.quiz_id+'" class="label"> E) '+exam.choice_5+'</label></li></ul></div></div>';
+						list = list+'<div class="panel panel-default"><div class="panel-body panel-question"><i>'+num+')</i>&nbsp;<span>'+exam.question+'</span></div><div class="panel-body panel-choices"><ul class="list"><li class="list_item"> <input type="radio" value="'+exam.choice_1+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_1_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_1_'+exam.quiz_id+'" class="label"> A) '+exam.choice_1+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_2+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_2_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_2_'+exam.quiz_id+'" class="label"> B) '+exam.choice_2+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_3+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_3_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_3_'+exam.quiz_id+'" class="label"> C) '+exam.choice_3+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_4+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_4_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_4_'+exam.quiz_id+'" class="label"> D) '+exam.choice_4+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_5+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_5_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_5_'+exam.quiz_id+'" class="label"> E) '+exam.choice_5+'</label></li></ul></div></div>';
 					//console.log(exam.question);
 						total_question++;
 						num++;
@@ -226,7 +246,7 @@
 				 console.log(result);
 				if(result.stats == true){
 					$('.panel-exam-questions').hide('fast');
-					$('.result').removeClass('hidden').html('<span style="font-size:16px;">Your score is</span> <span>'+result.total_exam+'/'+total_question+'</span>');
+					$('.result').removeClass('hidden').html('<span style="font-size:16px;">Your score is</span> <span>'+result.total_exam+'/'+total_question+'</span><br /><button class="btn btn-info" onclick="retake();">Retake</button>');
 					$('.loader').addClass('hidden');
 
 
@@ -282,5 +302,10 @@
 							//$('.result').removeClass('hidden').html('Result');
 							showRatings(data);
 						}
+	}
+
+	function retake() {
+		// body...
+		location.reload();
 	}
 </script>

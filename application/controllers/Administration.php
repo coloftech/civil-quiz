@@ -23,10 +23,12 @@ class Administration extends CI_Controller {
 		$this->load->model('admin_m');
 		$this->load->model('site_m');
 		//$this->load->model('post_m');
-		//$this->load->library('visitors');
+		$this->load->library('visitors');
 	}
 	public function index($value='')
 	{
+		$data['total_visitors'] = $this->visitors->total_visitors();
+		$data['unique_visitors'] = $this->visitors->unique_visitor();
 		$data['isadmindashboard'] =  true;
 		$data['site_title'] =  'Administration';
 		

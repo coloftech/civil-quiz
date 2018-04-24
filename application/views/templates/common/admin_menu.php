@@ -38,19 +38,17 @@
                 
 
                 <li>
-                    <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Quiz Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <a href="#" data-toggle="collapse" data-target="#submenu-2"><i class="fa fa-fw fa-book"></i>  Exam setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                     <ul id="submenu-2" class="collapse">
 
                         <li><a href="<?=site_url('quiz/create');?>"><i class="fa fa-angle-double-right"></i> Create a quiz</a></li>
                         <li><a href="<?=site_url('quiz/list_exam');?>"><i class="fa fa-angle-double-right"></i> List all exam</a></li>
-                        <li><a href="<?=site_url('quiz/list_questions');?>"><i class="fa fa-angle-double-right"></i> List all question</a></li>
-                        <li><a href="<?=site_url('quiz/takeaquiz');?>"><i class="fa fa-angle-double-right"></i> Take a quiz</a></li>
 
                     </ul>
                 </li>
 
                 <li>
-                    <a href="#" data-toggle="collapse" data-target="#subject"><i class="fa fa-fw fa-book"></i>  Category Setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <a href="#" data-toggle="collapse" data-target="#subject"><i class="fa fa-fw fa-book"></i>  Category setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
                     <ul id="subject" class="collapse">
 
                         <li><a href="<?=site_url('subject');?>"><i class="fa fa-angle-double-right"></i> View all</a></li>
@@ -59,6 +57,15 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="#" data-toggle="collapse" data-target="#examtypesettings"><i class="fa fa-fw fa-book"></i>  Exam type setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
+                    <ul id="examtypesettings" class="collapse">
+
+                        <li><a href="<?=site_url('subject');?>"><i class="fa fa-angle-double-right"></i> View all</a></li>
+                        <li><a href="<?=site_url('subject/create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
+
+                    </ul>
+                </li>
                 <li>
                     <a href="#" data-toggle="collapse" data-target="#site_setting"><i class="fa fa-fw fa-globe"></i>  Site setting <i class="fa fa-fw fa-angle-down pull-right"></i></a>
 

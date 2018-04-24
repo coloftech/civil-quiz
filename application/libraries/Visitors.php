@@ -384,9 +384,46 @@ function getBrowser($user_agent="") {
 
 
 
+	public function unique_visitor()
+	{
+		# code...
+		$visitors = 0;
+		$query = $this->ci->db->select('userip,count(id) as unique_visitor')
+				->from('post_view')
+				->group_by('userip')
+				->get();
+				if($result = $query->result()){
+					//$result[0]->unique_visitor;
+					foreach ($result as $key) {
+						# code...
+						$visitors++;// = (int)$visitors + (int)$key->unique_visitor;
+						//echo "$key->userip ($key->unique_visitor) <br/>";
+					}
+					//exit();
+
+					return $visitors;
+				}else{
+					return $visitors;
+				}
+
+	}
 
 
 
+
+	public function total_visitors()
+	{
+		# code...
+		$query = $this->ci->db->select('sum(counter) as total_visitors')
+				->from('post_view')
+				->get();
+				if($result = $query->result()){
+					return $result[0]->total_visitors;
+				}else{
+					return 0;
+				}
+
+	}
 
 
 

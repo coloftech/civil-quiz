@@ -11,6 +11,11 @@ class Exam_m extends CI_Model
 		# code...
 		parent::__construct();
 	}
+	public function examType()
+	{
+		# code...
+		return $this->db->get('exam_type')->result();
+	}
 
 	public function getExamById($exam_id=0)
 	{

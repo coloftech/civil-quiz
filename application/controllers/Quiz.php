@@ -286,6 +286,18 @@ class Quiz extends CI_Controller
 
 			$cat .= '</select>';
 		}
+		$this->load->model('exam_m');
+		$exam_type = '<option value="1">Default</option>';
+		if($list_type = $this->exam_m->examType()){
+			$exam_type = '';
+			foreach ($list_type as $key) {
+				# code...
+				$exam_type .= "<option value='$key->type_id'>$key->type_title</option>";
+			}
+			$exam_type .= "<option value='0'>Others</option>";
+
+		}
+		$data['exam_type'] = $exam_type;
 		$data['category']=$cat;
 
 		$data['editform'] = true;
@@ -453,8 +465,11 @@ class Quiz extends CI_Controller
 				'slug'=>$this->slug->create($input->q_title),
 				'shuffle_choices'=>$choices,
 				'suffle_questions'=>$questions,
-				'date_posted'=>date('Y-m-d H:i:s')
+				'date_posted'=>date('Y-m-d H:i:s'),
+				'exam_type_id'=>$input->examtype
 			);
+			//var_dump($data);
+			//exit();
 			$quizes_id = $this->quiz_m->add_exam($data);
 			echo json_encode(array('stats'=>true,'msg'=>'Quiz settings added successfuly.','quizes_id'=>$quizes_id));
 			exit();
