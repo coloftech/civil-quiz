@@ -510,21 +510,17 @@ class Quiz_m extends CI_Model
 
 	}
 
-	public function list_exams($category=false)
+	public function list_exams($is_admin=false)
 	{
-		if($category){
-
-			$this->db->select('quizes_setting.*')
-				->from('quizes_setting')
-				->where('quizes_setting.category_id',$category);
-			return $this->db->get()->result();
-
-		}else{
+		
 
 			$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam,, SUM('.$this->db->dbprefix("exam_setting").'.exam_total) as exam_total')
 				->from('quizes_setting')
-				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT')
-				->group_by('exam_setting.exam_id')
+				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT');
+				if(!$is_admin)
+				$this->db->where('status',1);
+
+				$this->db->group_by('exam_setting.exam_id')
 				->order_by('quizes_setting.date_posted','DESC');
 			$result =  $this->db->get()->result();
 			$ar = '';
@@ -538,12 +534,13 @@ class Quiz_m extends CI_Model
 					->from('exam_setting')
 					->join('category','category.cat_id = exam_setting.category_id','left')
 					->where('exam_id',$key->quizes_id);
-					$category = $this->db->get()->result();
+					if($category = $this->db->get()->result()){
 					foreach ($category as $cat) {
 						# code...
 						$cat_names[] = $cat->cat_name;
 						//$cat_ids[] = $cat->category_id;
 						$categories[] =(object) array('category_id'=>$cat->category_id,'category_name'=>$cat->cat_name);
+					}
 					}
 					
 
@@ -567,7 +564,7 @@ class Quiz_m extends CI_Model
 			}
 			return $ar;
 			
-		}
+		
 	}
 
 	public function list_question($category=false,$exam_id= false)

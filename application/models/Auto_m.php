@@ -240,4 +240,34 @@ class Auto_m extends CI_Model
         $menus = $this->listmenu->get_menu_html();
         return $menus;
     }
+
+    public function trim_sp($subject) {
+        $regex = "/\s*(\.*)\s*/s";
+        if (preg_match ($regex, $subject, $matches)) {
+            $subject = $matches[1];
+        }
+        return $subject;
+    }
+
+    public function no_error($data='',$msg='')
+    {
+        # code...
+        if(is_array($data)){
+            if((int)$data['error'] > 0){
+                $this->no_error($data['message']);
+            }else{
+                return true;
+            }
+        }else{
+            if(is_bool($data) && $data == true){
+            return true;
+        }elseif(is_int($data)){
+            return true;
+            }else{
+                return false;
+            }
+        }
+        
+
+    }
 }

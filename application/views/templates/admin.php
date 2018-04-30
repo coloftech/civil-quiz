@@ -55,6 +55,7 @@
             <!-- Page Heading -->
             <div class="row  main">
               <div class="wrapper admin-wrapper create">
+                <div class="col-md-12"><span class="show-notify pull-right"></span></div>
 
                 <div class="col-md-12" style="padding:1px;">
                   

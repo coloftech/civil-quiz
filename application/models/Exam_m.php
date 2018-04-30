@@ -224,6 +224,50 @@ class Exam_m extends CI_Model
 		return false;
 	}
 
+	public function is_publish($status = 0,$exam_id=0){
+		if($exam_id > 0){
+
+		$this->db->where('quizes_id',$exam_id);
+		return $this->db->update('quizes_setting',array('status'=>$status));
+		}else{
+			return false;
+		}
+	}
+
+	public function update_exam($exam_id=0,$category_id=0,$total=0){
+		if($exam_id > 0 && $category_id > 0){
+
+		$this->db->where(array('exam_id'=>$exam_id,'category_id='=>$category_id));
+		return $this->db->update('exam_setting',array('exam_total'=>$total));
+		}else{
+			return false;
+		}
+	}
+
+	public function is_title_exist($title,$exam_id=0){
+		if($exam_id > 0){
+		$query =  $this->db->get_where('quizes_setting',array('quizes_title'=>$title,'quizes_id != ' =>$exam_id));
+		return $query->num_rows();
+		}else{
+
+		$query =  $this->db->get_where('quizes_setting',array('quizes_title'=>$title));
+		return $query->num_rows();
+		}
+	}
+
+	public function update($exam_id=0,$data=''){
+		
+		$this->db->where('quizes_id',$exam_id);
+		$this->db->update('quizes_setting',$data);
+		$error = $this->db->error();
+		if(!empty($error['code']) ){
+			return $error['message'];
+		}else{
+			return true;
+		}
+	}
+	
+
 
 }
 

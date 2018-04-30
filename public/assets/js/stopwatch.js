@@ -46,11 +46,11 @@ var ss = document.getElementsByClassName('stopwatch');
     function stopTimer () {
         clearInterval(interval);
         interval = 0;
-        pause_timer();
+        //pause_timer();
     }
 
     function resetTimer () {
-        stopTimer();
+        //stopTimer();
 
         currentTimer = 0;
 

@@ -22,6 +22,7 @@
 			</form>
 		</div>
 	</div>
+
 	<div class="panel panel-show-result">
 		<center>
 		<div class="loader hidden"></div>
@@ -31,6 +32,41 @@
 		</center>
 
 	</div>
+
+	<div class="panel panel-result-btn">
+
+		<div class="col-md-12" style="">
+			<div class="result-controls ">
+			<div class="not-mobile">
+				<button class="btn btn-stop hidden" id="btn_stop"><i class="fa fa-check"></i> Result</button>  <button class="btn btn-pause" id="btn_pause" data-val='Pause'> <i class="fa fa-pause"></i></button>
+				<button class="btn btn-info btn-next hidden" id="btn_next" data-val='Next'> <i class="fa fa-forward"></i></button>
+			</div>
+
+
+			</div>
+			<div class="result-controls ">
+
+			<div class="stopwatch">
+	            <div class="controls hidden">
+                <button class="start">Start</button>
+                <button class="stop">Stop</button>
+                <button class="reset">Reset</button>
+	            </div>
+	            <div class="display">
+	                <span class="minutes">00</span><span class="seconds">00</span><span class="centiseconds">00</span>
+	            </div>
+       		</div>
+
+			</div>
+			<div class="result-controls ">
+				<div class="answer-counter">
+					<span class="answer-total">0</span>/<span class="exam-question">0</span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 
 
 </div>
@@ -154,8 +190,8 @@
 						i_question++;
 						questions_id.push(exam.quiz_id);
 					});
-
-
+						$('.answer-total').html('0');
+						$('.exam-question').html(i_question);
 						$('.list-questions').html(list);
 						i++;
 
@@ -264,9 +300,12 @@
 	function saveanswer(quiz_id) {
 		// body...
 		if(my_answer == false){
+
 			my_answer = [];
 			my_answer.push(quiz_id);
 			i_answer++;
+			$('.start').click();
+			$('.answer-total').html(i_answer);
 		}else{
 
 			if (jQuery.inArray(quiz_id, my_answer)!='-1') {
@@ -277,6 +316,7 @@
 	           // alert(name + ' is NOT in the array...');
 	           my_answer.push(quiz_id);
 	           i_answer++;
+				$('.answer-total').html(i_answer);
 	        }
 		}
 		//console.log(i_answer);
@@ -309,3 +349,4 @@
 		location.reload();
 	}
 </script>
+<script type="text/javascript" src="<?=base_url('public/assets/js/stopwatch.js')?>"></script>
