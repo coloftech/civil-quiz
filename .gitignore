@@ -16,3 +16,9 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 application/application v2.zip
+*.zip
+application/helpers/Pdf_create_helper.php
+application/models/Email_m.php
+application/views/admin/exam/createq.php
+application/models/Email_m.php
+application/models/Email_m.php
