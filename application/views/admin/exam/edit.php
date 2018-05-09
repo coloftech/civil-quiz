@@ -16,7 +16,8 @@
     font-size: 10px;
     text-align: right;
     float: right;
-  }
+  } 
+  .form-control{border-color: #6495ED
 </style>
 <ul class="nav nav-tabs" id="ul_new">
   <li class="li_home "><a data-toggle="tab" href="#tab_home" class="tab_home">SETTING</a></li>
@@ -31,7 +32,7 @@
     <h3>Exam settings</h3>
     <div class="col-md-12">
 
-    			<form class="form form-horizontal" id="frmnew" method="post" accept="./addexam">
+          <form class="form form-horizontal" id="frmnew" method="post" accept="./addexam">
             
             <div class="form-group">
               
@@ -53,7 +54,7 @@
 
     <div class="form-group append_exam ">
     </div>
-    			</form>
+          </form>
     </div>
   </div>
 
@@ -62,15 +63,15 @@
       <button class="btn btn-default btn-sm add-category" data-toggle="modal"  data-target="#mtotal_modal" type="button" ><i class="fa fa-plus "></i></button></h3>
     <p>
 
-	<table class="table table-bordered" id="tbl_exams">
-		<thead>
-			<tr><th>Exam Category</th><th>Type</th><th>Question</th><th>Action</th></tr>
-		</thead>
-		<tbody>
-			
-	<?php echo isset($tr) ? $tr : '';?>
-		</tbody>
-	</table>
+  <table class="table table-bordered" id="tbl_exams">
+    <thead>
+      <tr><th>Exam Category</th><th>Type</th><th>Question</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      
+  <?php echo isset($tr) ? $tr : '';?>
+    </tbody>
+  </table>
     </p>
   </div>
 
@@ -91,26 +92,18 @@
       <textarea class="form-control" name="question" id="question" class="summernote"></textarea>
     </div>
 
+    
     <div class="form-group choices">
-      <label for="answer1" style="width:100%;display: block;"><input type="radio" name="answer" id="answer1" value="1" > Choice 1 </label>
-      <input type="text" name="choice1" id="choice1" class="form-control txtinput" placeholder="Enter choice here..."  required />
+      <label>Answer</label>
+      <input type="text" name="choices[]" id="choices0" class="form-control choice" />
+      <label>Other choices</label>      
+      <input type="text" name="choices[]" id="choices1" class="form-control choice" />
+      <input type="text" name="choices[]" id="choices2" class="form-control choice" />
+      <input type="text" name="choices[]" id="choices3" class="form-control choice" />
     </div>
-    <div class="form-group choices">
-      <label for="answer2" style="width:100%;display: block;"><input type="radio" name="answer" id="answer2" value="2"> Choice 2 </label>
-      <input type="text" name="choice2" id="choice2" class="form-control txtinput" placeholder="Enter choice here..."  required />
-    </div>
-    <div class="form-group choices">
-      <label for="answer3" style="width:100%;display: block;"><input type="radio" name="answer" id="answer3" value="3"> Choice 3 </label>
-      <input type="text" name="choice3" id="choice3" class="form-control txtinput" placeholder="Enter choice here..." required  />
-    </div>
-    <div class="form-group choices">
-      <label for="answer4" style="width:100%;display: block;"><input type="radio" name="answer" id="answer4" value="4"> Choice 4 </label>
-      <input type="text" name="choice4" id="choice4" class="form-control txtinput" placeholder="Enter choice here..." required  />
-    </div>
-    <div class="form-group choices">
-      <label for="answer5" style="width:100%;display: block;"><input type="radio" name="answer" id="answer5" value="5"> Choice 5 </label>
-      <input type="text" name="choice5" id="choice5" class="form-control txtinput" placeholder="Enter choice here..." required  />
-    </div>
+    <div class="btn-add-choices"><button class="btn btn-default btn-sm" type="button" id="btn_more">Add more choices...</button><br/><br/></div>
+
+  </div>
 
   </div>
   </div>
@@ -177,32 +170,32 @@
       <div class="modal-body">
         
         <p>   
-        	<style type="text/css">
-        		.c_setting{
-        			display: none;
-        		}
-        	</style>
+          <style type="text/css">
+            .c_setting{
+              display: none;
+            }
+          </style>
     <form action="#" id="frm_mtotal" name="frm_mtotal" class="">
-           	
-           	<div class="c_setting">
-	           		
-	             <div class="form-group">
-	              <label for="s_category">Select subject/category <i class="btn fa fa-plus"></i></label>
-	              <?php echo $category; ?>
-	            </div>
-	             <div class="form-group">
-	              <label for="category_notes">Directions: </label>
-	              <textarea id="directions" name="directions" class="form-control"  placeholder="(optional)"></textarea>
-	            </div>
+            
+            <div class="c_setting">
+                
+               <div class="form-group">
+                <label for="s_category">Select subject/category <i class="btn fa fa-plus"></i></label>
+                <?php echo $category; ?>
+              </div>
+               <div class="form-group">
+                <label for="category_notes">Directions: </label>
+                <textarea id="directions" name="directions" class="form-control"  placeholder="(optional)"></textarea>
+              </div>
 
-	            <div class="form-group">
-	              <label for="question">Select quiz type </label>
-	              <select class="form-control" id="q_type" name="q_type">
-	                <option value="1">Multiple choice</option>
-	              </select>
-	            </div>
+              <div class="form-group">
+                <label for="question">Select quiz type </label>
+                <select class="form-control" id="q_type" name="q_type">
+                  <option value="1">Multiple choice</option>
+                </select>
+              </div>
 
-           	</div>
+            </div>
              
 
          <div class="form-group">
@@ -236,17 +229,17 @@
 </div>
 
 <script type="text/javascript">
-	  $('a[data-toggle="tab"]').on('click', function(){
-	  if ($(this).parent('li').hasClass('disabled')) {
-	    return false;
-	  };
-	});
+    $('a[data-toggle="tab"]').on('click', function(){
+    if ($(this).parent('li').hasClass('disabled')) {
+      return false;
+    };
+  });
 
 </script>
 <script type="text/javascript">
-	var old_title = '<?=$exam_title?>';
+  var old_title = '<?=$exam_title?>';
 
-	$('#frmnew').on('submit',function(){
+  $('#frmnew').on('submit',function(){
     var data = $(this).serialize();
 
     max_question = $('#q_total').val();
@@ -254,7 +247,7 @@
 
     if(old_title.trim() == exam_title.trim()){
         $('.show-notify').notify('No changes made.', { position:"bottom right", className:"error" }); 
-    	return false;
+      return false;
     }else{
     
 
@@ -266,10 +259,10 @@
       dataType: 'json',
 
       success: function(resp){
-      	//console.log(resp)
+        //console.log(resp)
          if (resp.stats ==  true) {
-          	$('#q_title').val(exam_title.trim());
-    		old_title = exam_title.trim();
+            $('#q_title').val(exam_title.trim());
+        old_title = exam_title.trim();
 
 
           $('.show-notify').notify("Question settings updated successfully", { position:"bottom right", className:"success" }); 
@@ -285,13 +278,13 @@
       }
 
     });
-	}
-		return false;
-	});
-	
+  }
+    return false;
+  });
+  
 </script>
 <script type="text/javascript">
-	
+  
 
   $('.list-question').on('click',function(){
     var e = $(this);
@@ -299,7 +292,7 @@
   });
   function list_question(e){
 
-	e_category = $(e).parent().parent().data('category');
+  e_category = $(e).parent().parent().data('category');
 
     var q = $('#questions_'+e_category).text();
 
@@ -355,28 +348,28 @@
   });
 </script>
 <script type="text/javascript">
-	var is_change = false;
-	var e_category = 0;
-	var m_total = 0;
-	var qa_total;
-	var exam_id = <?=$exam_id?>;
-	function maxQuestion(e) {
-		// body...
+  var is_change = false;
+  var e_category = 0;
+  var m_total = 0;
+  var qa_total;
+  var exam_id = <?=$exam_id?>;
+  function maxQuestion(e) {
+    // body...
 
-		if(is_change == false){
-		 m_total = $(e).text();
-		 e_category = $(e).parent().parent().data('category');
-		 $('#mtotal_modal').modal('show');
-		 $('#mtotal_modal #txtmtotal').val(m_total);
-  		 $('.c_setting').css('display','none');
-  		 $('#btn_category').html('Update');
-		//console.log(e_category);
-		is_change = true;
-		}else{
-			m_total = $('#txtmtotal').val();
-  		 $('#btn_category').html('Add');
+    if(is_change == false){
+     m_total = $(e).text();
+     e_category = $(e).parent().parent().data('category');
+     $('#mtotal_modal').modal('show');
+     $('#mtotal_modal #txtmtotal').val(m_total);
+       $('.c_setting').css('display','none');
+       $('#btn_category').html('Update');
+    //console.log(e_category);
+    is_change = true;
+    }else{
+      m_total = $('#txtmtotal').val();
+       $('#btn_category').html('Add');
 
-			 var data = 'exam_id='+exam_id+'&category_id='+e_category+'&maxquestions='+m_total;
+       var data = 'exam_id='+exam_id+'&category_id='+e_category+'&maxquestions='+m_total;
               $.ajax({
 
               type: 'post',
@@ -387,7 +380,7 @@
               success: function(resp){
                 //console.log(resp)
                 if(resp.stats == true){
-                 $('#mtotal_'+e_category).html(m_total);	
+                 $('#mtotal_'+e_category).html(m_total);  
 
             $('.show-notify').notify("Settings updated successfully", { position:"bottom right", className:"success" });
                 }else{
@@ -403,36 +396,36 @@
 
             });
 
-		}
+    }
 
-	}
-	$('.close').on('click',function(){
+  }
+  $('.close').on('click',function(){
 
-		 $('#mtotal_modal').modal('hide');	
-		 is_change = false;
-	});
+     $('#mtotal_modal').modal('hide');  
+     is_change = false;
+  });
 
-	$('#frm_mtotal').on('submit',function(){
-		var action = $('#btn_category').html();
-		if(action == 'Update'){
+  $('#frm_mtotal').on('submit',function(){
+    var action = $('#btn_category').html();
+    if(action == 'Update'){
 
-			maxQuestion($(this));
-			$('#mtotal_modal').modal('hide');	
-			is_change = false;
-		}else{
-			//alert('Setting');
-			add_category($(this));
-			return false;
-		}
+      maxQuestion($(this));
+      $('#mtotal_modal').modal('hide'); 
+      is_change = false;
+    }else{
+      //alert('Setting');
+      add_category($(this));
+      return false;
+    }
 
-		return false;
-	});
+    return false;
+  });
 
 
 
   function removeCategory(e) {
     // body...
-	e_category = $(e).parent().parent().data('category');
+  e_category = $(e).parent().parent().data('category');
 
     var data = 'exam_id='+exam_id+'&category_id='+e_category;
     //console.log(data);
@@ -466,7 +459,7 @@
 
 
   $('.add-category').on('click',function(){
-  	$('.c_setting').css('display','block');
+    $('.c_setting').css('display','block');
 
   });
 
@@ -474,9 +467,7 @@
 </script>
 
 <script type="text/javascript">
-  $(function(){ 
-    $("#question_added").html(total_question);
-  });
+ 
   $('input[type="radio"]').on('click', function(e) {
    // console.log(e.type);
 
@@ -498,35 +489,51 @@
           $('#question').summernote('code', '');
   }
 
+  var is_addquestion = false;
+  function addquestion(e){
 
-	var is_addquestion = false;
-	function addquestion(e){
-		if(is_addquestion == false){
+    //return false;
+    if(is_addquestion == false){
 
-			e_category = $(e).parent().parent().data('category');
-			m_total = $('#mtotal_'+e_category).text();
-			qa_total = $('#questions_'+e_category).text();
-			$('#total_question').html(m_total);
-			$('#question_added').html(qa_total);
+      e_category = $(e).parent().parent().data('category');
+      m_total = $('#mtotal_'+e_category).text();
+      qa_total = $('#questions_'+e_category).text();
 
-		    $('.li_questions').removeClass('disabled');
-			$('.tab_questions').click();
-			is_addquestion = true;
-		}else{
+          if(parseInt(m_total) == parseInt(qa_total)){
+            $('.show-notify').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
+            return false;
+          }
+          
+      $('#total_question').html(m_total);
+      $('#question_added').html(qa_total);
+      
+        $('.li_questions').removeClass('disabled');
+      $('.tab_questions').click();
+      is_addquestion = true;
+    }else{
 
-		var data = $(e).serialize();
-		//console.log(data);
-		//return false;
+
+    var data = $(e).serialize();
+    //console.log(data);
+    //return false;
     $.ajax({
 
       type: 'post',
       data: data+'&exam_id='+exam_id+'&category_id='+e_category,
       url: '<?=site_url("quiz/add_question"); ?>',
       dataType: 'json',
-
+        statusCode: {
+          404: function() {
+                  $('.show-notify').notify('Error 404! page not found.', { position:"bottom right", className:"warning" });
+          },
+          505: function() {
+                  $('.show-notify').notify('Error 505! page not found.', { position:"bottom right", className:"warning" });
+          }
+         },
+         
       success: function(resp){
-      	//console.log(resp);
-      	//return false;
+        //console.log(resp);
+        //return false;
         if(resp.stats == true){
 
         qa_total = parseInt(qa_total) + 1;
@@ -541,6 +548,7 @@
           $('.show-notify').notify("Question added successfully", { position:"bottom right", className:"success" }); 
 
           $('#frmquestion')[0].reset();
+          clearform();
 
 
 
@@ -552,61 +560,61 @@
 
     });
 
-			//is_addquestion = false;
+      //is_addquestion = false;
 
-		}
-	}
+    }
+  }
 
 
-	function add_category(e){
-		var data = $(e).serialize();
-		//var ar = JSON.stringify($(e).serializeArray());
+  function add_category(e){
+    var data = $(e).serialize();
+    //var ar = JSON.stringify($(e).serializeArray());
 
-		var t_category = $('#s_category option:selected').text();
-		var t_type = $('#q_type option:selected').text();
+    var t_category = $('#s_category option:selected').text();
+    var t_type = $('#q_type option:selected').text();
 
-		    m_total = parseInt($('#txtmtotal').val());
+        m_total = parseInt($('#txtmtotal').val());
 
-		    e_category = $('#s_category').val();
+        e_category = $('#s_category').val();
 
-		   // var data = 'exam_id='+exam_id+'&category_id='+e_category;
-    	//console.log(ar);
-   	 	//return false;
-	     $.ajax({
+       // var data = 'exam_id='+exam_id+'&category_id='+e_category;
+      //console.log(ar);
+      //return false;
+       $.ajax({
 
-	      type: 'post',
-	      data: data+'&exam_id='+exam_id,
-	      url: '<?=site_url("quiz/exam_setting"); ?>',
-	      dataType: 'json',
+        type: 'post',
+        data: data+'&exam_id='+exam_id,
+        url: '<?=site_url("quiz/exam_setting"); ?>',
+        dataType: 'json',
 
-	      success: function(resp){
+        success: function(resp){
 
-	      //console.log(resp);
-	     // return false;
-	      if(resp.stats == true){
+        //console.log(resp);
+       // return false;
+        if(resp.stats == true){
 
-	        //$('#tr_'+e_category).remove();
-	         $('#tbl_exams tbody').append("<tr class='list' data-category='"+e_category+"' id='tr_"+e_category+"'><td>"+t_category+"</td><td>"+t_type+"</td><td><span class='btn list-question' id='questions_"+e_category+"' style='width:40%;'>0</span> / <span class='btn span_exam_total' id='mtotal_"+e_category+"' style='width:40%;' onClick='maxQuestion(this)'>"+m_total+"</span></td><td><button class='btn btn-info btn-sm' onClick='addquestion(this)'><i class='fa fa-plus'></i></button> <button class='btn btn-danger btn-sm' type='button' onClick='removeCategory(this)'><i class='fa fa-remove'></i></button></td></tr>");
+          //$('#tr_'+e_category).remove();
+           $('#tbl_exams tbody').append("<tr class='list' data-category='"+e_category+"' id='tr_"+e_category+"'><td>"+t_category+"</td><td>"+t_type+"</td><td><span class='btn list-question' id='questions_"+e_category+"' style='width:40%;'>0</span> / <span class='btn span_exam_total' id='mtotal_"+e_category+"' style='width:40%;' onClick='maxQuestion(this)'>"+m_total+"</span></td><td><button class='btn btn-info btn-sm' onClick='addquestion(this)'><i class='fa fa-plus'></i></button> <button class='btn btn-danger btn-sm' type='button' onClick='removeCategory(this)'><i class='fa fa-remove'></i></button></td></tr>");
 
-	         	$('.list-question').on('click',function(){
+            $('.list-question').on('click',function(){
 
-					    list_question($(this));
-	         	});
+              list_question($(this));
+            });
 
-	                  $(e).notify(resp.msg, { position:"top right", className:"success" }); 
-	      }else{
+                    $(e).notify(resp.msg, { position:"top right", className:"success" }); 
+        }else{
 
-	                  $(e).notify(resp.msg, { position:"top right", className:"warning" }); 
-	      }
-	      }
+                    $(e).notify(resp.msg, { position:"top right", className:"warning" }); 
+        }
+        }
 
-	    });
-	}
+      });
+  }
 </script>
 
 
 <script type="text/javascript">
-	
+  
   $('#frmquestion').on('submit',function(){
 
     var question = $('#question').val();
@@ -618,28 +626,67 @@
       $('.show-notify').notify('Error! Please input a question.', { position:"bottom right", className:"error" }); 
       return false;
     }
+     /*
      if(choices == '' || choices == undefined){
 
 
       $('.show-notify').notify('Error! Please select an answer to this question.', { position:"bottom right", className:"error" }); 
       return false;
     }
+    */
 
           if(parseInt(m_total) == parseInt(qa_total)){
             $('.show-notify').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
             return false;
           }
-     
+     is_addquestion = true;
           addquestion(this);
-  	return false;
+    return false;
     });
 
   $('.li_category').on('click',function(){
-  	is_addquestion = false;
-  	 $('.li_questions').addClass('disabled');
+    is_addquestion = false;
+     $('.li_questions').addClass('disabled');
   });
   $('.li_home').on('click',function(){
-  	is_addquestion = false;
-  	 $('.li_questions').addClass('disabled');
+    is_addquestion = false;
+     $('.li_questions').addClass('disabled');
   });
 </script>
+<script type="text/javascript">
+  var choices = 4;
+  $('#btn_more').on('click',function(){
+    $('.choices').append('<input type="text" name="choices[]" id="choices'+choices+'" class="form-control choice" />');
+      
+      $('.choice').on('blur',function(){
+       check_input(this);
+
+      });
+    return false;
+  });
+
+
+var input_choices = [];
+$('.choice').on('blur',function(){
+ check_input(this);
+
+});
+
+function check_input(e) {
+  // body...
+
+    var item = $(e).val();
+          if(isInArray(item,input_choices)){
+            $(e).val('').focus();
+            $(e).notify('The same data is not allowed.', { position:"Top left", className:"error" });
+          }else{
+            
+            input_choices.push(item);
+          }
+}
+
+
+
+
+</script>
+

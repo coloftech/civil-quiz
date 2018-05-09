@@ -31,7 +31,7 @@ class Quiz extends CI_Controller
 		$quiz = $this->quiz_m->list_exams(true);
 		$data['lists'] = $quiz;
 		$data['site_title'] = 'List all';
-		$this->template->load('admin','quiz/listexam',$data);
+		$this->template->load('admin','admin/exam/list_exam',$data);
 	}
 
 	public function list_question($exam_id=0,$category_id = 0){
@@ -141,7 +141,7 @@ class Quiz extends CI_Controller
 									<td>$key->category_name</td>
 									<td>$t</td>
 									<td><span class='btn list-question' id='questions_$key->category_id' style='width:40%;'>$total_questions</span> / <span class='btn span_exam_total' id='mtotal_$key->category_id' style='width:40%;' onClick='maxQuestion(this)'>$cat->exam_total</span></td>
-									<td><button class='btn btn-info btn-sm' onClick='addquestion(this)'><i class='fa fa-plus'></i></button> <button class='btn btn-danger btn-sm' type='button' onClick='removeCategory(this)'><i class='fa fa-remove'></i></button></td>
+									<td><button class='btn btn-info btn-sm' onClick='addquestion(this)'><i class='fa fa-plus fa-questions'></i></button> <button class='btn btn-danger btn-sm' type='button' onClick='removeCategory(this)'><i class='fa fa-remove'></i></button></td>
 								</tr>
 								";
 
@@ -184,7 +184,7 @@ class Quiz extends CI_Controller
 		$data['editform'] = true;
 
 		$data['site_title'] = 'Edit';
-		$this->template->load('admin','quiz/new_edit',$data);
+		$this->template->load('admin','admin/exam/edit',$data);
 	}
 
 	public function changemaxquestion()
@@ -221,7 +221,7 @@ class Quiz extends CI_Controller
 	{
 		# code...
 		if($this->input->post()){
-			if($isRemove = $this->quiz_m->removeExam($this->input->post('quizes_id'))){
+			if($isRemove = $this->quiz_m->removeExam($this->input->post('exam_id'))){
 
 				echo json_encode(array('stats'=>true,'msg'=>'Exam remove successfully'));
 			}else{
@@ -276,15 +276,60 @@ class Quiz extends CI_Controller
 		}
 	}
 
+
 	public function add_question($exam_id=0){
 
 		if($this->input->post()){
 			$input = (object)$this->input->post();
-			$num = $input->answer;
-			$answer = $this->input->post('choice'.$num);
+			$choice = $input->choices;
+			$answer = $choice[0];
+
+			$uniqid =uniqid();
+			$quiz_id = $this->quiz_m->add_quiz(
+				array(
+					'post_question'=>$input->question,
+					'date_posted'=>date('Y-m-d H:i:s'),
+					'token'=>$uniqid
+					)
+			);
+			if($quiz_id > 0){
+
+					$answer_id = $this->quiz_m->add_to_choices(array('quiz_id'=>$quiz_id,'choice_label'=>$answer,'is_answer'=>1));
+					$c=0;
+					foreach ($choice as $choi) {
+						# code...
+						if(!empty($choi) && $c > 0){
+
+						$this->quiz_m->add_to_choices(array('quiz_id'=>$quiz_id,'choice_label'=>$choi,'is_answer'=>0));
+						}
+						$c++;
+					}
+
+					$set_answer = $this->quiz_m->update_quiz(array('choice_id'=>$answer_id),$quiz_id);
+
+				$add_to_exam = $this->quiz_m->add_to_exam(array('quiz_id'=>$quiz_id,'exam_id'=>$input->exam_id,'category_id'=>$input->category_id));
+
+				echo json_encode(array('stats'=>true,'msg'=>'Question added','quiz_id'=>$quiz_id));
+
+			}
+
+			exit();
+
+		}else{
+			echo json_encode(array('stats'=>false,'msg'=>'No input receveid.'));
+		}
+	}
+
+	public function add_question_old($exam_id=0){
+
+		if($this->input->post()){
+			$input = (object)$this->input->post();
+			//$num = $input->answer;
+			//$answer = $this->input->post('choice'.$num);
+			$answer = $input->answer;
 			$choice = '';
 			$j=0;
-			for ($i=1; $i <= 6 ; $i++) { 
+			/*for ($i=1; $i <= 6 ; $i++) { 
 
 				if($answer != ($this->input->post('choice'.$i))){
 				$choice[$j] = $this->input->post('choice'.$i);
@@ -292,6 +337,11 @@ class Quiz extends CI_Controller
 				}
 
 			}
+			*/
+			$choice = $input->choices;
+
+			var_dump($choice);
+			exit();
 			$uniqid =uniqid();
 			$data = array(
 				'post_question'=>$input->question,

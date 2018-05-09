@@ -42,7 +42,7 @@ class Exam extends CI_Controller
 
 	public function create($value='')
 	{
-			 if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
+		if (!$this->permission->is_loggedIn() || !$this->permission->is_admin()){
 			redirect('login');
 		}
 		# code...
@@ -228,9 +228,10 @@ class Exam extends CI_Controller
 
 
 				}
-				echo json_encode(array('stats'=>true,'exam'=>$exam));
+				echo json_encode(array('stats'=>true,'exam'=>$exam,'user_exam_id'=>$user_exam_id));
 				exit();
 			}
+
 
 
 			echo json_encode(array('stats'=>false,'msg'=>'No Exam available right now!'));
@@ -243,6 +244,47 @@ class Exam extends CI_Controller
 
 	public function js_script(){
 		$js_script = '';
+	}
+
+	public function test(){
+			$this->load->model('exam_m');
+			$input = (object)$this->input->post();
+
+			if($exam = $this->exam_m->randomByCategory($input->exam_id,$input->category_id)){
+				//var_dump($exam); 
+				$html = "";
+				$quiz_id = false;
+				$j=1;
+				$e=0;
+				foreach ($exam as $key) {
+					# code...
+					$html .= "<div class='panel panel-default'><div class='panel-heading  panel-question'>$j) $key->question</div><div class='panel-body  panel-choices'>";
+					$i='A';
+					$html .= "<ul class='list'>";
+					$choices = $key->choices;
+					//shuffle($choices);
+						foreach ($choices as $c) {
+							# code...
+							$html .= "<li class='list=item'><input type='radio' value='$c' id='choice_".$i."_$key->quiz_id' name='choice_$key->quiz_id'  onclick='saveanswer($key->quiz_id)' class='radio radio-inline radio-btn'/><label for='choice_".$i."_$key->quiz_id'  class='label'>$i. $c</label></li>";
+							$i++;
+						}
+					$html .='</ul></div></div>';
+					$quiz_id[] = $key->quiz_id;
+					$j++;
+					$e++;
+				}		
+				/*				
+
+					if(!$this->session->user_exam_id){
+
+						$user_exam_id = $this->Userexam_m->start_user_exam($input->exam_id,$input->category_id,$this->uid);
+						$_SESSION['user_exam_id'] = $user_exam_id;
+						$_SESSION['category_id'] = $input->category_id;
+					}
+					*/
+
+				echo json_encode(array('stats'=>true,'questions'=>$html,'total'=>$e,'arr_quiz_id'=>$quiz_id));
+			}
 	}
 
 	

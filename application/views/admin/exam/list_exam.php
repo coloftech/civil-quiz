@@ -7,7 +7,7 @@
 		<th>Exam title</th>
 		<th>Category</th>
 		<th>Total exam</th>
-		<th>Shuffle Choices</th>
+		<th class='hidden'>Is shuffle</th>
 		<th>Status</th>
 		<th></th>
 	</tr>
@@ -30,20 +30,20 @@
 		if ($key->suffle_questions == 1) {
 		 	$questions = 'Yes';
 		 }
-		 $Status = '<button class="btn btn-warning btn-sm btn-publish" data-status="0" data-exam="'.$key->quizes_id.'" style="width:55px;border-radius:0;">Draft</button>';
+		 $Status = '<button class="btn btn-warning btn-sm btn-publish" data-status="0" data-exam="'.$key->exam_id.'" style="width:55px;border-radius:0;">Draft</button>';
 		if ($key->status == 1) {
-		 	$Status = '<button class="btn btn-success btn-sm btn-publish" data-status="1" data-exam="'.$key->quizes_id.'" style="width:55px;font-size:10px;border-radius:0;">Published</button>';
+		 	$Status = '<button class="btn btn-success btn-sm btn-publish" data-status="1" data-exam="'.$key->exam_id.'" style="width:55px;font-size:10px;border-radius:0;">Published</button>';
 		 }
 
 		  ?>
-	<tr id="tr_<?=$key->quizes_id ?>">
+	<tr id="tr_<?=$key->exam_id ?>">
 		<td width="100px"><?=date('Y-m-d',strtotime($key->date_posted)) ?></td>
 		<td><?=$key->quizes_title ?></td>
 		<td><?php if(!empty($key->category_names)){ echo implode(', ', $key->category_names);}else{echo "None";}?></td>
 		<td  width="100px"><?=isset($key->exam_total) ? $key->exam_total : 0;?></td>
-		<td  width="130px"><?=$choices ?></td>
+		<td class='hidden'  width="130px"><?=$choices ?></td>
 		<td  width="80px"><?=$Status ?></td>
-		<td width="120px"><a href="<?=site_url("quiz/take_exam/$key->quizes_id"); ?>"><i class="fa fa-briefcase btn" style="color:green;" title="Take this exam"></i></a> <a href="<?=site_url("quiz/edit/$key->quizes_id"); ?>"><i class="fa fa-edit btn" title="Edit exam"></i></a> <i class="fa fa-remove btn"  style="color:red;"  onclick="removeExam(<?=$key->quizes_id ?>);" title="Drop this exam"></i></td>
+		<td width="120px"><a href="<?=site_url("examination/review/$key->exam_id"); ?>" target="_blank"><i class="fa fa-briefcase btn btn-sm" style="color:green;" title="Take this exam"></i></a> <a href="<?=site_url("quiz/edit/$key->exam_id"); ?>"><i class="fa fa-edit btn btn-sm" title="Edit exam"></i></a> <i class="fa fa-remove btn btn-sm"  style="color:red;"  onclick="removeExam(<?=$key->exam_id ?>);" title="Drop this exam"></i></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>
@@ -62,7 +62,7 @@
 	}
 	function removeExam(examid){
 		//alert(examid);
-		var data = 'quizes_id='+examid;
+		var data = 'exam_id='+examid;
 		 $.ajax({
 
       type: 'post',
@@ -71,7 +71,7 @@
       dataType: 'json',
 
       success: function(resp){
-         console.log(resp);
+        // console.log(resp);
          if (resp.stats ==  true) {
 
           $('.user-profile').notify(resp.msg, { position:"bottom right", className:"success" }); 

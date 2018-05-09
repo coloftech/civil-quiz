@@ -61,6 +61,8 @@ class Guest extends CI_Controller
 			}
 
 		}
+		redirect('examination/review/'.$exam_id);
+		exit();
 
 			$info = false;
 			$categories=false;

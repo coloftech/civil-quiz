@@ -250,7 +250,20 @@ $('#btn-summernote').on('click',function(){
             return false;
         }
 </script>
+<script type="text/javascript">
+  function isInArray(value, array) {
+      return array.indexOf(value) > -1;
+  }
+  function removeItem(array, item){
+      for(var i in array){
+          if(array[i]==item){
+              array.splice(i,1);
+              break;
+          }
+      }
+  }
 
+</script>
     
 <?php endif ?>
 

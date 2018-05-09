@@ -21,7 +21,7 @@ class Exam_m extends CI_Model
 	{
 		# code...
 		if($exam_id > 0){
-			$result = $this->db->get_where('quizes_setting',array('quizes_id'=>$exam_id));
+			$result = $this->db->get_where('quizes_setting',array('exam_id'=>$exam_id));
 			
 				return $result->result();
 
@@ -39,7 +39,7 @@ class Exam_m extends CI_Model
 			return false;
 	}
 
-	public function randomByCategory($exam_id=0,$category_id = 0)
+	public function randomByCategorysas($exam_id=0,$category_id = 0)
 	{
 		# code...
 		//return  $category_id;
@@ -55,10 +55,6 @@ class Exam_m extends CI_Model
 			}
 		}
 
-		//$query = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id));
-		//if($result = $query->result()){
-
-			//foreach ($result as $cat) {
 				# code...
 				$query2 = '';
 				$result2 = '';
@@ -73,8 +69,6 @@ class Exam_m extends CI_Model
 					if($result2 = $query2->result())
 					{
 						shuffle($result2);
-						//$object[] = $result2;
-									//$object2 = '';
 									foreach ($result2 as $key) {
 										# code...
 										$choice = '';
@@ -110,8 +104,58 @@ class Exam_m extends CI_Model
 									}
 					}
 
-			//}
-		//}
+		return $object;
+
+	}
+
+
+	public function randomByCategory($exam_id=0,$category_id = 0)
+	{
+		# code...
+		//return  $category_id;
+
+		$object = false;
+
+		$is_shuffle = 0;
+		if($q_shuffle = $this->db->get_where('exam_setting',array('exam_id'=>$exam_id,'category_id'=>$category_id))){
+
+			if($shuffle = $q_shuffle->result()){
+				
+			$is_shuffle = $shuffle[0]->is_shuffle;
+			}
+		}
+
+				$query2 = '';
+				$result2 = '';
+				$query = $this->db->select('exam_id, quiz.quiz_id,quiz.post_question,GROUP_CONCAT('.$this->db->dbprefix('quiz_choices').
+					'.choice_label separator "~") as choices')
+					->from('quiz')
+					->join('quiz_choices','quiz_choices.quiz_id = quiz.quiz_id','left')
+					->join('quizes','quizes.quiz_id = quiz.quiz_id','left')
+					->where(array('quizes.exam_id'=>$exam_id,'quizes.category_id'=>$category_id))
+					->order_by('category_id')
+					->group_by('quiz.quiz_id')
+					->get();
+					
+					if($result2 = $query->result())
+					{
+						shuffle($result2);
+									foreach ($result2 as $key) {
+										$choices = '';
+										$choices = explode('~', $key->choices);
+										if($is_shuffle == 0){
+											shuffle($choices);
+										}
+										$object[] = (object) array(
+											'quiz_id'=>$key->quiz_id,
+											'question'=>$key->post_question,
+											'choices' =>$choices
+										);
+
+									}
+					}
+					//var_dump($object);
+					//exit();
 		return $object;
 
 	}
@@ -145,16 +189,30 @@ class Exam_m extends CI_Model
 			return false;
 		}
 	}
-	public function save_result($user_exam_id = 0,$category_id = 0,$exam_id = 0,$total = 0)
+	public function save_result($user_exam_id = 0,$category_id = 0,$exam_id = 0,$total = 0,$timer_finnish=false)
 	{
+		if(!empty($timer_finnish)){
+
 			$data = array(
 				'user_exam_id'=>$user_exam_id,
 				'category_id'=>$category_id,
 				'exam_id'=>$exam_id,
-				'result'=>$total
+				'result'=>0,
+				'timer_finnish'=>$timer_finnish
 			);
 			$this->db->insert('user_exam_result',$data);
 			return true;
+
+		}else{
+			$data = array(
+				'user_exam_id'=>$user_exam_id,
+				'category_id'=>$category_id,
+				'exam_id'=>$exam_id
+			);
+			return $this->db->set('result',$total)
+				->where($data)
+				->update('user_exam_result');
+		}
 	}
 	public function save_final_result($user_exam_id = 0,$result=0)
 	{
@@ -208,9 +266,9 @@ class Exam_m extends CI_Model
 	{
 		
 		if($user_id > 0){
-			$query = $this->db->select('exam_id,count("exam_id") as retake_total,MAX(result) as results,quizes_title as exam_title')
+			$query = $this->db->select('user_exam.exam_id,count("user_exam.exam_id") as retake_total,MAX(result) as results,quizes_title as exam_title')
 				->from('user_exam')
-				->join('quizes_setting','quizes_setting.quizes_id = user_exam.exam_id','LEFT')
+				->join('quizes_setting','quizes_setting.exam_id = user_exam.exam_id','LEFT')
 
 
 				->where('user_id',$user_id)
@@ -227,7 +285,7 @@ class Exam_m extends CI_Model
 	public function is_publish($status = 0,$exam_id=0){
 		if($exam_id > 0){
 
-		$this->db->where('quizes_id',$exam_id);
+		$this->db->where('exam_id',$exam_id);
 		return $this->db->update('quizes_setting',array('status'=>$status));
 		}else{
 			return false;
@@ -246,7 +304,7 @@ class Exam_m extends CI_Model
 
 	public function is_title_exist($title,$exam_id=0){
 		if($exam_id > 0){
-		$query =  $this->db->get_where('quizes_setting',array('quizes_title'=>$title,'quizes_id != ' =>$exam_id));
+		$query =  $this->db->get_where('quizes_setting',array('quizes_title'=>$title,'exam_id != ' =>$exam_id));
 		return $query->num_rows();
 		}else{
 
@@ -257,7 +315,7 @@ class Exam_m extends CI_Model
 
 	public function update($exam_id=0,$data=''){
 		
-		$this->db->where('quizes_id',$exam_id);
+		$this->db->where('exam_id',$exam_id);
 		$this->db->update('quizes_setting',$data);
 		$error = $this->db->error();
 		if(!empty($error['code']) ){

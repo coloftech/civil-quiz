@@ -38,7 +38,7 @@
 		<div class="col-md-12" style="">
 			<div class="result-controls ">
 			<div class="not-mobile">
-				<button class="btn btn-stop hidden" id="btn_stop"><i class="fa fa-check"></i> Result</button>  <button class="btn btn-pause" id="btn_pause" data-val='Pause'> <i class="fa fa-pause"></i></button>
+				<button class="btn btn-stop hidden" id="btn_stop"><i class="fa fa-check"></i> Result</button>  <button class="btn btn-pause hidden" id="btn_pause" data-val='Pause'> <i class="fa fa-pause"></i></button>
 				<button class="btn btn-info btn-next hidden" id="btn_next" data-val='Next'> <i class="fa fa-forward"></i></button>
 			</div>
 
@@ -106,7 +106,8 @@
 		a_category_id = category_id[i];
 
 		var data = 'exam_id='+exam_id+'&category_id='+category_id[i] ;
-
+		//console.log(category_id);
+		//return false;
 		questionaire(data);
 
 	});
@@ -114,7 +115,9 @@
 	
 	$('#frmExam').on('submit',function(){
 		var data = $(this).serialize();
-		data = data+'&exam_id='+exam_id+"&category_id="+a_category_id+"&questions_id="+JSON.stringify(questions_id);
+		var timefinnish = $('.display .minutes').text()+':'+$('.display .seconds').text();
+
+		data = data+'&exam_id='+exam_id+"&category_id="+a_category_id+"&questions_id="+JSON.stringify(questions_id)+'&timefinnish='+timefinnish;
 		//console.log(questions_id);
 		$('.loader').removeClass('hidden');
 		$('.panel-exam-questions').addClass('hidden');
@@ -154,7 +157,7 @@
 		$.ajax({
 			data: data,
 			type: 'post',
-			url: '../../examination/questions',			
+			url: '../../exam/test',			
 	    	statusCode: {
 	        404: function() {
                   $('.navbar-coloftech').notify('Error 404! page not found.', { position:"bottom right", className:"warning" });
@@ -182,14 +185,21 @@
 					 	questions_id = [];
 						i_question = 0;
 						i_answer = 0;
-					$.each(result.questions, function(key, exam) {
-						list = list+'<div class="panel panel-default"><div class="panel-body panel-question"><i>'+num+')</i>&nbsp;<span>'+exam.question+'</span></div><div class="panel-body panel-choices"><ul class="list"><li class="list_item"> <input type="radio" value="'+exam.choice_1+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_1_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_1_'+exam.quiz_id+'" class="label"> A) '+exam.choice_1+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_2+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_2_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_2_'+exam.quiz_id+'" class="label"> B) '+exam.choice_2+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_3+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_3_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_3_'+exam.quiz_id+'" class="label"> C) '+exam.choice_3+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_4+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_4_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_4_'+exam.quiz_id+'" class="label"> D) '+exam.choice_4+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_5+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_5_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_5_'+exam.quiz_id+'" class="label"> E) '+exam.choice_5+'</label></li></ul></div></div>';
+					/*$.each(result.questions, function(key, exam) {
+
+						/*list = list+'<div class="panel panel-default"><div class="panel-body panel-question"><i>'+num+')</i>&nbsp;<span>'+exam.question+'</span></div><div class="panel-body panel-choices"><ul class="list"><li class="list_item"> <input type="radio" value="'+exam.choice_1+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_1_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_1_'+exam.quiz_id+'" class="label"> A) '+exam.choice_1+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_2+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_2_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_2_'+exam.quiz_id+'" class="label"> B) '+exam.choice_2+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_3+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_3_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_3_'+exam.quiz_id+'" class="label"> C) '+exam.choice_3+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_4+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_4_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_4_'+exam.quiz_id+'" class="label"> D) '+exam.choice_4+'</label></li><li class="list_item"> <input type="radio" value="'+exam.choice_5+'" onclick="saveanswer('+exam.quiz_id+')" class="radio radio-inline radio-btn" id="choice_5_'+exam.quiz_id+'" name="choice_'+exam.quiz_id+'"/><label for="choice_5_'+exam.quiz_id+'" class="label"> E) '+exam.choice_5+'</label></li></ul></div></div>';
+						
 					//console.log(exam.question);
 						total_question++;
 						num++;
 						i_question++;
 						questions_id.push(exam.quiz_id);
-					});
+					});*/
+					i_question = result.total;
+					total_question = total_question + result.total;
+					questions_id = result.arr_quiz_id;
+					//console.log(questions_id);
+					list = result.questions;
 						$('.answer-total').html('0');
 						$('.exam-question').html(i_question);
 						$('.list-questions').html(list);
@@ -226,9 +236,7 @@
 						$('.loader').removeClass('hidden');
 			},
 			success: function(result) {
-				// body...
-
-				 //console.log(result);
+				
 				if(result.stats == true){
 					$('.loader').addClass('hidden');
 
@@ -240,6 +248,9 @@
 
 
 						a_category_id = category_id[i];
+
+
+					 $('.reset').click();
 
 					showNext();
 
@@ -279,7 +290,6 @@
 			},
 			success: function(result) {
 
-				 console.log(result);
 				if(result.stats == true){
 					$('.panel-exam-questions').hide('fast');
 					$('.result').removeClass('hidden').html('<span style="font-size:16px;">Your score is</span> <span>'+result.total_exam+'/'+total_question+'</span><br /><button class="btn btn-info" onclick="retake();">Retake</button>');
@@ -288,6 +298,9 @@
 
 					 $('.navbar-coloftech').notify('Score proccess successfully.', { position:"bottom right", className:"success" });
 					 total_question = 0;
+
+					 $('.stop').click();
+
 				}else{
 					 $('.navbar-coloftech').notify('No question available. Try again later.', { position:"bottom right", className:"warning" });
 				}
@@ -304,32 +317,40 @@
 			my_answer = [];
 			my_answer.push(quiz_id);
 			i_answer++;
-			$('.start').click();
+			//$('.start').click();
 			$('.answer-total').html(i_answer);
 		}else{
 
 			if (jQuery.inArray(quiz_id, my_answer)!='-1') {
-	            //alert(name + ' is in the array!');
 	           
 	            return false;
 	        } else {
-	           // alert(name + ' is NOT in the array...');
 	           my_answer.push(quiz_id);
 	           i_answer++;
 				$('.answer-total').html(i_answer);
 	        }
 		}
-		//console.log(i_answer);
+		if(i_answer == i_question){
+			$('#btn_stop').removeClass('hidden');
+		}
 	}
+	$('#btn_stop').on('click',function() {
+		// body...
+		$('#frmExam').submit();
+		$(this).addClass('hidden');
+	})
+
 
 	function showNext() {
 		// body...
+
 						if(i < category_id.length){
 
 							$('.list-questions').html('');
 
 							var data = 'exam_id='+exam_id+'&category_id='+a_category_id;
 
+							console.log(a_category_id);
 							questionaire(data);
 
 						
@@ -338,8 +359,6 @@
 							var data = 'exam_id='+exam_id+'&category_id='+JSON.stringify(category_id);
 
 							$('.panel-exam-questions').hide('fast');
-							//console.log('Result');
-							//$('.result').removeClass('hidden').html('Result');
 							showRatings(data);
 						}
 	}
@@ -348,5 +367,16 @@
 		// body...
 		location.reload();
 	}
+
+	window.onload = function(e){ 
+		$('.btn-show-exam').click();
+	}
+	$('.btn-show-exam').on('click',function (e) {
+
+		if(my_answer == false){
+
+			$('.start').click();
+		}
+	})
 </script>
 <script type="text/javascript" src="<?=base_url('public/assets/js/stopwatch.js')?>"></script>

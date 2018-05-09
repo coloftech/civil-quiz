@@ -17,11 +17,12 @@
     text-align: right;
     float: right;
   }
+  .form-control{border-color: #6495ED;}
 </style>
 <ul class="nav nav-tabs" id="ul_new">
   <li class="li_home active"><a data-toggle="tab" href="#tab_home" class="tab_home">SETTING</a></li>
   <li class="li_category disabled"><a data-toggle="tab" href="#tab_category" class="tab_category">CATEGORY</a></li>
-  <li class="li_questions disabled"><a data-toggle="tab" href="#tab_questions" class="tab_questions">QUESTION</a></li>
+  <li class="li_questions"><a data-toggle="tab" href="#tab_questions" class="tab_questions">QUESTION</a></li>
 
 </ul>
 
@@ -92,25 +93,14 @@
     </div>
 
     <div class="form-group choices">
-      <label for="answer1" style="width:100%;display: block;"><input type="radio" name="answer" id="answer1" value="1" > Choice 1 </label>
-      <input type="text" name="choice1" id="choice1" class="form-control txtinput" placeholder="Enter choice here..."  required />
+      <label>Answer</label>
+      <input type="text" name="choices[]" id="choices0" class="form-control" />
+      <label>Other choices</label>      
+      <input type="text" name="choices[]" id="choices1" class="form-control" />
+      <input type="text" name="choices[]" id="choices2" class="form-control" />
+      <input type="text" name="choices[]" id="choices3" class="form-control" />
     </div>
-    <div class="form-group choices">
-      <label for="answer2" style="width:100%;display: block;"><input type="radio" name="answer" id="answer2" value="2"> Choice 2 </label>
-      <input type="text" name="choice2" id="choice2" class="form-control txtinput" placeholder="Enter choice here..."  required />
-    </div>
-    <div class="form-group choices">
-      <label for="answer3" style="width:100%;display: block;"><input type="radio" name="answer" id="answer3" value="3"> Choice 3 </label>
-      <input type="text" name="choice3" id="choice3" class="form-control txtinput" placeholder="Enter choice here..." required  />
-    </div>
-    <div class="form-group choices">
-      <label for="answer4" style="width:100%;display: block;"><input type="radio" name="answer" id="answer4" value="4"> Choice 4 </label>
-      <input type="text" name="choice4" id="choice4" class="form-control txtinput" placeholder="Enter choice here..." required  />
-    </div>
-    <div class="form-group choices">
-      <label for="answer5" style="width:100%;display: block;"><input type="radio" name="answer" id="answer5" value="5"> Choice 5 </label>
-      <input type="text" name="choice5" id="choice5" class="form-control txtinput" placeholder="Enter choice here..." required  />
-    </div>
+    <div class="btn-add-choices"><button class="btn btn-default btn-sm" type="button" id="btn_more">Add more choices...</button><br/><br/></div>
 
   </div>
   </div>
@@ -118,7 +108,8 @@
 
       <div class="col-md-12">
       <div class="form-group">
-        <label>You already have <span id="question_added"  style="color:red;">0</span> of <span id="total_question">0</span> questions</label>
+        <label class="hidden">You already have <span id="question_added"  style="color:red;">0</span> of <span id="total_question">0</span> questions</label>
+        <b><h4 id="h5_questions" style="margin: 0;padding: 0;margin-left: -10px;"></h4></b>
       </div>
     </div>
     <div class="form-group">
@@ -501,15 +492,18 @@
 	function addquestion(e){
 		if(is_addquestion == false){
 
-			e_category = $(e).parent().parent().data('category');
-			m_total = $('#mtotal_'+e_category).text();
-			qa_total = $('#questions_'+e_category).text();
-			$('#total_question').html(m_total);
-			$('#question_added').html(qa_total);
+      e_category = $(e).parent().parent().data('category');
+      m_total = $('#mtotal_'+e_category).text();
+      qa_total = $('#questions_'+e_category).text();
 
-		    $('.li_questions').removeClass('disabled');
-			$('.tab_questions').click();
-			is_addquestion = true;
+      $('#h5_questions').text('Questions: '+qa_total+'/'+m_total);
+      $('#total_question').html(m_total);
+      $('#question_added').html(qa_total);
+      
+        $('.li_questions').removeClass('disabled');
+      $('.tab_questions').click();
+      is_addquestion = true;
+
 		}else{
 
 		var data = $(e).serialize();
@@ -523,7 +517,7 @@
       dataType: 'json',
 
       success: function(resp){
-      	//console.log(resp);
+      	console.log(resp);
       	//return false;
         if(resp.stats == true){
 
@@ -532,13 +526,17 @@
         $("#question_added").html(qa_total);
         $('#questions_'+e_category).html(qa_total);
 
+      $('#h5_questions').text('Questions: '+qa_total+'/'+m_total);
+
           if(m_total == qa_total){
             $('#btn_publish').removeAttr('disabled');
           }
 
           $('.show-notify').notify("Question added successfully", { position:"bottom right", className:"success" }); 
+          $('#btn_add').notify("Question added successfully", { position:"bottom left", className:"success" }); 
 
           $('#frmquestion')[0].reset();
+          clearform();
 
 
 
@@ -616,18 +614,20 @@
       $('.show-notify').notify('Error! Please input a question.', { position:"bottom right", className:"error" }); 
       return false;
     }
+     /*
      if(choices == '' || choices == undefined){
 
 
       $('.show-notify').notify('Error! Please select an answer to this question.', { position:"bottom right", className:"error" }); 
       return false;
     }
+    */
 
           if(parseInt(m_total) == parseInt(qa_total)){
             $('.show-notify').notify('Maximum question already added.', { position:"bottom right", className:"error" }); 
             return false;
           }
-     
+          is_change == true;
           addquestion(this);
   	return false;
     });
@@ -640,4 +640,44 @@
   	is_addquestion = false;
   	 $('.li_questions').addClass('disabled');
   });
+
 </script>
+
+
+<script type="text/javascript">
+  var choices = 4;
+  $('#btn_more').on('click',function(){
+    $('.choices').append('<input type="text" name="choices[]" id="choices'+choices+'" class="form-control choice" />');
+      
+      $('.choice').on('blur',function(){
+       check_input(this);
+
+      });
+    return false;
+  });
+
+
+var input_choices = [];
+$('.choice').on('blur',function(){
+ check_input(this);
+
+});
+
+function check_input(e) {
+  
+
+    var item = $(e).val();
+          if(isInArray(item,input_choices)){
+            $(e).val('').focus();
+            $(e).notify('The same data is not allowed.', { position:"Top left", className:"error" });
+          }else{
+            
+            input_choices.push(item);
+          }
+}
+
+
+
+
+</script>
+

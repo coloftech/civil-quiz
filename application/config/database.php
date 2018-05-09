@@ -62,7 +62,7 @@ $db['default']['dbprefix'] = $ini['database']['dbprefix'];
 
 /*-----------------------------------------*/
 $db['default']['pconnect'] = TRUE;
-$db['default']['db_debug'] = FALSE;
+$db['default']['db_debug'] = $ini['database']['db_debug'];
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = "";
 $db['default']['char_set'] = "utf8";

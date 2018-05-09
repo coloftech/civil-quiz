@@ -64,12 +64,12 @@
 		 }
 
 		  ?>
-	<tr id="tr_<?=$key->quizes_id ?>">
+	<tr id="tr_<?=$key->exam_id ?>">
 		<td width="100px"><?=date('Y-m-d',strtotime($key->date_posted)) ?></td>
 		<td><?=$key->quizes_title ?></td>
 		<td><?php if(!empty($key->category_names)) echo implode(', ', $key->category_names);?></td>
 		<td  width="100px"><?=$key->exam_total?></td>
-		<td width="50px"><a href="<?=site_url("exam/take_exam/$key->quizes_id"); ?>"><i class="fa fa-briefcase btn" style="color:green;" title="Take this exam"></i></a></td>
+		<td width="50px"><a href="<?=site_url("exam/take_exam/$key->exam_id"); ?>"><i class="fa fa-briefcase btn" style="color:green;" title="Take this exam"></i></a></td>
 	</tr>
 	<?php endforeach ?>
 <?php endif ?>

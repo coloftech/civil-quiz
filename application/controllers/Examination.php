@@ -47,6 +47,7 @@ class Examination extends CI_Controller
 
 			$info = false;
 			$categories=false;
+			$title = '';
 
 		if($exam_id){
 			$info = $this->exam_m->getExamById($exam_id);
@@ -58,6 +59,8 @@ class Examination extends CI_Controller
 
 					}
 				}
+
+			$title = $info[0]->quizes_title;
 
 
 
@@ -74,7 +77,7 @@ class Examination extends CI_Controller
 		$data['exam'] = $info;
 		$data['categories'] = (is_array($categories)) ? implode(',', $categories) : false;
 		$data['exam_id'] = $exam_id;
-		$data['site_title'] = 'Examination review';
+		$data['site_title'] = $title.' - start exam';
 		$this->template->load(false,'examination/exam',$data);
 	}
 	public function startexam()
@@ -132,15 +135,15 @@ class Examination extends CI_Controller
 			$object = (object)$this->input->post();
 
 
-			if($exam = $this->exam_m->randomByCategory($object->exam_id,$object->category_id)){
-				if(!$this->session->user_exam_id){
+			if($exam = $this->exam_m->randomByCategory2($object->exam_id,$object->category_id)){
+				/*if(!$this->session->user_exam_id){
 
 				$user_exam_id = $this->Userexam_m->start_user_exam($object->exam_id,$object->category_id,$this->uid);
 				$_SESSION['user_exam_id'] = $user_exam_id;
 				$_SESSION['category_id'] = $object->category_id;
 
 
-				}
+				}*/
 				echo json_encode(array('stats'=>true,'questions'=>$exam));
 				exit();
 			}
@@ -155,22 +158,37 @@ class Examination extends CI_Controller
 	public function save_answer()
 	{
 		if($this->input->post()){
+
+			
+
 			$data = $this->input->post();
 			$object = (object)$data;
+
+					
 			$questions = json_decode($object->questions_id);
 			$answer = '';
 			$is_save = '';
 
-			$user_exam_id = $this->session->user_exam_id;
+			if(!$this->session->user_exam_id){
+
+						$user_exam_id = $this->Userexam_m->start_user_exam($object->exam_id,0,$this->uid);
+
+						$_SESSION['user_exam_id'] = $user_exam_id;
+					}else{
+
+						$user_exam_id = $this->session->user_exam_id;
+					}
+
 
 			foreach ($questions as $key) {
 				# code...
-				//$answer[] = array('quiz_id'=>$key,'answer'=>$data['choice_'.$key]);
 				$answer = $data['choice_'.$key];
 				$quiz_id = $key;
 				$is_save[] = $this->exam_m->saveAnswer($user_exam_id,$object->category_id,$this->uid,$answer,$quiz_id);
 				usleep(150000);
 			}
+
+			$this->exam_m->save_result($user_exam_id,$object->category_id,$object->exam_id,0,$object->timefinnish);
 
 			echo json_encode(array('stats'=>true));
 			exit();
@@ -193,6 +211,7 @@ class Examination extends CI_Controller
 			$user_exam_id = $this->session->user_exam_id;
 			$total_exam = 0;
 			$res = 0;
+			$i=0;
 			foreach ($category_id as $key) {
 				# code...
 
@@ -217,6 +236,18 @@ class Examination extends CI_Controller
 		}else{
 			echo json_encode(array('stats'=>false,'msg'=>'No input received.'));
 		}
+	}
+	function pdf()
+	{
+		$data['site_title'] = 'PDF Create';
+     $this->load->helper(array('pdf_create', 'file'));
+     // page info here, db calls, etc.     
+     $html = $this->load->view('exam/exam', $data, true);
+     pdf_create($html, 'filename');
+     /*or
+     $data = pdf_create($html, '', false);
+     write_file('name', $data);*/
+     //if you want to write it to disk and/or send it as an attachment    
 	}
 
 

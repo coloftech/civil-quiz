@@ -47,43 +47,6 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a href="#" data-toggle="collapse" data-target="#subject"><i class="fa fa-fw fa-book"></i>  Category setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                    <ul id="subject" class="collapse">
-
-                        <li><a href="<?=site_url('subject');?>"><i class="fa fa-angle-double-right"></i> View all</a></li>
-                        <li><a href="<?=site_url('subject/create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
-
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="#" data-toggle="collapse" data-target="#examtypesettings"><i class="fa fa-fw fa-book"></i>  Exam type setting<i class="fa fa-fw fa-angle-down pull-right"></i></a>
-                    <ul id="examtypesettings" class="collapse">
-
-                        <li><a href="<?=site_url('subject');?>"><i class="fa fa-angle-double-right"></i> View all</a></li>
-                        <li><a href="<?=site_url('subject/create');?>"><i class="fa fa-angle-double-right"></i> New</a></li>
-
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" data-toggle="collapse" data-target="#site_setting"><i class="fa fa-fw fa-globe"></i>  Site setting <i class="fa fa-fw fa-angle-down pull-right"></i></a>
-
-                    <ul id="site_setting"  class="collapse">
-                        <li><a href="<?=site_url('admin/sites/new')?>">New site</a></li>
-                        <li><a href="<?=site_url('admin/sites');?>">List sites</a></li>
-
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" data-toggle="collapse" data-target="#page"><i class="fa fa-fw fa-file-powerpoint-o"></i> Page setting <i class="fa fa-fw fa-angle-down pull-right"></i></a>
-
-                    <ul id="page"  class="collapse">
-                        <li><a href="<?=site_url('pages/add_page')?>">New page</a></li>
-                        <li><a href="<?=site_url('pages')?>">List pages</a></li>
-
-                    </ul>
-                </li>
                         <?php if ($this->permission->is_admin  ()): ?>
                             
                  <li>

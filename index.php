@@ -100,6 +100,10 @@ $ini = parse_ini_file("config.ini.php", true);
 if($ini['installation']['installed'] == 'off'){
 	header("Location: install/index.php");
 }
+
+if($ini['installation']['maintenance'] == 'on'){
+	header("Location: maintenance.php");
+}
 //print_r($ini['database']['hostname']);
 //exit();
 /*

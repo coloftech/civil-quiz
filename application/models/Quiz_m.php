@@ -27,7 +27,7 @@ class Quiz_m extends CI_Model
 	}
 	public function update_exam($data=false,$exam_id=0)
 	{
-			$this->db->where('quizes_id',$exam_id);
+			$this->db->where('exam_id',$exam_id);
 			return $this->db->update('quizes_setting',$data);
 
 	}
@@ -135,8 +135,8 @@ class Quiz_m extends CI_Model
 
 		$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam,, SUM('.$this->db->dbprefix("exam_setting").'.exam_total) as exam_total')
 				->from('quizes_setting')
-				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT')
-				->where('quizes_setting.quizes_id',$exam_id)
+				->join('exam_setting','exam_setting.exam_id = quizes_setting.exam_id','LEFT')
+				->where('quizes_setting.exam_id',$exam_id)
 				->group_by('exam_setting.exam_id')
 				->order_by('quizes_setting.date_posted','DESC');
 			$result =  $this->db->get()->result();
@@ -150,7 +150,7 @@ class Quiz_m extends CI_Model
 				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
 					->from('exam_setting')
 					->join('category','category.cat_id = exam_setting.category_id','left')
-					->where('exam_id',$key->quizes_id);
+					->where('exam_id',$key->exam_id);
 					$category = $this->db->get()->result();
 					foreach ($category as $cat) {
 						# code...
@@ -161,7 +161,7 @@ class Quiz_m extends CI_Model
 					
 
 					$ar[] =(object) array(
-						'quizes_id'=>$key->quizes_id,		
+						'exam_id'=>$key->exam_id,		
 						'quizes_title'=>$key->quizes_title,
 						'e_description'=>$key->e_description,
 						'slug'=>$key->slug,
@@ -186,7 +186,7 @@ class Quiz_m extends CI_Model
 	{
 				if($slug){
 			$object =  false;
-			$query = $this->db->select('quizes_id,quizes_title,e_description,date_posted,status')
+			$query = $this->db->select('exam_id,quizes_title,e_description,date_posted,status')
 				->from('quizes_setting')
 				->where('slug',$slug)
 				->get();
@@ -199,7 +199,7 @@ class Quiz_m extends CI_Model
 				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
 					->from('exam_setting')
 					->join('category','category.cat_id = exam_setting.category_id','left')
-					->where('exam_id',$result[0]->quizes_id);
+					->where('exam_id',$result[0]->exam_id);
 					$category = $this->db->get()->result();
 					foreach ($category as $cat) {
 
@@ -207,7 +207,7 @@ class Quiz_m extends CI_Model
 
 					}
 						$object[] =(object) array(
-						'quizes_id'=>$result[0]->quizes_id,		
+						'exam_id'=>$result[0]->exam_id,		
 						'quizes_title'=>$result[0]->quizes_title,
 						'e_description'=>$result[0]->e_description,
 						'date_posted'=>$result[0]->date_posted,
@@ -230,9 +230,9 @@ class Quiz_m extends CI_Model
 	{
 				if($exam_id){
 			$object =  false;
-			$query = $this->db->select('quizes_id,quizes_title,e_description,date_posted,status')
+			$query = $this->db->select('exam_id,quizes_title,e_description,date_posted,status')
 				->from('quizes_setting')
-				->where('quizes_id',$exam_id)
+				->where('exam_id',$exam_id)
 				->get();
 				if($result =  $query->result()){
 
@@ -251,7 +251,7 @@ class Quiz_m extends CI_Model
 
 					}
 						$object[] =(object) array(
-						'quizes_id'=>$result[0]->quizes_id,		
+						'exam_id'=>$result[0]->exam_id,		
 						'quizes_title'=>$result[0]->quizes_title,
 						'e_description'=>$result[0]->e_description,
 						'date_posted'=>$result[0]->date_posted,
@@ -516,7 +516,7 @@ class Quiz_m extends CI_Model
 
 			$this->db->select('quizes_setting.*,COUNT('.$this->db->dbprefix("exam_setting").'.exam_id) as totalexam,, SUM('.$this->db->dbprefix("exam_setting").'.exam_total) as exam_total')
 				->from('quizes_setting')
-				->join('exam_setting','exam_setting.exam_id = quizes_setting.quizes_id','LEFT');
+				->join('exam_setting','exam_setting.exam_id = quizes_setting.exam_id','LEFT');
 				if(!$is_admin)
 				$this->db->where('status',1);
 
@@ -533,7 +533,7 @@ class Quiz_m extends CI_Model
 				$sql = $this->db->select('exam_setting.category_id,category.cat_name')
 					->from('exam_setting')
 					->join('category','category.cat_id = exam_setting.category_id','left')
-					->where('exam_id',$key->quizes_id);
+					->where('exam_id',$key->exam_id);
 					if($category = $this->db->get()->result()){
 					foreach ($category as $cat) {
 						# code...
@@ -545,7 +545,7 @@ class Quiz_m extends CI_Model
 					
 
 					$ar[] =(object) array(
-						'quizes_id'=>$key->quizes_id,		
+						'exam_id'=>$key->exam_id,		
 						'quizes_title'=>$key->quizes_title,
 						'e_description'=>$key->e_description,
 						'slug'=>$key->slug,
@@ -586,6 +586,7 @@ class Quiz_m extends CI_Model
 	public function removeExam($exam_id=0)
 	{
 		# code...
+		
 
 		$query = $this->db->select('quiz_id')
 					->from('quizes')
@@ -603,7 +604,7 @@ class Quiz_m extends CI_Model
 		$this->db->delete('exam_setting',array('exam_id'=>$exam_id));
 		$this->db->delete('quizes',array('exam_id'=>$exam_id));
 
-		return $this->db->delete('quizes_setting',array('quizes_id'=>$exam_id));
+		return $this->db->delete('quizes_setting',array('exam_id'=>$exam_id));
 	}
 
 
@@ -667,6 +668,6 @@ function removeTag($str,$id,$start_tag,$end_tag)
 
 /*
 
-SELECT s.quizes_id,s.quizes_title,q.*,c.cat_id FROM q_quiz as q LEFT JOIN q_quiz_category as c ON c.quiz_id = q.quiz_id LEFT JOIN q_quizes as qq ON q.quiz_id = qq.quiz_id LEFT JOIN q_exam_setting as e ON e.exam_id = qq.exam_id LEFT JOIN q_quizes_setting as s ON e.exam_id = s.quizes_id ORDER BY s.quizes_id DESC
+SELECT s.exam_id,s.quizes_title,q.*,c.cat_id FROM q_quiz as q LEFT JOIN q_quiz_category as c ON c.quiz_id = q.quiz_id LEFT JOIN q_quizes as qq ON q.quiz_id = qq.quiz_id LEFT JOIN q_exam_setting as e ON e.exam_id = qq.exam_id LEFT JOIN q_quizes_setting as s ON e.exam_id = s.exam_id ORDER BY s.exam_id DESC
 
 */
